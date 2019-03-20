@@ -43,12 +43,11 @@ class Header extends React.Component {
                     <button className="dropbtn" onClick={this.toggleDropdown} >
                         <i className="fa fa-bars fa-lg" aria-hidden="true"></i>
                     </button>
-                    {this.state.toggle &&
-                    <div className="dropdown-content" style={{marginLeft: '125px'}} onClick={this.toggleDropdown} >
-                        {!this.props.loggedIn ? <NavLink to='/login'>Login</NavLink> : <NavLink to='/logout'>Logout</NavLink> }
-                    </div>
+                    {   this.state.toggle &&
+                        <div className="dropdown-content" style={{marginLeft: '125px'}} onClick={this.toggleDropdown} >
+                            {!this.props.loggedIn ? <NavLink to='/login'>Login</NavLink> : <NavLink to='/logout'>Logout</NavLink> }
+                        </div>
                     }
-                    
                 </div>
             </div>                       
         )

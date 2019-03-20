@@ -1,5 +1,4 @@
 var getConnection = require('../../config/dbconnection')
-var modelsUtils = require('./modelsUtils')
 
 module.exports.authenticate = (req, callback) => {
     var getUsersByUsernamePassword = 'select * from user where username=? and password=?'
