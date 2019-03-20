@@ -1,0 +1,74 @@
+
+
+.border {
+  background-color: gray;
+}
+
+.grid-container {
+  /* display as grid layout */
+  display: grid;
+  /* Take the full height of browser */
+  height: 100vh;                          
+  /* 12 column in 1 row, 1fr (1 part of available space) here the whole row space */
+  grid-template-columns: repeat(12,1fr);  
+  /* 1st row auto, 3rd row auto, 2nd row (1 part of available space) */
+  grid-template-rows: auto 1fr auto;      
+  /* grid-row-start=1, grid-row-end=3. i.e. 3 rows in grid */
+  grid-row : 1 / 3;  
+  /*
+  https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/Box_Alignment_in_CSS_Grid_Layout 
+  */
+  grid-template-areas:
+    ". . . . . . . . . . . ."                     
+    ". a a a a a a a a a a ."
+    ". . . . . . . . . . . .";
+  grid-gap: 1px;
+}
+
+/*
+https://stackoverflow.com/questions/13792755/show-border-grid-lines-only-between-elements/47914693#47914693
+*/
+.grid-container > div {
+  background-color: white;
+  padding: 5px;
+}
+
+/*================== Menu Header ================== */
+.header {
+  /* The first div class is header occupies 12 column, ie 1st entire row */
+  grid-column: span 12;                   
+}
+
+/*================== Main Body ================== */
+
+/*=== For login, register options ===*/
+.center-grid {
+  grid-area: a;
+  align-self: center;   /* values: start, center , end */
+  justify-self: center; /* a box is justified inside its alignment container along the appropriate axis. */
+}
+
+/*=== After login, treeview and contents ===*/
+.aside {
+  /* The second div class is aside, takes 2 column out of 12 in second row*/
+  grid-column: span 2;                    
+  /* The treenode should show auto scrollbar on content overflow */
+  overflow: auto;                         
+}
+.contents {
+  /* The third div class is contents, takes 10 column after aside in second row */
+  grid-column: span 10;                   
+}
+
+/* react-split-pane requirement for middle row */
+.middleContents {
+  grid-column: span 12;
+}
+
+/*================== Footer ================== */
+.footer {
+  /* The forth div class is footer, takes 12 column in 3rd row */
+  grid-column: span 12;                   
+  /* Align the text in the footer at the center */
+  text-align: center;
+}

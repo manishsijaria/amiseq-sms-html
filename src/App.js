@@ -1,26 +1,33 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Route, Switch} from 'react-router-dom'
+
+import { history } from './_helpers';
+import { ConnectedRouter } from 'connected-react-router';
+
+import { Header } from './components/header'
+import Main from './components/main'
+import LandingPage from './components/landingPage'
+import './css/overall-layout.css'
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <ConnectedRouter history={history}>
+        <div className='border'>
+          <div className='grid-container'>
+              <div className='header'>
+                <Header/>
+              </div> 
+
+              <Switch>
+                <Route exact path="/landingpage"  component={LandingPage} />
+                <Route component={Main}></Route>
+              </Switch>
+              
+              <div className='footer'>Copyright @2018-2020 Amiseq Inc.</div>
+          </div>
+        </div>
+      </ConnectedRouter>
     );
   }
 }
