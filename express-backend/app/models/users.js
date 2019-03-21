@@ -11,7 +11,8 @@ module.exports.authenticate = (req, callback) => {
             } else {
                 if(result.length) {
                     console.log('Login success !!')
-                    callback({username: req.body.username, 
+                    callback({user_id: result[0].user_id,
+                            username: req.body.username, 
                             password: req.body.password},null)
                     
                 } else {

@@ -3,7 +3,7 @@ import { Route, Switch} from 'react-router-dom'
 import  AppPage  from './appPage'
 import  { Login } from './login'
 import { Register }  from './register'
-import AddContact from './addContact'
+import { AddContact } from './addContact'
 import '../css/overall-layout.css'
 
 

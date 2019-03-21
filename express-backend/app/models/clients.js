@@ -273,6 +273,7 @@ module.exports.getClientMsgsCount = (client_id,fetchText, callback) => {
         case '7_DAYS':
             whereDateCondition = `msg_date > (NOW() - INTERVAL 7 DAY)`
             break;
+       
     }
     if(whereDateCondition !== '') {
         queryClientMsgsCount = queryClientMsgsCount + ` AND ` + whereDateCondition
