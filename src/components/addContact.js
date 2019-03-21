@@ -56,7 +56,6 @@ class AddContact extends React.Component {
     
     render() {
         const { firstname, lastname, mobile_no, contact_type_id } = this.state.contact
-        const { submitted } = this.state
         const { contactTypes } = this.props
 
         var tagOptions
