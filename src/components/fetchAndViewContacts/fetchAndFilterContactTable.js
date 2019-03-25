@@ -5,6 +5,8 @@ import { SelectContactType } from './selectContactType'
 import SelectUser from './selectUser'
 import SearchContact from './searchContact'
 import ContactTable from './contactTable'
+import {connect} from 'react-redux'
+import { contactActions } from '../../_actions'
 import '../../css/contact.css'
 
 /*
@@ -38,6 +40,11 @@ export default class FetchAndFilterContactTable  extends React.Component {
         super(props)
         this.state = { filterText: ''}
     }
+    componentWillMount() {
+        const { dispatch, user } = this.props
+        dispatch(contactActions.getContacts(user.user_id))
+        
+    }
     handelFilterTextChange = (filterText) => {
         this.setState({
             filterText: filterText
@@ -48,6 +55,7 @@ export default class FetchAndFilterContactTable  extends React.Component {
     }
     render() {
         const { filterText } = this.state
+        const { contacts } = this.props
         return(
                 <div className='content'>
                     {/*
@@ -55,7 +63,7 @@ export default class FetchAndFilterContactTable  extends React.Component {
                    <SelectUser/>
                    */}
                    <SearchContact filterText={filterText} onSearchContactFilterChange={this.handelFilterTextChange}/>
-                   <ContactTable contacts={fetchedContacts} 
+                   <ContactTable contacts={contacts} 
                                 filterText={filterText} 
                                 contactSelected={this.props.contactSelected}
                                 onContactClick={this.selected}/>
@@ -63,3 +71,13 @@ export default class FetchAndFilterContactTable  extends React.Component {
         )
     }
 }
+
+function mapStateToProps(state) {
+    const { user } = state.authentication
+    const { contacts } = state.contactsGet
+    return { user, contacts }
+}
+
+const connectedFetchAndFilterContactTable = connect(mapStateToProps)(FetchAndFilterContactTable)
+
+export { connectedFetchAndFilterContactTable as FetchAndFilterContactTable}

@@ -15,4 +15,16 @@ router.post('/addContact', (req, res) => {
     })
 })
 
+router.get('/getContacts/:number', (req, res) => {
+    console.log('/contacts/getContacts called via get===')
+
+    contactsModel.getContacts(parseInt(req.params.number,10), (result,err) => {
+        if(err) { 
+            return res.status(404).json(JSON.stringify({msg:err})) 
+        }
+        else { return res.status(200).json(JSON.stringify(result)) }        
+    })
+   
+})
+
 module.exports = router

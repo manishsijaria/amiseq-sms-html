@@ -9,7 +9,7 @@ export default class ContactTable  extends React.Component {
     render() {
         const contacts = this.props.contacts
         let  tagContactRows
-        if(!contacts.length) {
+        if(!contacts || !contacts.length) {
             return null
         } else { 
             tagContactRows =  contacts.map(contact => 

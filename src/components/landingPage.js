@@ -1,7 +1,7 @@
 import React from 'react'
 
 import SplitPane from 'react-split-pane'
-import FetchAndFilterContactTable  from './fetchAndViewContacts/fetchAndFilterContactTable'
+import { FetchAndFilterContactTable }  from './fetchAndViewContacts/fetchAndFilterContactTable'
 
 import '../css/react-split-pane.css'
 

@@ -3,7 +3,8 @@ import 'whatwg-fetch' //in each file before using fetch
 
 
 export const contactServices = {
-    addContact
+    addContact,
+    getContacts,
 }
 
 function addContact(contact) {
@@ -21,4 +22,20 @@ function addContact(contact) {
             })
             .then(contact => { return contact})
             .catch(err => {console.log(err)})    
+}
+
+function getContacts(user_id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: { 'Content-Type' : 'application/json'}
+    }
+    return fetch('/contacts/getContacts/' + user_id , requestOptions)
+            .then(response => {
+                if(response.ok) {
+                    return response.json()
+                }
+                throw new Error("Error in getting Contacts List")
+            })
+            .then(contacts => {return contacts})
+            .catch(err => {console.log(err)})
 }

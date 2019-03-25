@@ -4,6 +4,7 @@ import { alert } from './alert.reducer'
 import { clientsGet,selectedClients , clientsMsgs, clientMsgsCount } from './client.reducer'
 import { candidatesGet, selectedCandidates,candidatesMsgs,candidateMsgsCount} from './candidate.reducer'
 
+import { contactsGet } from '../_reducers/contact.reducer'
 import { contactTypesGet } from './contactType.reducer'
 import { authentication } from './authentication.reducer'
 
@@ -21,6 +22,7 @@ const createRootReducer = history =>  combineReducers({
     candidateMsgsCount,
 
     contactTypesGet,
+    contactsGet,
     authentication,
     router: connectRouter(history),
 })

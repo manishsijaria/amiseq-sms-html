@@ -10,7 +10,7 @@ export default class ContactRow  extends React.Component {
         let contactClassName = 'contact_row'
         if(this.props.contactSelected) {
             if(this.props.contactSelected === contact.contact_id) {
-                contactClassName = contactClassName + ' contact_row_selected'
+                contactClassName +=  ' contact_row_selected'
             }
         }
         return(
