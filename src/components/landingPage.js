@@ -1,6 +1,8 @@
 import React from 'react'
 
 import SplitPane from 'react-split-pane'
+import FetchAndFilterContactTable  from './fetchAndViewContacts/fetchAndFilterContactTable'
+
 import '../css/react-split-pane.css'
 
 import { connect } from 'react-redux'
@@ -8,7 +10,7 @@ import { connect } from 'react-redux'
 class LandingPage extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { nodeSelected: '', height: 0};
+        this.state = { contactSelected: '', height: 0};
     }
     
     componentWillMount() {
@@ -42,16 +44,22 @@ class LandingPage extends React.Component {
         window.removeEventListener("resize", this.updateDimensions);
     }
  
+    handelClick = (contact) => {
+        this.setState({ contactSelected: parseInt(contact, 10)})
+    }  
     render() {
         return(
                 <>
                     <div className='middleContents' ref={'middleContentsRef'}>
-                        <SplitPane split="vertical" minSize={70} defaultSize={300} style={{ height: this.state.height }}>
+                        <SplitPane split="vertical" minSize={70} defaultSize={250} style={{ height: this.state.height }}>
                             <div>
-                                Hello Left
+                                <FetchAndFilterContactTable 
+                                        onContactClick={this.handelClick} 
+                                        contactSelected={this.state.contactSelected}
+                                        />
                             </div>
                             <div>
-                                Right
+                                {this.state.contactSelected}
                             </div>
                         </SplitPane>
                     </div>

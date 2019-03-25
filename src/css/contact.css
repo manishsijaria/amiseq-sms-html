@@ -1,0 +1,51 @@
+
+.content {
+  margin: 1px 0px 0px 5px;
+  width: 220px; 
+}
+
+.searchContact {
+  position: fixed;
+  top: 59px;
+  background: #b2b9b9; 
+  border-radius: 7%;
+}
+.searchContactForm {
+  margin-left: 3px;
+}
+
+.contentTable {
+  margin-top: 60px;
+}
+
+.contact_row { 
+  height: 42px;
+  border-bottom: 2px solid #b2b9b9;
+  margin: 1px 0; 
+  cursor: pointer;
+}
+
+.contact_row:hover {
+  background-color: rgb(244,245,245)
+}
+
+.contact_row_selected {
+  background-color: rgb(233,235,235);
+  border-radius: 7%;
+}
+
+.contact_row_msg_count_oval {
+  width: 30px;
+  height: 20px;
+  background: rgb(9,210,97);
+  border-radius: 40%;
+  text-align: center;
+  color: white
+}
+
+div#contact_type, 
+div#user {
+  position:relative;
+  float:left;
+  margin-right:3px;      
+}
