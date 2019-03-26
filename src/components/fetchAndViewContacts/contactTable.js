@@ -8,17 +8,24 @@ export default class ContactTable  extends React.Component {
     }
     render() {
         const contacts = this.props.contacts
-        let  tagContactRows
+        let  tagContactRows = []
+        const {  filterText  } = this.props
         if(!contacts || !contacts.length) {
             return null
         } else { 
-            tagContactRows =  contacts.map(contact => 
-                                            <ContactRow 
-                                                key={contact.contact_id} 
-                                                contact={contact}
-                                                contactSelected={this.props.contactSelected}
-                                                onContactClick={this.selected}>
-                                            </ContactRow>)
+            contacts.forEach(contact => {
+                if( contact.fullname.toLowerCase().indexOf(filterText.toLowerCase()) === -1) { 
+                    return 
+                } else {
+                    tagContactRows.push(<ContactRow 
+                                            key={contact.contact_id} 
+                                            contact={contact}
+                                            contactSelected={this.props.contactSelected}
+                                            onContactClick={this.selected}>
+                                        </ContactRow>);
+                }
+
+            });
         }
         return(
             <div className='contentTable'>
