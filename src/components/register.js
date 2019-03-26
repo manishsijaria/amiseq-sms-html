@@ -38,11 +38,17 @@ class Register extends React.Component {
 
     render() {
         const { user, submitted } = this.state
+        const { alert  } = this.props
         return(
             <div>
                 <div className='formheader'>
                     <h3>Register User</h3>
                 </div>
+                <div className='alert-div'>
+                  {(alert !== undefined && alert.message !== '')  &&
+                      <div className={`alert ${alert.type}`}>{alert.message}</div>
+                    }
+                </div>                
                 <div className='formcontainer'>
                     <form name="form" onSubmit={this.handleSubmit}>
                         <label for="firstname"><b>Firstname</b></label>
@@ -67,7 +73,10 @@ class Register extends React.Component {
         )
     }
 }
-
-const ConnectedRegister = connect()(Register)
+function mapStateToProps(state) {
+    const { alert } = state
+    return { alert }
+}
+const ConnectedRegister = connect(mapStateToProps)(Register)
 
 export { ConnectedRegister as Register}

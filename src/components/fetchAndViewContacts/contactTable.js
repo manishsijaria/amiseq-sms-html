@@ -14,7 +14,7 @@ export default class ContactTable  extends React.Component {
             return null
         } else { 
             contacts.forEach(contact => {
-                if( contact.fullname.toLowerCase().indexOf(filterText.toLowerCase()) === -1) { 
+                if(filterText && contact.fullname.toLowerCase().indexOf(filterText.toLowerCase()) === -1) { 
                     return 
                 } else {
                     tagContactRows.push(<ContactRow 

@@ -1,8 +1,8 @@
 
 import React from 'react'
 
-import { SelectContactType } from './selectContactType'
-import SelectUser from './selectUser'
+//import { SelectContactType } from './selectContactType'
+//import SelectUser from './selectUser'
 import SearchContact from './searchContact'
 import ContactTable from './contactTable'
 import {connect} from 'react-redux'
@@ -18,6 +18,8 @@ FetchAndFilterContactTable --- this.state = { contact_type: 'All', user: 'My_Lis
 		ContactRow
 
 */
+
+/*
 const fetchedContacts = 
 [
 	{contact_id: 1, fullname: 'Rahul Dubey', mobile_no: '+1453245423', contact_type_id: 1, user_id: 1, msg_count: 2}, 
@@ -34,7 +36,7 @@ const fetchedContacts =
     {contact_id: 12, fullname: 'U anup', mobile_no: '+15673636366', contact_type_id: 1, user_id: 1, msg_count: 5},
 
 ];
-
+*/
 export default class FetchAndFilterContactTable  extends React.Component {
     constructor(props) {
         super(props)

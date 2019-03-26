@@ -16,7 +16,7 @@ function addContact(contact) {
         contactServices.addContact(contact)
         .then(contact => {
             if(!contact || contact === undefined) {
-                let e = 'Contacts mobile number is already registered'
+                let e = 'Mobile number is already registered'
                 dispatch(failure(e))
                 dispatch(alertActions.error(e))
             } else {
@@ -35,7 +35,7 @@ function getContacts(user_id) {
         contactServices.getContacts(user_id)
         .then(contacts => {
             if(!contacts || contacts === undefined) {
-                let e = 'Error in getting contacts List'
+                let e = 'Error in getting contacts list'
                 dispatch(failure(e))
                 dispatch(alertActions.error(e))
             } else {

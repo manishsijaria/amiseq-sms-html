@@ -19,9 +19,29 @@
     border-bottom: none;
 }
 
+/* ======== Alert div and required css ========*/
+.alert-div {
+    max-width: 250px;
+    padding: 10px;
+    overflow-wrap: break-word;
+}
+.alert {
+    border-radius:5px;
+    color: white;
+    margin-bottom: 5px;
+}
+
+.alert-success {
+    background-color: rgb(212,237,218);
+}
+
+.alert-danger {
+    background-color: rgb(243, 112, 122);
+}
+/* ===========================================*/
+
 .formheader h3 {
     margin: 0;
-    
 }
 
 form {
@@ -43,8 +63,7 @@ input:invalid  {
     box-shadow: 0 0 5px 1px red;
 }
   
-input[type=submit] {
-    
+input[type=submit] { 
     width: 98%;
     padding: 5px;
     border-radius: 5px;

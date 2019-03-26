@@ -53,11 +53,17 @@ class Login extends React.Component {
     
     render() {
         const { username, password } = this.state
+        const {  alert  } = this.props
         return(
             <div>
                 <div className='formheader'>
                     <h3>Login</h3>
                 </div>
+                <div className='alert-div'>
+                  {(alert !== undefined && alert.message !== '')  &&
+                      <div className={`alert ${alert.type}`}>{alert.message}</div>
+                    }
+                </div>                
                 <div className='formcontainer'>
                     <form name="form" onSubmit={this.handleSubmit}>
                         <label for="username"><b>Username</b></label>
@@ -74,11 +80,10 @@ class Login extends React.Component {
     }
 }
 
-
-
 function mapStateToProps(state) {
+    const { alert } = state
     const { loggingIn, loggedIn, user } = state.authentication
-    return { loggingIn,loggedIn, user }
+    return { alert, loggingIn,loggedIn, user }
 }
 
 const connectedLogin = connect(mapStateToProps)(Login)

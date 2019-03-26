@@ -56,7 +56,7 @@ class AddContact extends React.Component {
     
     render() {
         const { firstname, lastname, mobile_no, contact_type_id } = this.state.contact
-        const { contactTypes } = this.props
+        const { contactTypes, alert  } = this.props
 
         var tagOptions
         if(!contactTypes.length) {
@@ -71,6 +71,11 @@ class AddContact extends React.Component {
             <div>
                 <div className='formheader'>
                     <h3>Add Contact</h3>
+                </div>
+                <div className='alert-div'>
+                  {(alert !== undefined && alert.message !== '')  &&
+                      <div className={`alert ${alert.type}`}>{alert.message}</div>
+                    }
                 </div>
                 <div className='formcontainer'>
                     <form name="form" onSubmit={this.handleSubmit}>
@@ -99,9 +104,10 @@ class AddContact extends React.Component {
 }
 
 function mapStateToProps(state) {
+    const { alert } = state
     const { contactTypes } = state.contactTypesGet
     const { user, loggedIn } = state.authentication
-    return { contactTypes, user, loggedIn }
+    return { alert, contactTypes, user, loggedIn }
 }
 
 const connectedAddContact = connect(mapStateToProps)(AddContact)
