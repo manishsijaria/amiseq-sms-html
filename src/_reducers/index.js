@@ -11,7 +11,7 @@ import { authentication } from './authentication.reducer'
 import { connectRouter } from 'connected-react-router'
 
 const createRootReducer = history =>  combineReducers({
-    alert,
+
     clientsGet,
     selectedClients,
     candidatesGet,
@@ -21,6 +21,7 @@ const createRootReducer = history =>  combineReducers({
     candidatesMsgs,
     candidateMsgsCount,
 
+    alert,
     contactTypesGet,
     contactsGet,
     authentication,

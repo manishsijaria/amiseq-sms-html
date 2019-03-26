@@ -7,10 +7,14 @@ import { ConnectedRouter } from 'connected-react-router';
 import { Header } from './components/header'
 import Main from './components/main'
 import LandingPage from './components/landingPage'
+
 import './css/overall-layout.css'
 
+
 class App extends Component {
+  
   render() {
+    const { alert } = this.props
     return (
       <ConnectedRouter history={history}>
         <div className='border'>
@@ -18,7 +22,7 @@ class App extends Component {
               <div className='header'>
                 <Header/>
               </div> 
-
+              
               <Switch>
                 <Route exact path="/landingpage"  component={LandingPage} />
                 <Route component={Main}></Route>

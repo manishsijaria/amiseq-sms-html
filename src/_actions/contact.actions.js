@@ -3,6 +3,7 @@ import { contactConstants  } from '../_constants'
 import { contactServices } from "../_services";
 
 import { push } from 'connected-react-router'
+import { alertActions } from './alert.actions';
 
 export const contactActions = {
     addContact,
@@ -15,8 +16,9 @@ function addContact(contact) {
         contactServices.addContact(contact)
         .then(contact => {
             if(!contact || contact === undefined) {
-                let e = 'Contact is already registered'
+                let e = 'Contacts mobile number is already registered'
                 dispatch(failure(e))
+                dispatch(alertActions.error(e))
             } else {
                 let ParseContact = JSON.parse(contact)
                 dispatch(success(ParseContact))
@@ -35,6 +37,7 @@ function getContacts(user_id) {
             if(!contacts || contacts === undefined) {
                 let e = 'Error in getting contacts List'
                 dispatch(failure(e))
+                dispatch(alertActions.error(e))
             } else {
                 let ParsedContacts = JSON.parse(contacts)
                 dispatch(success(ParsedContacts)) 
