@@ -14,7 +14,7 @@ import './css/overall-layout.css'
 class App extends Component {
   
   render() {
-    const { alert } = this.props
+    
     return (
       <ConnectedRouter history={history}>
         <div className='border'>
