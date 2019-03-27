@@ -37,7 +37,7 @@ class Register extends React.Component {
     }
 
     render() {
-        const { user, submitted } = this.state
+        const { user } = this.state
         const { alert  } = this.props
         return(
             <div>

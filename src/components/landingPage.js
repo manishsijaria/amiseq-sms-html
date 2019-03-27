@@ -5,7 +5,7 @@ import { FetchAndFilterContactTable }  from './fetchAndViewContacts/fetchAndFilt
 
 import '../css/react-split-pane.css'
 
-import { connect } from 'react-redux'
+//import { connect } from 'react-redux'
 
 class LandingPage extends React.Component {
     constructor(props) {
@@ -14,7 +14,7 @@ class LandingPage extends React.Component {
     }
     
     componentWillMount() {
-        const { dispatch } = this.props
+        //const { dispatch } = this.props
 
         this.updateDimensions();
     }

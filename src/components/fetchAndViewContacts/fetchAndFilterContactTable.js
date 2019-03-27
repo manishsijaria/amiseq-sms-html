@@ -43,7 +43,7 @@ export default class FetchAndFilterContactTable  extends React.Component {
         this.state = { filterText: ''}
     }
     componentWillMount() {
-        const { dispatch, user } = this.props
+        const { dispatch } = this.props
         dispatch(contactActions.getContacts())
         
     }

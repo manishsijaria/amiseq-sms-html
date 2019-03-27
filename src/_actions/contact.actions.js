@@ -36,7 +36,7 @@ function deleteContact(contact_id) {
         contactServices.deleteContact(contact_id)
         .then(successMsg => {
             if(!successMsg || successMsg === undefined) {
-                let e = 'Contact was not deleted'
+                //let e = 'Contact was not deleted'
                 //dispatch(failure(e))
                 //dispatch(alertActions.error(e))
             } else {
