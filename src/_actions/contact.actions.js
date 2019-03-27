@@ -7,6 +7,7 @@ import { alertActions } from './alert.actions';
 
 export const contactActions = {
     addContact,
+    deleteContact,
     getContacts,
 }
 
@@ -30,9 +31,27 @@ function addContact(contact) {
     function success(contact) { return { type: contactConstants.ADD_CONTACT_SUCCESS, contact }} 
 }
 
-function getContacts(user_id) {
+function deleteContact(contact_id) {
+    return dispatch => {
+        contactServices.deleteContact(contact_id)
+        .then(successMsg => {
+            if(!successMsg || successMsg === undefined) {
+                let e = 'Contact was not deleted'
+                //dispatch(failure(e))
+                //dispatch(alertActions.error(e))
+            } else {
+                dispatch(deleteContact(contact_id))
+                //dispatch(push('/landingpage'))
+            }
+        })
+    }
+    function deleteContact(contact_id) { return { type: contactConstants.DELETE_CONTACT_SUCCESS, contact_id }}
+}
+
+
+function getContacts() {
     return (dispatch) => {
-        contactServices.getContacts(user_id)
+        contactServices.getContacts()
         .then(contacts => {
             if(!contacts || contacts === undefined) {
                 let e = 'Error in getting contacts list'

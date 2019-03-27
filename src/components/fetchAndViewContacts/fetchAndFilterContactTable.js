@@ -44,7 +44,7 @@ export default class FetchAndFilterContactTable  extends React.Component {
     }
     componentWillMount() {
         const { dispatch, user } = this.props
-        dispatch(contactActions.getContacts(user.user_id))
+        dispatch(contactActions.getContacts())
         
     }
     handelFilterTextChange = (filterText) => {
@@ -54,6 +54,12 @@ export default class FetchAndFilterContactTable  extends React.Component {
     }
     selected = (contact) => {
         this.props.onContactClick(contact)
+    }
+    deleteContact = (contact_id) => {
+        const { dispatch } = this.props
+        dispatch(contactActions.deleteContact(parseInt(contact_id,10)))
+        //-1 will not be any contact_id, the viewNSendSms will be blank.
+        this.props.onContactClick(-1) 
     }
     render() {
         const { filterText } = this.state
@@ -68,7 +74,8 @@ export default class FetchAndFilterContactTable  extends React.Component {
                    <ContactTable contacts={contacts} 
                                 filterText={filterText} 
                                 contactSelected={this.props.contactSelected}
-                                onContactClick={this.selected}/>
+                                onContactClick={this.selected}
+                                onContactDelete={this.deleteContact}/>
                 </div> 
         )
     }

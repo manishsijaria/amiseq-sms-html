@@ -24,10 +24,28 @@ module.exports.addContact = (req, callback) => {
     })     
 }
 
-module.exports.getContacts = (user_id, callback) => {
+module.exports.deleteContact = (contact_id , callback) => {
+    var deleteContact = `DELETE FROM contact WHERE contact_id =` + contact_id
+    getConnection((err,connection)=> {
+        connection.query(deleteContact, [], (err, result) => {
+            connection.release()
+            if(err) {
+                callback(null,err)
+                console.log('Error in deleting Contact')
+            } else {
+                console.log('result.length=' + JSON.stringify(result.length))
+                console.log('result=' + JSON.stringify(result))
+                callback(result,null)
+            }
+
+        })
+    })    
+}
+
+module.exports.getContacts = ( callback) => {
     var queryContacts = `SELECT contact_id, CONCAT(firstname,' ', lastname) as fullname,
                                 mobile_no, contact_type_id, user_id, msg_count FROM 
-                            contact WHERE user_id=` + user_id + ` ORDER BY msg_count desc, fullname asc`
+                            contact  ORDER BY msg_count desc, fullname asc`
  
 
     getConnection((err,connection)=> {

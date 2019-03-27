@@ -5,6 +5,15 @@ export default class ContactRow  extends React.Component {
     selected = (event) => {
         this.props.onContactClick(event.currentTarget.dataset.tag)
     }
+    handelKeyPress = (e) => { 
+        switch (e.keyCode) {
+            case 46:
+                this.props.onContactDelete(e.currentTarget.dataset.tag)
+                break;
+            default:
+            //Do nothing
+        }
+    }
     render() {
         const contact = this.props.contact
         let contactClassName = 'contact_row'
@@ -14,7 +23,11 @@ export default class ContactRow  extends React.Component {
             }
         }
         return(
-            <div className={contactClassName} onClick={this.selected} data-tag={contact.contact_id}>
+            <div className={contactClassName} 
+                 onClick={this.selected} 
+                 data-tag={contact.contact_id}
+                 onKeyDown={this.handelKeyPress}
+                 tabIndex={0} >
                 <div>
                     <div style={{float: 'left'}}><b>{contact.fullname}</b></div>
                     {contact.msg_count > 0 ?

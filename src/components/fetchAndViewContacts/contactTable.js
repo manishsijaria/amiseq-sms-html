@@ -6,6 +6,9 @@ export default class ContactTable  extends React.Component {
     selected = (contact) => {
         this.props.onContactClick(contact)
     }
+    deleteContact = (contact_id) => {
+        this.props.onContactDelete(contact_id)
+    }
     render() {
         const contacts = this.props.contacts
         let  tagContactRows = []
@@ -21,7 +24,8 @@ export default class ContactTable  extends React.Component {
                                             key={contact.contact_id} 
                                             contact={contact}
                                             contactSelected={this.props.contactSelected}
-                                            onContactClick={this.selected}>
+                                            onContactClick={this.selected}
+                                            onContactDelete={this.deleteContact}>
                                         </ContactRow>);
                 }
 

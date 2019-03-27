@@ -47,6 +47,7 @@ class LandingPage extends React.Component {
     handelClick = (contact) => {
         this.setState({ contactSelected: parseInt(contact, 10)})
     }  
+
     render() {
         return(
                 <>
