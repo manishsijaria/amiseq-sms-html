@@ -22,3 +22,13 @@ export function contactsGet(state = {contacts: []}, action) {
             return state
     }
 }
+
+export function contactsCount(state = 0, action) {
+    switch(action.type) {
+        case contactConstants.GET_CONTACTS_COUNT_SUCCESS:
+            //alert(action.count)
+            return action.count 
+        default:
+            return state
+    }
+}

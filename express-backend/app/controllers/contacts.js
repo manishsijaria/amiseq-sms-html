@@ -40,4 +40,18 @@ router.get('/getContacts', (req, res) => {
    
 })
 
+router.get('/getContactsCount', (req, res) => {
+    console.log('/contacts/getContactsCount called via get===')
+
+    contactsModel.getContactsCount((result,err) => {
+        if(err) { 
+            return res.status(404).json(JSON.stringify({msg:err})) 
+        }
+        else { return res.status(200).json(JSON.stringify(result)) }        
+    })
+   
+})
+
+
+
 module.exports = router

@@ -44,6 +44,11 @@ export default class FetchAndFilterContactTable  extends React.Component {
     }
     componentWillMount() {
         const { dispatch } = this.props
+        /*
+        dispatch(contactActions.getContactsCount())
+        alert(this.props.count)    
+        */
+        
         dispatch(contactActions.getContacts())
         
     }
@@ -84,7 +89,8 @@ export default class FetchAndFilterContactTable  extends React.Component {
 function mapStateToProps(state) {
     const { user } = state.authentication
     const { contacts } = state.contactsGet
-    return { user, contacts }
+    const  count  = state.contactsCount
+    return { user, contacts, count }
 }
 
 const connectedFetchAndFilterContactTable = connect(mapStateToProps)(FetchAndFilterContactTable)

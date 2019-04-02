@@ -1,3 +1,11 @@
 insert into contact_type (contact_type_id, type_name) 
 values (1, 'Candidate'), (2, 'Client'), (3, 'Others');
 
+
+Offset: It is used to specify the offset of the first row to be returned.
+		if offset=100 and the first row=1 than select would return 101st record.
+Count:It is used to specify the maximum number of rows to be returned.
+
+SELECT *
+FROM contact
+LIMIT Offset, Count;

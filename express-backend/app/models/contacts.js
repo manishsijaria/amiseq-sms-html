@@ -47,7 +47,6 @@ module.exports.getContacts = ( callback) => {
                                 mobile_no, contact_type_id, user_id, msg_count FROM 
                             contact  ORDER BY msg_count desc, fullname asc`
  
-
     getConnection((err,connection)=> {
         connection.query(queryContacts, [], (err, result) => {
             connection.release()
@@ -61,4 +60,23 @@ module.exports.getContacts = ( callback) => {
             }
         })
     })    
+}
+
+module.exports.getContactsCount = (callback) => {
+    var queryContactsCount = `SELECT count(*) as count 
+                            FROM 
+                            contact`
+    getConnection((err,connection)=> {
+        connection.query(queryContactsCount, [], (err, result) => {
+            connection.release()
+            if(err) {
+                callback(null,err)
+                console.log('Error in getting contact count')
+            } else {
+                callback(result[0].count, null)
+                console.log(JSON.stringify(result.length))
+                console.log(JSON.stringify(result))
+            }
+        })
+    })
 }

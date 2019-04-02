@@ -6,6 +6,7 @@ export const contactServices = {
     addContact,
     deleteContact,
     getContacts,
+    getContactsCount,
 }
 
 function addContact(contact) {
@@ -56,4 +57,21 @@ function getContacts() {
             })
             .then(contacts => {return contacts})
             .catch(err => {console.log(err)})
+}
+
+function getContactsCount() {
+    const requestOptions = {
+        method: 'GET',
+        headers: { 'Content-Type' : 'application/json'}
+    }
+    
+    return fetch('/contacts/getContactsCount', requestOptions)
+            .then(response => {
+                if(response.ok) {
+                    return response.json()
+                }
+                throw new Error("Error in getting contacts count")
+            })
+            .then(count => { return parseInt(count,10)})
+            .catch(err => {console.log(err)})    
 }
