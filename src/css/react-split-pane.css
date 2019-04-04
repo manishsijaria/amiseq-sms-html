@@ -51,7 +51,7 @@
 .Pane1 {
     display: flex;
     min-width: 0;
-    overflow: auto; /* let the scrollbar appear*/
+    overflow: hidden; /* let the scrollbar disappear in left pane*/
 }
 
 .Pane2 {

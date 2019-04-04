@@ -27,9 +27,9 @@ export default class ContactRow  extends React.Component {
                  onClick={this.selected} 
                  data-tag={contact.contact_id}
                  onKeyDown={this.handelKeyPress}
-                 tabIndex={0} >
+                 tabIndex={0} style={this.props.style} >
                 <div>
-                    <div style={{float: 'left'}}><b>{contact.fullname}</b></div>
+                    <div style={{float: 'left', whiteSpace: 'nowrap' }}><b>{contact.fullname}</b></div>
                     {contact.msg_count > 0 ?
                         <div style={{float: 'right'}} className='contact_row_msg_count_oval'>{contact.msg_count}</div>
                         : null}

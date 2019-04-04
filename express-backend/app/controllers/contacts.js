@@ -28,10 +28,12 @@ router.delete('/delete', (req,res) => {
     })    
 })
 
-router.get('/getContacts', (req, res) => {
+router.get('/getContacts/:offset/:count', (req, res) => {
     console.log('/contacts/getContacts called via get===')
 
-    contactsModel.getContacts( (result,err) => {
+    contactsModel.getContacts(parseInt(req.params.offset,10),
+                              parseInt(req.params.count,10),       
+                              (result,err) => {
         if(err) { 
             return res.status(404).json(JSON.stringify({msg:err})) 
         }

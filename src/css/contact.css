@@ -1,14 +1,14 @@
 
 .content {
   margin: 1px 0px 0px 5px;
-  width: 220px; 
+  /*width: 250px; */
 }
 
 .searchContact {
   position: fixed;
   top: 59px;
   background: #b2b9b9; 
-  border-radius: 7%;
+  border-radius: 3%;
 }
 .searchContactForm {
   margin-left: 3px;
@@ -16,6 +16,8 @@
 
 .contentTable {
   margin-top: 60px;
+  /*width: 230px;*/
+  overflow: auto;
 }
 
 .contact_row { 
@@ -30,8 +32,8 @@
 }
 
 .contact_row_selected {
-  background-color: rgb(233,235,235);
-  border-radius: 7%;
+  background-color: rgb(238, 101, 38);
+  border-radius: 3%;
 }
 
 .contact_row_msg_count_oval {

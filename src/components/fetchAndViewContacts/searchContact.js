@@ -10,13 +10,16 @@ export default class SearchContact  extends React.Component {
         this.props.onSearchContactFilterChange(value)
     }
     render() {
+        let splitPaneSize = this.props.splitPaneSize
         return(
-                <div className='searchContact'>
+                <div className='searchContact' style={{ width: `${splitPaneSize}px`}}>
                     <form name="form" className='searchContactForm'>
                         <input type="text" name="name" 
                             value = {this.props.filterText} 
                             onChange={this.handelChange} 
-                            placeholder="Search contact..."/>
+                            placeholder="Search contact..."
+                            style={{ width: `${splitPaneSize - 40}px`}}
+                        />
                     </form>
                 </div> 
         )

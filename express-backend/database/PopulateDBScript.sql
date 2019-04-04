@@ -9,3 +9,7 @@ Count:It is used to specify the maximum number of rows to be returned.
 SELECT *
 FROM contact
 LIMIT Offset, Count;
+
+SELECT contact_id, CONCAT(firstname,' ', lastname) as fullname,
+                                mobile_no, contact_type_id, user_id, msg_count FROM
+                            contact  ORDER BY msg_count desc, contact_id asc, fullname asc LIMIT 0, 20;

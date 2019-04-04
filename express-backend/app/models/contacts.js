@@ -42,17 +42,18 @@ module.exports.deleteContact = (contact_id , callback) => {
     })    
 }
 
-module.exports.getContacts = ( callback) => {
+module.exports.getContacts = (offset, count, callback) => {
     var queryContacts = `SELECT contact_id, CONCAT(firstname,' ', lastname) as fullname,
                                 mobile_no, contact_type_id, user_id, msg_count FROM 
-                            contact  ORDER BY msg_count desc, fullname asc`
+                            contact  ORDER BY msg_count desc, contact_id asc, fullname asc LIMIT ` + offset + `,` + count
  
     getConnection((err,connection)=> {
         connection.query(queryContacts, [], (err, result) => {
             connection.release()
             if(err) {
                 callback(null,err)
-                console.log('Error in getting Contacts list')
+                console.log('Error in getting Contacts list Error:' + err)
+                console.log('Query:' + queryContacts)
             } else {
                 callback(result,null)
                 console.log(JSON.stringify(result.length))

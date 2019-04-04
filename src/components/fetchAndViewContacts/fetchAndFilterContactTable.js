@@ -8,7 +8,7 @@ import ContactTable from './contactTable'
 import {connect} from 'react-redux'
 import { contactActions } from '../../_actions'
 import '../../css/contact.css'
-
+import { FetchContactConstants } from '../../_constants'
 /*
 FetchAndFilterContactTable --- this.state = { contact_type: 'All', user: 'My_List', filterText: ''}
 	SelectContactType
@@ -37,21 +37,44 @@ const fetchedContacts =
 
 ];
 */
+
 export default class FetchAndFilterContactTable  extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { filterText: ''}
+        this.state = { filterText: '', rowCount: 0}
     }
     componentWillMount() {
         const { dispatch } = this.props
-        /*
         dispatch(contactActions.getContactsCount())
-        alert(this.props.count)    
-        */
-        
-        dispatch(contactActions.getContacts())
-        
     }
+    componentDidUpdate(prevProps, prevState) {
+        if(prevProps.count !== this.props.count) {
+            //alert("prevProps.count=" + prevProps.count + " this.props.count=" + this.props.count)
+            this.setState({ rowCount: this.props.count})
+            if(this.props.count > FetchContactConstants.MINIMUM_BATCH_SIZE) {
+                this.fetchMoreRows({startIndex: FetchContactConstants.MINIMUM_START_INDEX, 
+                                    stopIndex: FetchContactConstants.MINIMUM_BATCH_SIZE})
+            }
+            else {
+                this.fetchMoreRows({startIndex: FetchContactConstants.MINIMUM_START_INDEX, 
+                                    stopIndex: this.props.count })
+            }
+        }
+    }
+
+    /*
+    Offset: It is used to specify the offset of the first row to be returned.
+		if offset=100 and the first row=1 than select would return 101st record.
+    Count:It is used to specify the maximum number of rows to be returned.
+    SELECT *
+    FROM contact
+    LIMIT Offset, Count;
+    */
+    fetchMoreRows = ({startIndex, stopIndex}) => {
+        const { dispatch } = this.props
+        dispatch(contactActions.getContacts(startIndex,stopIndex - startIndex + 1))
+    }
+
     handelFilterTextChange = (filterText) => {
         this.setState({
             filterText: filterText
@@ -68,19 +91,28 @@ export default class FetchAndFilterContactTable  extends React.Component {
     }
     render() {
         const { filterText } = this.state
-        const { contacts } = this.props
+        const { contacts, count } = this.props
         return(
-                <div className='content'>
+                <div className='content' style={{ width: this.props.splitPaneSize }}>
                     {/*
                    <SelectContactType/>
                    <SelectUser/>
                    */}
-                   <SearchContact filterText={filterText} onSearchContactFilterChange={this.handelFilterTextChange}/>
+                   <SearchContact   filterText={filterText} 
+                                    onSearchContactFilterChange={this.handelFilterTextChange}
+                                    splitPaneSize={this.props.splitPaneSize}
+                    />
                    <ContactTable contacts={contacts} 
                                 filterText={filterText} 
                                 contactSelected={this.props.contactSelected}
                                 onContactClick={this.selected}
-                                onContactDelete={this.deleteContact}/>
+                                onContactDelete={this.deleteContact}
+                                heightInPx={this.props.heightInPx}
+                                splitPaneSize={this.props.splitPaneSize}
+
+                                loadMoreRows={this.fetchMoreRows}
+                                rowCount={count}
+                    />
                 </div> 
         )
     }

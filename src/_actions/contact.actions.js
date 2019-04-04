@@ -50,9 +50,9 @@ function deleteContact(contact_id) {
 }
 
 
-function getContacts() {
+function getContacts(offset, count) {
     return (dispatch) => {
-        contactServices.getContacts()
+        contactServices.getContacts(offset, count)
         .then(contacts => {
             if(!contacts || contacts === undefined) {
                 let e = 'Error in getting contacts list'
@@ -73,15 +73,10 @@ function getContactsCount() {
     return (dispatch) => {
         contactServices.getContactsCount()
         .then(count => {
-            if(!count) {
-                let e = 'Error in getting contacts count'
-                dispatch(failure(e))
-                dispatch(alertActions.error(e))
-            } else {
                 dispatch(success(count))
             }
-        })
+        )
     }
-    function failure(e) { return {type: contactConstants.GET_CONTACTS_COUNT_FAILURE, e} }
+    //function failure(e) { return {type: contactConstants.GET_CONTACTS_COUNT_FAILURE, e} }
     function success(count) { return {type: contactConstants.GET_CONTACTS_COUNT_SUCCESS, count }}
 }

@@ -5,7 +5,7 @@ export function contactsGet(state = {contacts: []}, action) {
         case contactConstants.GET_CONTACTS_FAILURE:
             return {contacts: []}
         case contactConstants.GET_CONTACTS_SUCCESS:
-            return {contacts: action.contacts}
+            return {contacts: [...state.contacts, ...action.contacts]}
         case contactConstants.ADD_CONTACT_SUCCESS:
             return Object.assign({}, state, { contacts:[...state.contacts, {...action.contact}]})
         case contactConstants.DELETE_CONTACT_SUCCESS:
