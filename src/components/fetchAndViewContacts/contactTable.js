@@ -73,8 +73,10 @@ export default class ContactTable  extends React.PureComponent {
                             height={listHeight}
                             rowHeight={rowHeight}
                             rowCount={fetchedRowCount}
-                            contactSelected={this.props.contactSelected}
+                            
+                            contactSelected={this.props.contactSelected} 
                             >
+                            {/* when the contactSelected prop changes the list is rerendered, and highlighted by css */ }
                         </List>
                     )}
                 </InfiniteLoader>
