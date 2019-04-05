@@ -1,6 +1,6 @@
 export const FetchContactConstants = {
     MINIMUM_BATCH_SIZE : 20,
-    MINIMUM_START_INDEX : 1,
+    MINIMUM_START_INDEX : 0,
 };
 
 

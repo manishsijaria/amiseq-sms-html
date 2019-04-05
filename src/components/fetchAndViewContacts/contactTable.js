@@ -10,6 +10,7 @@ export default class ContactTable  extends React.PureComponent {
     constructor(props) {
         super(props)
         this.listRef = React.createRef()
+        this.InfiniteLoaderRef = React.createRef()
     }
     isRowLoaded = ({index}) => {
         return !!this.props.contacts[index]
@@ -30,6 +31,20 @@ export default class ContactTable  extends React.PureComponent {
             </ContactRow>    
         )
     }
+
+    /*
+    An update can be caused by changes to props or state. 
+    This methods is called when a component is being re-rendered
+    */
+    shouldComponentUpdate(nextProps, nextState) {
+        if(nextProps.filterText !== this.props.filterText) {
+            //the filterText prop is changed, reset the infinite loader cache.
+            alert('nextProps.filterText=' + nextProps.filterText + ' this.props.filterText=' + this.props.filterText)
+            //this.InfiniteLoaderRef.current.resetLoadMoreRowsCache(true);
+        }
+        return true;
+    }
+
     selected = (contact) => {
         this.props.onContactClick(contact)
     }
@@ -60,7 +75,11 @@ export default class ContactTable  extends React.PureComponent {
                 <InfiniteLoader isRowLoaded={this.isRowLoaded}
                                 loadMoreRows={this.props.loadMoreRows}
                                 rowCount={this.props.rowCount}
-                                minimumBatchSize={FetchContactConstants.MINIMUM_BATCH_SIZE}>
+                                minimumBatchSize={FetchContactConstants.MINIMUM_BATCH_SIZE}
+                                ref={(infiniteloader) => {
+                                    this.InfiniteLoaderRef = infiniteloader
+                                }}
+                >
                     {({ onRowsRendered, registerChild}) => (
                         <List
                             ref={(list) => { 

@@ -41,16 +41,17 @@ const fetchedContacts =
 export default class FetchAndFilterContactTable  extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { filterText: '', rowCount: 0}
+        this.state = { filterText: ''}
     }
     componentWillMount() {
         const { dispatch } = this.props
         dispatch(contactActions.getContactsCount())
     }
+
     componentDidUpdate(prevProps, prevState) {
         if(prevProps.count !== this.props.count) {
             //alert("prevProps.count=" + prevProps.count + " this.props.count=" + this.props.count)
-            this.setState({ rowCount: this.props.count})
+            //this.setState({ rowCount: this.props.count})
             if(this.props.count > FetchContactConstants.MINIMUM_BATCH_SIZE) {
                 this.fetchMoreRows({startIndex: FetchContactConstants.MINIMUM_START_INDEX, 
                                     stopIndex: FetchContactConstants.MINIMUM_BATCH_SIZE})
@@ -59,7 +60,7 @@ export default class FetchAndFilterContactTable  extends React.Component {
                 this.fetchMoreRows({startIndex: FetchContactConstants.MINIMUM_START_INDEX, 
                                     stopIndex: this.props.count })
             }
-        }
+        }  
     }
 
     /*
