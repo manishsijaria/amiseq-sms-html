@@ -42,11 +42,14 @@ module.exports.deleteContact = (contact_id , callback) => {
     })    
 }
 
-module.exports.getContacts = (offset, count, callback) => {
-    var queryContacts = `SELECT contact_id, CONCAT(firstname,' ', lastname) as fullname,
+module.exports.getContacts = (offset, count, filterText, callback) => {
+    var selectClause = `SELECT contact_id, CONCAT(firstname,' ', lastname) as fullname,
                                 mobile_no, contact_type_id, user_id, msg_count FROM 
-                            contact  ORDER BY msg_count desc, contact_id asc, fullname asc LIMIT ` + offset + `,` + count
- 
+                            contact`  
+    var whereClause = (filterText) ? ` WHERE CONCAT(firstname,' ', lastname) like '%` + filterText + `%'` : ``
+    var  orderByClause = ` ORDER BY msg_count desc, contact_id asc, fullname asc LIMIT ` + offset + `,` + count
+    var queryContacts = selectClause + whereClause + orderByClause
+
     getConnection((err,connection)=> {
         connection.query(queryContacts, [], (err, result) => {
             connection.release()
@@ -63,10 +66,13 @@ module.exports.getContacts = (offset, count, callback) => {
     })    
 }
 
-module.exports.getContactsCount = (callback) => {
-    var queryContactsCount = `SELECT count(*) as count 
+module.exports.getContactsCount = (filterText, callback) => {
+    var selectClause = `SELECT count(*) as count 
                             FROM 
                             contact`
+    var whereClause = (filterText) ? ` WHERE CONCAT(firstname,' ', lastname) like '%` + filterText + `%'` : ``
+    var queryContactsCount = selectClause + whereClause
+    console.log(queryContactsCount)
     getConnection((err,connection)=> {
         connection.query(queryContactsCount, [], (err, result) => {
             connection.release()

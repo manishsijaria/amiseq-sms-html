@@ -28,11 +28,13 @@ router.delete('/delete', (req,res) => {
     })    
 })
 
-router.get('/getContacts/:offset/:count', (req, res) => {
-    console.log('/contacts/getContacts called via get===')
+router.post('/getContacts/:offset/:count', (req, res) => {
+    console.log('/contacts/getContacts called via post===')
+    const { filterText } = req.body
 
     contactsModel.getContacts(parseInt(req.params.offset,10),
-                              parseInt(req.params.count,10),       
+                              parseInt(req.params.count,10),
+                              filterText,       
                               (result,err) => {
         if(err) { 
             return res.status(404).json(JSON.stringify({msg:err})) 
@@ -42,10 +44,11 @@ router.get('/getContacts/:offset/:count', (req, res) => {
    
 })
 
-router.get('/getContactsCount', (req, res) => {
-    console.log('/contacts/getContactsCount called via get===')
-
-    contactsModel.getContactsCount((result,err) => {
+router.post('/getContactsCount', (req, res) => {
+    console.log('/contacts/getContactsCount called via post===')
+    const { filterText } = req.body
+    console.log('filterText=' + filterText)
+    contactsModel.getContactsCount(filterText, (result,err) => {
         if(err) { 
             return res.status(404).json(JSON.stringify({msg:err})) 
         }

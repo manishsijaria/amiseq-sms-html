@@ -45,22 +45,26 @@ export default class FetchAndFilterContactTable  extends React.Component {
     }
     componentWillMount() {
         const { dispatch } = this.props
-        dispatch(contactActions.getContactsCount())
+        dispatch(contactActions.getContactsCount(''))
     }
 
     componentDidUpdate(prevProps, prevState) {
         if(prevProps.count !== this.props.count) {
-            //alert("prevProps.count=" + prevProps.count + " this.props.count=" + this.props.count)
-            //this.setState({ rowCount: this.props.count})
-            if(this.props.count > FetchContactConstants.MINIMUM_BATCH_SIZE) {
-                this.fetchMoreRows({startIndex: FetchContactConstants.MINIMUM_START_INDEX, 
-                                    stopIndex: FetchContactConstants.MINIMUM_BATCH_SIZE})
-            }
-            else {
-                this.fetchMoreRows({startIndex: FetchContactConstants.MINIMUM_START_INDEX, 
-                                    stopIndex: this.props.count })
-            }
+            this.fetchRowsOnCountChange(this.props.count)
         }  
+    }
+
+    fetchRowsOnCountChange = (RowCount) => {
+        //alert("prevProps.count=" + prevProps.count + " this.props.count=" + this.props.count)
+        //this.setState({ rowCount: this.props.count})
+        if(RowCount > FetchContactConstants.MINIMUM_BATCH_SIZE) {
+            this.fetchMoreRows({startIndex: FetchContactConstants.MINIMUM_START_INDEX, 
+                                stopIndex: FetchContactConstants.MINIMUM_BATCH_SIZE})
+        }
+        else {
+            this.fetchMoreRows({startIndex: FetchContactConstants.MINIMUM_START_INDEX, 
+                                stopIndex: RowCount })
+        }
     }
 
     /*
@@ -73,13 +77,16 @@ export default class FetchAndFilterContactTable  extends React.Component {
     */
     fetchMoreRows = ({startIndex, stopIndex}) => {
         const { dispatch } = this.props
-        dispatch(contactActions.getContacts(startIndex,stopIndex - startIndex + 1))
+        dispatch(contactActions.getContacts(startIndex,stopIndex - startIndex + 1, this.state.filterText))
     }
 
     handelFilterTextChange = (filterText) => {
         this.setState({
             filterText: filterText
         })
+        const { dispatch } = this.props
+        dispatch(contactActions.getContactsCount(filterText))
+        
     }
     selected = (contact) => {
         this.props.onContactClick(contact)

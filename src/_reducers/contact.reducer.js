@@ -6,8 +6,12 @@ export function contactsGet(state = {contacts: []}, action) {
             return {contacts: []}
         case contactConstants.GET_CONTACTS_SUCCESS:
             return {contacts: [...state.contacts, ...action.contacts]}
+        case contactConstants.RESET_CONTACTS:
+            return {contacts: []}
+
         case contactConstants.ADD_CONTACT_SUCCESS:
             return Object.assign({}, state, { contacts:[...state.contacts, {...action.contact}]})
+            
         case contactConstants.DELETE_CONTACT_SUCCESS:
             let tempContacts = []
             state.contacts.forEach((contact)=> {

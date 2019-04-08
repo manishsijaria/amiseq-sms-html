@@ -2,7 +2,7 @@
 import React from 'react'
 import ContactRow from './contactRow'
 
-import { AutoSizer, InfiniteLoader, List, WindowScroller } from 'react-virtualized'
+import {  InfiniteLoader, List } from 'react-virtualized'
 import 'react-virtualized/styles.css'
 import { FetchContactConstants } from '../../_constants'
 
@@ -32,19 +32,13 @@ export default class ContactTable  extends React.PureComponent {
         )
     }
 
-    /*
-    An update can be caused by changes to props or state. 
-    This methods is called when a component is being re-rendered
-    */
-    shouldComponentUpdate(nextProps, nextState) {
-        if(nextProps.filterText !== this.props.filterText) {
-            //the filterText prop is changed, reset the infinite loader cache.
-            alert('nextProps.filterText=' + nextProps.filterText + ' this.props.filterText=' + this.props.filterText)
-            //this.InfiniteLoaderRef.current.resetLoadMoreRowsCache(true);
-        }
-        return true;
+    componentDidUpdate(prevProps, prevState) {
+        if(prevProps.filterText !== this.props.filterText) {
+            if(this.InfiniteLoaderRef) {
+                this.InfiniteLoaderRef.resetLoadMoreRowsCache(true);
+            }
+        }  
     }
-
     selected = (contact) => {
         this.props.onContactClick(contact)
     }
@@ -52,12 +46,6 @@ export default class ContactTable  extends React.PureComponent {
         this.props.onContactDelete(contact_id)
     }
     render() {
-        const contacts = this.props.contacts
-        let  tagContactRows = []
-        const {  filterText  } = this.props
-        
-        //if(!(contacts && contacts.length > 0)) {
- 
         let fetchedRowCount= (this.props.contacts) ? this.props.contacts.length : 0 
         let heightOfSearchContact = 60 + 3
         let listHeight
@@ -69,58 +57,43 @@ export default class ContactTable  extends React.PureComponent {
         const rowHeight = 42;
         const rowWidth = this.props.splitPaneSize //225;
         let splitPaneSize = this.props.splitPaneSize
+        let NoContactMsg = (this.props.rowCount === 0) ? 
+                                <div><span>No Contacts 
+                                            {(this.props.filterText) ? ' matching ' + this.props.filterText : 'yet!' } 
+                                     </span>
+                                </div> : ''
         return(
             <div className='contentTable' style={{ width: `${splitPaneSize}px`}}>
-                {(this.props.rowCount === 0) ? <div><span>No Contacts yet!</span></div> : 
-                <InfiniteLoader isRowLoaded={this.isRowLoaded}
-                                loadMoreRows={this.props.loadMoreRows}
-                                rowCount={this.props.rowCount}
-                                minimumBatchSize={FetchContactConstants.MINIMUM_BATCH_SIZE}
-                                ref={(infiniteloader) => {
-                                    this.InfiniteLoaderRef = infiniteloader
-                                }}
-                >
-                    {({ onRowsRendered, registerChild}) => (
-                        <List
-                            ref={(list) => { 
-                                        this.listRef = list
-                                        registerChild(list)
-                                }}
-                            onRowsRendered={onRowsRendered}
-                            rowRenderer={this.rowRenderer}
-                            width={rowWidth}
-                            height={listHeight}
-                            rowHeight={rowHeight}
-                            rowCount={fetchedRowCount}
-                            
-                            contactSelected={this.props.contactSelected} 
-                            >
-                            {/* when the contactSelected prop changes the list is rerendered, and highlighted by css */ }
-                        </List>
-                    )}
-                </InfiniteLoader>
+                { (NoContactMsg) ? NoContactMsg : 
+                    <InfiniteLoader isRowLoaded={this.isRowLoaded}
+                                    loadMoreRows={this.props.loadMoreRows}
+                                    rowCount={this.props.rowCount}
+                                    minimumBatchSize={FetchContactConstants.MINIMUM_BATCH_SIZE}
+                                    ref={(infiniteloader) => {
+                                        this.InfiniteLoaderRef = infiniteloader
+                                    }}
+                    >
+                        {({ onRowsRendered, registerChild}) => (
+                            <List
+                                ref={(list) => { 
+                                            this.listRef = list
+                                            registerChild(list)
+                                    }}
+                                onRowsRendered={onRowsRendered}
+                                rowRenderer={this.rowRenderer}
+                                width={rowWidth}
+                                height={listHeight}
+                                rowHeight={rowHeight}
+                                rowCount={fetchedRowCount}
+                                
+                                contactSelected={this.props.contactSelected} 
+                                >
+                                {/* when the contactSelected prop changes the list is rerendered, and highlighted by css */ }
+                            </List>
+                        )}
+                    </InfiniteLoader>
                 }
             </div>
         )
     }
 }
-
-/*
-
-else { 
-            contacts.forEach(contact => {
-                if(filterText && contact.fullname.toLowerCase().indexOf(filterText.toLowerCase()) === -1) { 
-                    return 
-                } else {
-                    tagContactRows.push(<ContactRow 
-                                            key={contact.contact_id} 
-                                            contact={contact}
-                                            contactSelected={this.props.contactSelected}
-                                            onContactClick={this.selected}
-                                            onContactDelete={this.deleteContact}>
-                                        </ContactRow>);
-                }
-
-            });
-        }
-*/

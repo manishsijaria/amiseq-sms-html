@@ -43,10 +43,11 @@ function deleteContact(contact_id) {
             .catch(err => { console.log(err) })
 }
 
-function getContacts(offset, count) {
+function getContacts(offset, count, filterText) {
     const requestOptions = {
-        method: 'GET',
-        headers: { 'Content-Type' : 'application/json'}
+        method: 'POST',
+        headers: { 'Content-Type' : 'application/json'},
+        body: JSON.stringify({filterText: filterText})
     }
     return fetch('/contacts/getContacts/' + offset + '/' + count , requestOptions)
             .then(response => {
@@ -59,10 +60,11 @@ function getContacts(offset, count) {
             .catch(err => {console.log(err)})
 }
 
-function getContactsCount() {
+function getContactsCount(filterText) {
     const requestOptions = {
-        method: 'GET',
-        headers: { 'Content-Type' : 'application/json'}
+        method: 'POST',
+        headers: { 'Content-Type' : 'application/json'},
+        body: JSON.stringify({filterText: filterText})
     }
     
     return fetch('/contacts/getContactsCount', requestOptions)
