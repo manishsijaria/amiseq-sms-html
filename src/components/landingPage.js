@@ -5,15 +5,19 @@ import { FetchAndFilterContactTable }  from './fetchAndViewContacts/fetchAndFilt
 
 import '../css/react-split-pane.css'
 import { SplitPaneConstants } from '../_constants'
+import { ViewNSendSms } from '../components/viewNSendSms/viewNSendSms'
+import { ContectSelectedConstants } from '../_constants'
 //import { connect } from 'react-redux'
 
 class LandingPage extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { contactSelected: '', 
+        this.state = { contactSelected: ContectSelectedConstants.DEFAULT_CONTACT,
+                        fullname:'', 
                         heightInPercent: 0, 
                         heightInPx: 0,
-                        split_pane_size: SplitPaneConstants.LEFT_CONTACT_PANE_MIN_SIZE - SplitPaneConstants.RESIZER_OFFSET
+                        widthInPx: 0,
+                        left_split_pane_width: SplitPaneConstants.LEFT_CONTACT_PANE_MIN_SIZE - SplitPaneConstants.RESIZER_OFFSET
                     };
     }
     
@@ -28,7 +32,7 @@ class LandingPage extends React.Component {
         d = document,
         documentElement = d.documentElement,
         body = d.getElementsByTagName('body')[0],
-        //width = w.innerWidth || documentElement.clientWidth || body.clientWidth,
+        width = w.innerWidth || documentElement.clientWidth || body.clientWidth,
         height = w.innerHeight|| documentElement.clientHeight|| body.clientHeight;
         //height = body.getElementsByClassName('middleContents')[0].clientHeight;
         //alert(height)
@@ -38,7 +42,9 @@ class LandingPage extends React.Component {
         let middleContentHeightInPercent = (100 * middleContentHeightInPx) / height
         middleContentHeightInPercent = Math.trunc(middleContentHeightInPercent) + "%"
         //alert(middleContentHeight)
-        this.setState({ heightInPercent: middleContentHeightInPercent, heightInPx: middleContentHeightInPx });
+        this.setState({ heightInPercent: middleContentHeightInPercent, 
+                        heightInPx: middleContentHeightInPx,
+                        widthInPx: width});
     }
 
     componentDidMount() {
@@ -48,11 +54,11 @@ class LandingPage extends React.Component {
         window.removeEventListener("resize", this.updateDimensions);
     }
  
-    handelClick = (contact) => {
-        this.setState({ contactSelected: parseInt(contact, 10)})
+    handelClick = (contact_id, fullname) => {
+        this.setState({ contactSelected: parseInt(contact_id, 10), fullname: fullname})
     }  
     _onDragFinished = (size) => {
-        this.setState({ split_pane_size: size - SplitPaneConstants.RESIZER_OFFSET})
+        this.setState({ left_split_pane_width: size - SplitPaneConstants.RESIZER_OFFSET})
     }
     render() {
         return(
@@ -60,7 +66,7 @@ class LandingPage extends React.Component {
                     <div className='middleContents' ref={'middleContentsRef'}>
                         <SplitPane split="vertical" 
                                     minSize={SplitPaneConstants.LEFT_CONTACT_PANE_MIN_SIZE} 
-                                    defaultSize={SplitPaneConstants.VERTICAL_PANE_DEFAULT_SIZE} 
+                                    defaultSize={SplitPaneConstants.LEFT_CONTACT_PANE_DEFAULT_SIZE} 
                                     style={{ height: this.state.heightInPercent }}
                                     onDragFinished={this._onDragFinished}>
                             <div>
@@ -68,10 +74,15 @@ class LandingPage extends React.Component {
                                         onContactClick={this.handelClick} 
                                         contactSelected={this.state.contactSelected}
                                         heightInPx={this.state.heightInPx}
-                                        splitPaneSize={this.state.split_pane_size}/>
+                                        leftSplitPaneWidth={this.state.left_split_pane_width}/>
                             </div>
                             <div>
-                                {this.state.contactSelected}
+                                <ViewNSendSms contactSelected={this.state.contactSelected}
+                                                fullname={this.state.fullname}
+                                                heightInPx={this.state.heightInPx}
+                                                rightSplitPaneWidth={this.state.widthInPx - this.state.left_split_pane_width - SplitPaneConstants.RESIZER_OFFSET}
+                                                >
+                                </ViewNSendSms>
                             </div>
                         </SplitPane>
                     </div>

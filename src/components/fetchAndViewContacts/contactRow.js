@@ -3,12 +3,12 @@ import React from 'react'
 import '../../css/contact.css'
 export default class ContactRow  extends React.Component {
     selected = (event) => {
-        this.props.onContactClick(event.currentTarget.dataset.tag)
+        this.props.onContactClick(event.currentTarget.dataset.id, event.currentTarget.dataset.fullname)
     }
     handelKeyPress = (e) => { 
         switch (e.keyCode) {
             case 46:
-                this.props.onContactDelete(e.currentTarget.dataset.tag)
+                this.props.onContactDelete(e.currentTarget.dataset.id )
                 break;
             default:
             //Do nothing
@@ -25,7 +25,8 @@ export default class ContactRow  extends React.Component {
         return(
             <div className={contactClassName} 
                  onClick={this.selected} 
-                 data-tag={contact.contact_id}
+                 data-id={contact.contact_id}
+                 data-fullname={contact.fullname}
                  onKeyDown={this.handelKeyPress}
                  tabIndex={0} style={this.props.style} >
                 <div>

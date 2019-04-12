@@ -1,5 +1,5 @@
 
-import { contactConstants  } from '../_constants'
+import { contactConstants, msgConstants,contactMsgConstants, FetchMsgsConstants  } from '../_constants'
 import { contactServices } from "../_services";
 
 import { push } from 'connected-react-router'
@@ -11,6 +11,8 @@ export const contactActions = {
     deleteContact,
     getContacts,
     getContactsCount,
+    getMsgsCount,
+    getContactMsgs,
 }
 
 
@@ -84,4 +86,37 @@ function getContactsCount(filterText) {
     }
     //function failure(e) { return {type: contactConstants.GET_CONTACTS_COUNT_FAILURE, e} }
     function success(count) { return {type: contactConstants.GET_CONTACTS_COUNT_SUCCESS, count }}
+}
+
+function getMsgsCount( contact_id) {
+    return (dispatch) => {
+        contactServices.getMsgsCount( contact_id)
+        .then(count => {
+            dispatch(success(count))
+        })
+    }
+    function success(count) { return {type: msgConstants.GET_MSGS_COUNT, contact_id, count }}
+}
+
+function getContactMsgs(offset, count, contact_id) {
+    return (dispatch) => {
+        if(offset === FetchMsgsConstants.MINIMUM_START_INDEX) {
+            dispatch(reset(contact_id))
+        }
+        contactServices.getContactMsgs(offset, count, contact_id)
+        .then(contactMsgs => {
+            if(!contactMsgs || contactMsgs === undefined) {
+                let e = 'Error in getting contact Messages'
+                dispatch(failure(e))
+                dispatch(alertActions.error(e))
+            } else {
+                let ParsedContactMsgs = JSON.parse(contactMsgs)
+                dispatch(success(contact_id,ParsedContactMsgs)) 
+            }
+
+        })
+    }
+    function failure(error) { return {type: contactMsgConstants.GET_CONTACT_MSGS_FAILURE, error }}
+    function success(contact_id, contactMsgs) { return {type: contactMsgConstants.GET_CONTACT_MSGS_SUCCESS, contact_id, contactMsgs }}      
+    function reset(contact_id) { return {type: contactMsgConstants.RESET_MSGS, contact_id }}
 }

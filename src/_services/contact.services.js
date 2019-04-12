@@ -7,6 +7,8 @@ export const contactServices = {
     deleteContact,
     getContacts,
     getContactsCount,
+    getMsgsCount,
+    getContactMsgs,
 }
 
 function addContact(contact) {
@@ -75,5 +77,38 @@ function getContactsCount(filterText) {
                 throw new Error("Error in getting contacts count")
             })
             .then(count => {  return parseInt(count,10)})
+            .catch(err => {console.log(err)})    
+}
+
+function getMsgsCount(contact_id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: { 'Content-Type' : 'application/json'}
+    }
+    
+    return fetch('/contacts/getMsgsCount/'   + contact_id , requestOptions)
+            .then(response => {
+                if(response.ok) {
+                    return response.json()
+                }
+                throw new Error("Error in getting Contact Messages Count")
+            })
+            .then(count => {return parseInt(count,10)})
+            .catch(err => {console.log(err)})     
+}
+
+function getContactMsgs(offset, count, contact_id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: { 'Content-Type' : 'application/json'}
+    }
+    return fetch('/contacts/getContactMsgs/' + offset + '/' + count + '/' + contact_id, requestOptions)
+            .then(response => {
+                if(response.ok) {
+                    return response.json()
+                }
+                throw new Error("Error in getting Clients Messages")
+            })
+            .then(contactMsgs => {return contactMsgs})
             .catch(err => {console.log(err)})    
 }

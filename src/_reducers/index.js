@@ -1,13 +1,14 @@
 import { combineReducers } from 'redux'
 
-import { alert } from './alert.reducer'
+
 import { clientsGet,selectedClients , clientsMsgs, clientMsgsCount } from './client.reducer'
 import { candidatesGet, selectedCandidates,candidatesMsgs,candidateMsgsCount} from './candidate.reducer'
 
-import { contactsGet, contactsCount } from '../_reducers/contact.reducer'
+
+import { alert } from './alert.reducer'
+import { contactsGet, contactsCount, contactMsgsCount,contactMsgs } from '../_reducers/contact.reducer'
 import { contactTypesGet } from './contactType.reducer'
 import { authentication } from './authentication.reducer'
-
 import { connectRouter } from 'connected-react-router'
 
 const createRootReducer = history =>  combineReducers({
@@ -25,6 +26,8 @@ const createRootReducer = history =>  combineReducers({
     contactTypesGet,
     contactsGet,
     contactsCount,
+    contactMsgsCount,
+    contactMsgs,
     authentication,
     router: connectRouter(history),
 })

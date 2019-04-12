@@ -57,6 +57,30 @@ router.post('/getContactsCount', (req, res) => {
    
 })
 
+router.get('/getMsgsCount/:number', (req, res) => {
+    console.log('/contacts/getMsgsCount called via get===')
+    
+    contactsModel.getMsgsCount(parseInt(req.params.number,10), (result,err) => {
+        if(err) { 
+            return res.status(404).json(JSON.stringify({msg:err})) 
+        }
+        else { return res.status(200).json(JSON.stringify(result)) }        
+    })
+   
+})
 
+router.get('/getContactMsgs/:offset/:count/:contact_id', (req, res) => {
+    console.log('/contacts/getContactMsgs called via get===')
+
+    contactsModel.getContactMsgs(parseInt(req.params.offset,10),
+                                 parseInt(req.params.count,10),
+                                 parseInt(req.params.contact_id,10), 
+                                (result,err) => {
+        if(err) { 
+            return res.status(404).json(JSON.stringify({msg:err})) 
+        }
+        else { return res.status(200).json(JSON.stringify(result)) }        
+    })
+})
 
 module.exports = router

@@ -8,7 +8,7 @@ import ContactTable from './contactTable'
 import {connect} from 'react-redux'
 import { contactActions } from '../../_actions'
 import '../../css/contact.css'
-import { FetchContactConstants } from '../../_constants'
+import { FetchContactConstants, ContectSelectedConstants } from '../../_constants'
 /*
 FetchAndFilterContactTable --- this.state = { contact_type: 'All', user: 'My_List', filterText: ''}
 	SelectContactType
@@ -86,29 +86,29 @@ export default class FetchAndFilterContactTable  extends React.Component {
         })
         const { dispatch } = this.props
         dispatch(contactActions.getContactsCount(filterText))
-        
+
     }
-    selected = (contact) => {
-        this.props.onContactClick(contact)
+    selected = (contact_id, fullname) => {
+        this.props.onContactClick(contact_id, fullname)
     }
     deleteContact = (contact_id) => {
         const { dispatch } = this.props
         dispatch(contactActions.deleteContact(parseInt(contact_id,10)))
         //-1 will not be any contact_id, the viewNSendSms will be blank.
-        this.props.onContactClick(-1) 
+        this.props.onContactClick(ContectSelectedConstants.DEFAULT_CONTACT) 
     }
     render() {
         const { filterText } = this.state
         const { contacts, count } = this.props
         return(
-                <div className='content' style={{ width: this.props.splitPaneSize }}>
+                <div className='content' style={{ width: this.props.leftSplitPaneWidth }}>
                     {/*
                    <SelectContactType/>
                    <SelectUser/>
                    */}
                    <SearchContact   filterText={filterText} 
                                     onSearchContactFilterChange={this.handelFilterTextChange}
-                                    splitPaneSize={this.props.splitPaneSize}
+                                    leftSplitPaneWidth={this.props.leftSplitPaneWidth}
                     />
                    <ContactTable contacts={contacts} 
                                 filterText={filterText} 
@@ -116,7 +116,7 @@ export default class FetchAndFilterContactTable  extends React.Component {
                                 onContactClick={this.selected}
                                 onContactDelete={this.deleteContact}
                                 heightInPx={this.props.heightInPx}
-                                splitPaneSize={this.props.splitPaneSize}
+                                leftSplitPaneWidth={this.props.leftSplitPaneWidth}
 
                                 loadMoreRows={this.fetchMoreRows}
                                 rowCount={count}

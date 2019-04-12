@@ -16,3 +16,12 @@ export const contactConstants = {
     DELETE_CONTACT_FAILURE : 'DELETE_CONTACT_FAILURE',
 }
 
+export const msgConstants = {
+    GET_MSGS_COUNT : 'GET_MSGS_COUNT'
+}
+
+export const contactMsgConstants = {
+    GET_CONTACT_MSGS_SUCCESS :'GET_CONTACT_MSGS_SUCCESS',
+    GET_CONTACT_MSGS_FAILURE : 'GET_CONTACT_MSGS_FAILURE',
+    RESET_MSGS : 'RESET_MSGS',
+}
