@@ -134,8 +134,9 @@ module.exports.getContactMsgs = (offset, count, contact_id, callback) => {
                 console.log('Query:' + queryContactMsgs)
             } else {
                 callback(result,null)
-                console.log(JSON.stringify(result.length))
-                console.log(JSON.stringify(result))
+                console.log("offset: " + offset + ", count:" + count)
+                //console.log(JSON.stringify(result.length))
+                //console.log(JSON.stringify(result))
             }
         })
     })

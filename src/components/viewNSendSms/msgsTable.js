@@ -1,71 +1,101 @@
 
 import React from 'react'
 
-import '../../css/simpleChat.css'
-import  { ServerConstants } from '../../_constants'
+import MsgRow from './msgRow'
+import {  InfiniteLoader, List } from 'react-virtualized'
+import { FetchMsgsConstants } from '../../_constants'
 
-export default class MsgsTable extends React.Component {
-   
+export default class MsgsTable extends React.PureComponent {
+    constructor(props) {
+        super(props)
+        this.listRef = React.createRef()
+        this.InfiniteLoaderRef = React.createRef()
+    }
+    isRowLoaded = ({index}) => {
+        return !!this.props.msgs[index]
+    }
+    rowRenderer = ({ key, index, style, isScrolling, isVisible }) => {
+        return (
+            <MsgRow 
+                key={key} 
+                index={index}
+                style={style}
+                isScrolling={isScrolling}
+                isVisible={isVisible}
+                
+                msg={this.props.msgs[index]}
+                searchText={this.props.searchText}>
+            </MsgRow>    
+        )        
+    }
+
+    _onScroll = ({scrollTop}) => {
+        if(scrollTop !== 0) {
+            //alert(scrollTop)
+        }
+    }
     render() {
-        const { msgs, searchText, fullname  } = this.props
+        const { msgs } = this.props
+        let fetchedRowCount = (msgs) ? msgs.length : 0
+        let listHeight = this.props.heightInPx
+        const rowHeight = 50;
+        const rowWidth = this.props.rightSplitPaneWidth
+        let NoMsgsMsg = (this.props.rowCount === undefined || this.props.rowCount === 0) ? 
+                                <div><span>No Messages !                               
+                                     </span>
+                                </div> : ''
+        /*
         const rows = []
-        //Header to add
         msgs.forEach((msg) => {
-            var indexOfSearchText = msg.sms_text.toLowerCase().indexOf(searchText.toLowerCase())
-            if(!searchText.length || (indexOfSearchText === -1)) {
-                if(ServerConstants.TWILIO_AMISEQ_NO === msg.msg_from) {
-                    rows.push(<li style={{width:'90%'}}>
-                                    <div className="msj-rta macro">
-                                        <div className="text text-r">
-                                            <p>{msg.sms_text}</p>
-                                            <p><small>Amiseq {msg.fullname} : {msg.message_date}</small></p>
-                                        </div>
-                                    </div>
-                                </li>)
-                    //rows.push(<tr className='amiseq'> <td>{msg.message_date} </td> <td>{msg.sms_text} </td> </tr>)
-                } else {
-                        rows.push(<li style={{width:'90%'}}>
-                                    <div className="msj macro">
-                                        <div className="text text-l">
-                                            <p> {msg.sms_text} </p>
-                                            <p><small>{fullname} : {msg.message_date}</small></p>
-                                        </div>
-                                    </div>
-                                </li>)
-                    //rows.push(<tr className='others'> <td>{msg.message_date} </td> <td>{msg.sms_text} </td> </tr>)
-                }                
-            } else {
-                var leftText = msg.sms_text.slice(0,indexOfSearchText)
-                var rightText = msg.sms_text.slice(indexOfSearchText + searchText.length, msg.sms_text.length)
-                var highlightText = msg.sms_text.slice(indexOfSearchText , indexOfSearchText + searchText.length) 
-                if(ServerConstants.TWILIO_AMISEQ_NO === msg.msg_from) {
-                    rows.push(<li style={{width:'90%'}}>
-                                <div className="msj-rta macro">
-                                    <div className="text text-r">
-                                        <p>{leftText}<span className='highlight'>{highlightText}</span>{rightText}</p>
-                                        <p><small>Amiseq {msg.fullname} : {msg.message_date}</small></p>
-                                    </div>
-                                </div>
-                            </li>)
-                } else {
-                    rows.push(<li style={{width:'90%'}}>
-                                    <div className="msj macro">
-                                        <div className="text text-l">
-                                            <p> {leftText}<span className='highlight'>{highlightText}</span>{rightText}</p>
-                                            <p><small>{fullname} : {msg.message_date}</small></p>
-                                        </div>
-                                    </div>
-                                </li>)
-                }
-            }
+            rows.push(<MsgRow
+               msg={msg}
+               searchText={searchText} 
+               fullname={fullname}
+                />
+            )
         })
+        */
         return(
-            <div className="frame" style={{ height: this.props.heightInPx, 
+            <div className="frame" style={{  height: this.props.heightInPx, 
                                             width: this.props.rightSplitPaneWidth, 
                                              }}>
-                <ul className="ulclass">
-                    {rows}
-                </ul>
+                
+                    <ul className="ulclass">
+                        {(NoMsgsMsg) ? NoMsgsMsg : 
+                            <InfiniteLoader isRowLoaded={this.isRowLoaded}
+                                            loadMoreRows={this.props.loadMoreRows}
+                                            rowCount={this.props.rowCount}
+                                            minimumBatchSize={FetchMsgsConstants.MINIMUM_BATCH_SIZE}
+                                            ref={(infiniteloader) => {
+                                                this.InfiniteLoaderRef = infiniteloader
+                                            }}
+                            >
+                                {({ onRowsRendered, registerChild}) => (
+                                    <List
+                                        ref={(list) => { 
+                                                    this.listRef = list
+                                                    registerChild(list)
+                                            }}
+                                        onRowsRendered={onRowsRendered}
+                                        rowRenderer={this.rowRenderer}
+                                        width={rowWidth}
+                                        height={listHeight}
+                                        rowHeight={rowHeight}
+                                        rowCount={fetchedRowCount}
+                                        onScroll={this._onScroll}
+                                        
+
+                                        searchText={this.props.searchText}
+                                        fullname={this.props.fullname}
+
+                                        >
+                                        {/* when the searchText prop changes the list is rerendered, and highlighted by css */ }
+                                    </List>
+                                )}
+                            </InfiniteLoader>  
+                        }                      
+                    </ul>
+                
             </div>
         )
     }

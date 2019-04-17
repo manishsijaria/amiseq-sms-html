@@ -8,7 +8,7 @@ import { SplitPaneConstants, ContectSelectedConstants } from '../../_constants'
 
 import  SearchableTable  from '../viewNSendSms/searchableTable'
 
-
+const TIMER_INTERVAL = 20000
 class ViewNSendSms extends React.Component {
     
     constructor(props) {
@@ -17,6 +17,7 @@ class ViewNSendSms extends React.Component {
                         heightInPx: 0,
                         horizontal_top_split_pane_height: this.props.heightInPx - SplitPaneConstants.SEND_SMS_SIZE - SplitPaneConstants.RESIZER_OFFSET
                     };
+        this.offset = [];
     }    
     /*
     componentWillMount() {
@@ -29,38 +30,53 @@ class ViewNSendSms extends React.Component {
     */
     componentWillUnmount() {
         clearInterval(this.timerID)
-        //alert('componentWillUnmount')
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if(prevProps.contactSelected !== this.props.contactSelected) {
+        let newContactSelected = this.props.contactSelected
+        if(prevProps.contactSelected !== newContactSelected) {
             const { dispatch } = this.props
-            dispatch(contactActions.getMsgsCount(this.props.contactSelected)) 
-          
+            dispatch(contactActions.getMsgsCount(newContactSelected)) 
+            
             clearInterval(this.timerID)
-            this.timerID = setInterval(() => this.setStateOnTimer(), 20000)    
+            this.timerID = setInterval(() => this.setStateOnTimer(), TIMER_INTERVAL)    
+            
+            
         }
-        /*
+        
+       let newMsgCount = this.props.contactMsgsCountArray[newContactSelected]
+       let prevMsgCount = prevProps.contactMsgsCountArray[newContactSelected]
+       /*
         TODO: presently fetchRowsOnChange resets the contactsMsgs [] , and refetches from beginning.
               later incremental fetch can be implemented for the latest(few) rows added, and can be appended in reducer.
         */
-        if(prevProps.contactMsgsCountArray[this.props.contactSelected] !== this.props.contactMsgsCountArray[this.props.contactSelected]) {
-            this.fetchRowsOnChange(this.props.contactSelected, this.props.contactMsgsCountArray[this.props.contactSelected])
+        if(prevMsgCount !== newMsgCount) {
+            //TODO: for incremental fetch the offset should not be [].
+            //      it should be offset of the last fetch + count + 1 i think.
+            this.offset = []
+            this.fetchRowsOnChange(newContactSelected, newMsgCount)
         }
+        //this.fetchMoreRows({ startIndex: this._loadMoreRowsStartIndex, stopIndex: this._loadMoreRowsStopIndex})
     }
 
     fetchRowsOnChange = (contact_id, RowCount) => {
-        const { dispatch } = this.props
+        let count
+        const { dispatch } = this.props        
         if(RowCount > FetchMsgsConstants.MINIMUM_BATCH_SIZE) {
+            count = FetchMsgsConstants.MINIMUM_BATCH_SIZE - FetchMsgsConstants.MINIMUM_START_INDEX + 1
+            this.offset[FetchMsgsConstants.MINIMUM_START_INDEX] = count
+
             dispatch(contactActions.getContactMsgs(FetchMsgsConstants.MINIMUM_START_INDEX,
-                FetchMsgsConstants.MINIMUM_BATCH_SIZE - FetchMsgsConstants.MINIMUM_START_INDEX + 1, 
+                count, 
                 contact_id))
         }
         else {
+            this.offset[FetchMsgsConstants.MINIMUM_START_INDEX] = RowCount
+
             dispatch(contactActions.getContactMsgs(FetchMsgsConstants.MINIMUM_START_INDEX,
                 RowCount, 
                 contact_id))
-        }     
+        }  
     }
 
       /*
@@ -72,10 +88,17 @@ class ViewNSendSms extends React.Component {
     LIMIT Offset, Count;
     */
    fetchMoreRows = ({startIndex, stopIndex}) => {
-        const { dispatch } = this.props
-        dispatch(contactActions.getContactMsgs(startIndex,
-                                        stopIndex - startIndex + 1, 
-                                        this.props.contactSelected))
+        //Note: if the scrollbar is kept pressed, same startIndex is asked with different stopIndex(count)
+        //      therefore caching the startIndex to avoid the same call with startIndex !!.
+        if(!this.offset[startIndex]) {
+            this.offset[startIndex] = stopIndex - startIndex + 1
+            
+            //Now feth the data, since it does not exists in offset array.
+            const { dispatch } = this.props
+            dispatch(contactActions.getContactMsgs(startIndex,
+                                            stopIndex - startIndex + 1, 
+                                            this.props.contactSelected))
+        }
     }
 
     setStateOnTimer = () => {
@@ -84,8 +107,9 @@ class ViewNSendSms extends React.Component {
         
         
         dispatch(contactActions.getMsgsCount(number))
+        /*
         setTimeout(() =>{
-            /*
+            
             if(this.state.msgs.length !== this.props.MsgsCount) {
                 dispatch(contactActions.getMsgs(number))
                 setTimeout(()=>{
@@ -94,11 +118,13 @@ class ViewNSendSms extends React.Component {
                     this.setState({ msgs: msgs})
                 },1000)        
             }
-            */
         },1000)
+         */
     }
     _onDragFinished = (size) => {
-        this.setState({ horizontal_top_split_pane_height: size - SplitPaneConstants.RESIZER_OFFSET})
+        if(size) {
+            this.setState({ horizontal_top_split_pane_height: size - SplitPaneConstants.RESIZER_OFFSET})
+        }
     }
     render() {
         const { contactsMsgArray, contactSelected, fullname } = this.props
@@ -108,6 +134,8 @@ class ViewNSendSms extends React.Component {
                 msgs = contactsMsgArray[contactSelected]
             }
         }
+        let count = (this.props.contactMsgsCountArray[contactSelected]) ? this.props.contactMsgsCountArray[contactSelected] :  msgs.length
+        
         return(
             <>  
                 <SplitPane split="horizontal"
@@ -119,8 +147,11 @@ class ViewNSendSms extends React.Component {
                         <SearchableTable msgs={msgs}
                                     fullname={fullname}
                                     heightInPx={this.state.horizontal_top_split_pane_height}
-                                    rightSplitPaneWidth={this.props.rightSplitPaneWidth}>
-                        </SearchableTable>
+                                    rightSplitPaneWidth={this.props.rightSplitPaneWidth}
+
+                                    loadMoreRows={this.fetchMoreRows}
+                                    rowCount={count}
+                        />
                     </div>                
                     <div>
                         SMS Component

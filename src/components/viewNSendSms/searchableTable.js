@@ -29,7 +29,12 @@ export default class SearchableTable extends React.Component {
                             searchText={searchText} 
                             fullname={fullname}
                             heightInPx={heightOfmsgTable}
-                            rightSplitPaneWidth={this.props.rightSplitPaneWidth}/>
+                            rightSplitPaneWidth={this.props.rightSplitPaneWidth}
+
+                            loadMoreRows={this.props.loadMoreRows}
+                            rowCount={this.props.rowCount}
+
+                />
             </>
         )
     }

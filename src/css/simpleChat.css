@@ -1,4 +1,8 @@
 
+.row-li {
+    width: 90%;
+}
+
 .macro{
     margin-top:5px;width:85%;
     border-radius:10px;padding:5px;
@@ -35,7 +39,7 @@
 
 .ulclass {
     width:100%;
-    height:100%;
+    height:95%;
     list-style-type: none;
     padding:2px;
     position:relative; 
@@ -43,15 +47,17 @@
     display:flex;
     flex-direction: column;
     top:0px;
-    overflow-y:scroll;
+    /* overflow-y:scroll; */
 }
 
 .frame{
     background:#e0e0de;
     /* border-radius:10px; */
     /* height:300px; */
-    overflow:auto;  /*TODO hidden */
+    overflow:hidden;  /*TODO hidden */
     padding:0;
+    top: 0px;
+    position: relative;
 }
 .frame > div:last-of-type{
     position:absolute;
