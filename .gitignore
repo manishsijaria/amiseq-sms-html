@@ -1,17 +1,25 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
-# dependencies
+# ------------ dependencies -----------------------------
+# If you don't append a slash, the pattern will match both files and 
+# the contents of directories with that name
 /node_modules
 /express-backend/node_modules
+
+#Appending a slash indicates the pattern is a directory. 
+#The entire contents of any directory in the repository matching 
+#that name – including all of its files and subdirectories – will be ignored
+/express-backend/logs/
+
 /express-backend/resumes
 
-# testing
+#--------------- testing ---------------
 /coverage
 
-# production
+#--------------- production ---------------
 /build
 
-# misc
+#--------------- misc ---------------
 .DS_Store
 .env.local
 .env.development.local

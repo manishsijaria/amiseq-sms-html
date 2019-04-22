@@ -58,8 +58,14 @@ export function contactMsgs(state = {contactsMsgArray:[]}, action) {
             if(!newArray[action.contact_id]) {
                 newArray[action.contact_id] = []
             } 
+            /*
+            let existingArray = newArray[action.contact_id]
+            for(let i=reverseMsgs.length -1; i >= 0; i--) {
+                existingArray[reverseMsgs[i].message_id] = reverseMsgs[i]  
+            }
+            newArray[action.contact_id] = existingArray 
+            */
             newArray[action.contact_id] =  [...reverseMsgs, ...newArray[action.contact_id]]
-            //return {contactsMsgArray: [...state.contactsMsgArray, ...action.contacts]}
             return Object.assign({}, state, {contactsMsgArray: newArray }) 
 
         case contactMsgConstants.GET_CONTACT_MSGS_FAILURE:

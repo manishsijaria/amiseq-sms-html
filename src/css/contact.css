@@ -22,6 +22,7 @@
 
 .contact_row { 
   height: 42px;
+  padding-left: 5px;
   border-bottom: 2px solid #b2b9b9;
   margin: 1px 0; 
   cursor: pointer;
@@ -41,8 +42,16 @@
   height: 20px;
   background: rgb(9,210,97);
   border-radius: 40%;
-  text-align: center;
-  color: white
+  text-align: center; 
+  color: white;
+  /* space on top and right of oval */
+  margin-top: 3px;
+  margin-right: 8px;
+}
+
+/* msg_count of contacts in left pane, within <small> tags */
+.contact_row_msg_count_oval small {
+  vertical-align: top; 
 }
 
 div#contact_type, 

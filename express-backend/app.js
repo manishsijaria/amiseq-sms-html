@@ -1,7 +1,9 @@
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
-var logger = require('morgan');
+var morgan = require('morgan');
+var winston = require('./config/winston');
+
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
@@ -21,7 +23,15 @@ var controller_router = require('./app/controllers/index');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
+
+/*
+NOTE: The first place we'll actually use winston is with morgan. We will use the stream option,
+and set it to the stream interface we created as part of the winston configuration.
+*/
+//short or combined
+app.use(morgan('short', { 'stream': winston.stream }));
+
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -51,6 +61,7 @@ var server = http.createServer(app);
  */
 
 server.listen(port);
+
 server.on('error', onError);
 server.on('listening', onListening);
 //============= socket.io ========================
@@ -102,10 +113,21 @@ app.use(function(req, res, next) {
 });
 
 // error handler
+/*
+err.status - The HTTP error status code. If one is not already present, default to 500.
+err.message - Details of the error.
+req.originalUrl - The URL that was requested.
+req.path - The path part of the request URL.
+req.method - HTTP method of the request (GET, POST, PUT, etc.).
+req.ip - Remote IP address of the request.
+*/
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // add this line to include winston logging
+  winston.error(`${err.status || 500} - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
 
   // render the error page
   res.status(err.status || 500);
@@ -169,6 +191,9 @@ function onListening() {
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
+
+  winston.log("info", "Amiseq SMS App listening on:" + bind);
+
   debug('Listening on ' + bind);
 }
 

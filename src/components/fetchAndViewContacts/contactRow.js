@@ -32,7 +32,9 @@ export default class ContactRow  extends React.Component {
                 <div>
                     <div style={{float: 'left', whiteSpace: 'nowrap' }}><b>{contact.fullname}</b></div>
                     {contact.msg_count > 0 ?
-                        <div style={{float: 'right'}} className='contact_row_msg_count_oval'>{contact.msg_count}</div>
+                        <div style={{float: 'right'}} className='contact_row_msg_count_oval'>
+                            <small>{contact.msg_count}</small>
+                        </div>
                         : null}
                 </div>
                 {/*<span style={{display: 'inline-block', width: '150px'}}>{contact.mobile_no}</span> */}

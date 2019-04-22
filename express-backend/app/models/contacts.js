@@ -1,4 +1,5 @@
 var getConnection = require('../../config/dbconnection')
+var winston = require('../../config/winston');
 
 module.exports.addContact = (req, callback) => {
     //prepare insert query
@@ -59,6 +60,7 @@ module.exports.getContacts = (offset, count, filterText, callback) => {
                 console.log('Query:' + queryContacts)
             } else {
                 callback(result,null)
+                winston.log("info", result )
                 console.log(JSON.stringify(result.length))
                 console.log(JSON.stringify(result))
             }
