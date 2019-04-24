@@ -39,8 +39,8 @@ export default class ContactTable  extends React.PureComponent {
             }
         }  
     }
-    selected = (contact_id, fullname) => {
-        this.props.onContactClick(contact_id, fullname)
+    selected = (contact_id, fullname, contact_create_date, added_by_username) => {
+        this.props.onContactClick(contact_id, fullname, contact_create_date, added_by_username)
     }
     deleteContact = (contact_id) => {
         this.props.onContactDelete(contact_id)
@@ -59,7 +59,7 @@ export default class ContactTable  extends React.PureComponent {
         let splitPaneSize = this.props.leftSplitPaneWidth
         let NoContactMsg = (this.props.rowCount === 0) ? 
                                 <div><span>No Contacts 
-                                            {(this.props.filterText) ? ' matching ' + this.props.filterText : 'yet!' } 
+                                            {(this.props.filterText) ? ' matching ' + this.props.filterText : ' yet!' } 
                                      </span>
                                 </div> : ''
         return(

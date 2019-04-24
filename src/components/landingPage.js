@@ -13,7 +13,10 @@ class LandingPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = { contactSelected: ContectSelectedConstants.DEFAULT_CONTACT,
-                        fullname:'', 
+                        contactFullname:'', 
+                        contactCreateDate: '',
+                        addedByUsername:'',
+
                         heightInPercent: 0, 
                         heightInPx: 0,
                         widthInPx: 0,
@@ -54,8 +57,12 @@ class LandingPage extends React.Component {
         window.removeEventListener("resize", this.updateDimensions);
     }
  
-    handelClick = (contact_id, fullname) => {
-        this.setState({ contactSelected: parseInt(contact_id, 10), fullname: fullname})
+    handelClick = (contact_id, contactFullname, contact_create_date, added_by_username) => {
+        this.setState({ contactSelected: parseInt(contact_id, 10), 
+                        contactFullname: contactFullname,
+                        contactCreateDate: contact_create_date,
+                        addedByUsername : added_by_username
+                    })
     }  
     _onDragFinished = (size) => {
         this.setState({ left_split_pane_width: size - SplitPaneConstants.RESIZER_OFFSET})
@@ -78,7 +85,10 @@ class LandingPage extends React.Component {
                             </div>
                             <div>
                                 <ViewNSendSms contactSelected={this.state.contactSelected}
-                                                fullname={this.state.fullname}
+                                                contactFullname={this.state.contactFullname}
+                                                contactCreateDate={this.state.contactCreateDate}       
+                                                addedByUsername={this.state.addedByUsername}
+                                                
                                                 heightInPx={this.state.heightInPx}
                                                 rightSplitPaneWidth={this.state.widthInPx - this.state.left_split_pane_width - SplitPaneConstants.RESIZER_OFFSET}
                                                 >

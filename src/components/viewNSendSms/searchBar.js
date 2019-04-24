@@ -13,7 +13,12 @@ export default class SearchBar  extends React.Component {
         let rightSplitPaneWidth = this.props.rightSplitPaneWidth
         return(
             <div style={{display: 'flex', flexDirection: 'row'}}>
-                <div style={{ marginLeft: '10px', marginTop: '15px', width: `${rightSplitPaneWidth/2}px`}}><b>{this.props.fullname}</b></div>
+                <div style={{ marginLeft: '10px', marginTop: '15px', 
+                              width: `${rightSplitPaneWidth/2}px`}}>
+                    {this.props.contactFullname ? 
+                        <span> <b>{this.props.contactFullname}</b> added by {this.props.addedByUsername} on {this.props.contactCreateDate} </span>
+                        : ''}
+                </div>
                 <div  style={{ width: `${rightSplitPaneWidth/2}px`}}>
                     <form name="form" className='searchContactForm'>
                         <input type="text" name="name" 

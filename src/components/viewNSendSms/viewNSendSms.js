@@ -7,6 +7,7 @@ import SplitPane from 'react-split-pane'
 import { SplitPaneConstants, ContectSelectedConstants } from '../../_constants'
 
 import  SearchableTable  from '../viewNSendSms/searchableTable'
+import { Sms } from './sms'
 
 const TIMER_INTERVAL = 20000
 class ViewNSendSms extends React.Component {
@@ -127,7 +128,7 @@ class ViewNSendSms extends React.Component {
         }
     }
     render() {
-        const { contactsMsgArray, contactSelected, fullname } = this.props
+        const { contactsMsgArray, contactSelected, contactFullname, contactCreateDate,addedByUsername } = this.props
         let msgs = []
         if(contactSelected !== ContectSelectedConstants.DEFAULT_CONTACT) {
             if(contactsMsgArray[contactSelected]) {
@@ -145,7 +146,10 @@ class ViewNSendSms extends React.Component {
                             onDragFinished={this._onDragFinished}>
                     <div>
                         <SearchableTable msgs={msgs}
-                                    fullname={fullname}
+                                    contactFullname={contactFullname}
+                                    contactCreateDate={contactCreateDate}
+                                    addedByUsername={addedByUsername}
+                                    
                                     heightInPx={this.state.horizontal_top_split_pane_height}
                                     rightSplitPaneWidth={this.props.rightSplitPaneWidth}
 
@@ -154,7 +158,11 @@ class ViewNSendSms extends React.Component {
                         />
                     </div>                
                     <div>
-                        SMS Component
+                        <Sms contactSelected={contactSelected} 
+                             rightSplitPaneWidth={this.props.rightSplitPaneWidth} 
+                             heightOfSmsComp={this.props.heightInPx - this.state.horizontal_top_split_pane_height}
+                        >
+                        </Sms>
                     </div>
                 </SplitPane>                
             </>

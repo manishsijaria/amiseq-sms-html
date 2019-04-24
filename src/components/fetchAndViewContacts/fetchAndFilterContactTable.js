@@ -88,8 +88,8 @@ export default class FetchAndFilterContactTable  extends React.Component {
         dispatch(contactActions.getContactsCount(filterText))
 
     }
-    selected = (contact_id, fullname) => {
-        this.props.onContactClick(contact_id, fullname)
+    selected = (contact_id, fullname, contact_create_date, added_by_username) => {
+        this.props.onContactClick(contact_id, fullname, contact_create_date, added_by_username)
     }
     deleteContact = (contact_id) => {
         const { dispatch } = this.props

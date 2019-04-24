@@ -8,7 +8,8 @@ import { push } from 'connected-react-router'
 export const userActions = {
     login,
     logout,
-    register
+    register,
+    smsSend,
 }
 
 function login(username, password) {
@@ -65,4 +66,23 @@ function register(user) {
     function request(user) { return { type: userConstants.REGISTER_REQUEST, user } }
     function success(user) { return { type: userConstants.REGISTER_SUCCESS, user } }
     function failure(error) { return { type: userConstants.REGISTER_FAILURE, error } }
+}
+
+
+
+function smsSend(user_id , smsText, contactArray, bDispatchAlert=true) {
+    return dispatch => {
+        //alert(clientArray.length)
+        userService.smsSend(user_id, smsText, contactArray)
+        .then(success => {
+            if(!success || success === 'undefined') {
+                let e = 'Failed to send SMS to selected contacts'
+                dispatch(alertActions.error(e))
+            } else {
+                //let ParsedSuccess = JSON.parse(success)
+                if(!bDispatchAlert) { return }
+                dispatch(alertActions.success('SMS send to selected contacts'))
+            }            
+        })
+    }
 }

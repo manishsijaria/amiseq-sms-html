@@ -8,14 +8,13 @@ export default class MsgRow  extends React.Component {
         let row
         let widthEightyPercent =  {mywidth: { width: '90%'}}
    
-        const { msg, searchText, fullname  } = this.props
-        if(!msg) { return null}
+        const { msg, searchText, contactFullname  } = this.props
         
         var indexOfSearchText = msg.sms_text.toLowerCase().indexOf(searchText.toLowerCase())
         if(!searchText.length || (indexOfSearchText === -1)) {
             if(ServerConstants.TWILIO_AMISEQ_NO === msg.msg_from) {
                 /* In top li of row-- Both className and style property works, not any of them */
-                row = <li key={this.props.index} style={{...this.props.style, ...widthEightyPercent.mywidth}}> 
+                row = <li key={this.props.key} style={{...this.props.style, ...widthEightyPercent.mywidth}}> 
                                 <div className="msj-rta macro" >
                                     <div className="text text-r" >
                                         <p>{msg.sms_text}</p>
@@ -25,11 +24,11 @@ export default class MsgRow  extends React.Component {
                         </li>
                 //rows.push(<tr className='amiseq'> <td>{msg.message_date} </td> <td>{msg.sms_text} </td> </tr>)
             } else {
-                    row = <li key={this.props.index} style={{...this.props.style, ...widthEightyPercent.mywidth}}>
+                    row = <li key={this.props.key} style={{...this.props.style, ...widthEightyPercent.mywidth}}>
                                 <div className="msj macro">
                                     <div className="text text-l">
                                         <p> {msg.sms_text} </p>
-                                        <p><small>{fullname} : {msg.message_date}</small></p>
+                                        <p><small>{contactFullname} : {msg.message_date}</small></p>
                                     </div>
                                 </div>
                             </li>
@@ -40,7 +39,7 @@ export default class MsgRow  extends React.Component {
             var rightText = msg.sms_text.slice(indexOfSearchText + searchText.length, msg.sms_text.length)
             var highlightText = msg.sms_text.slice(indexOfSearchText , indexOfSearchText + searchText.length) 
             if(ServerConstants.TWILIO_AMISEQ_NO === msg.msg_from) {
-                row = <li key={this.props.index} style={{...this.props.style, ...widthEightyPercent.mywidth}}>
+                row = <li key={this.props.key} style={{...this.props.style, ...widthEightyPercent.mywidth}}>
                             <div className="msj-rta macro">
                                 <div className="text text-r">
                                     <p>{leftText}<span className='highlight'>{highlightText}</span>{rightText}</p>
@@ -49,11 +48,11 @@ export default class MsgRow  extends React.Component {
                             </div>
                         </li>
             } else {
-                row = <li key={this.props.index} style={{...this.props.style, ...widthEightyPercent.mywidth}}>
+                row = <li key={this.props.key} style={{...this.props.style, ...widthEightyPercent.mywidth}}>
                                 <div className="msj macro">
                                     <div className="text text-l">
                                         <p> {leftText}<span className='highlight'>{highlightText}</span>{rightText}</p>
-                                        <p><small>{fullname} : {msg.message_date}</small></p>
+                                        <p><small>{contactFullname} : {msg.message_date}</small></p>
                                     </div>
                                 </div>
                             </li>

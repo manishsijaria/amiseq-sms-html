@@ -1,5 +1,21 @@
+
+/*================== Populate DB Script ==================*/
 insert into contact_type (contact_type_id, type_name) 
 values (1, 'Candidate'), (2, 'Client'), (3, 'Others');
+
+/* add user manish manish from application */
+select * from user;
+delete from user;
+update user set user_id =1 where user_id = 2;
+                            
+CALL `amiseq_sms_html`.`insertIntoContact`();
+select * from contact;
+
+CALL `amiseq_sms_html`.`insertIntoMessage`();
+select * from message;
+update contact SET mobile_no = '+14108675310' where contact_id = 1;
+
+/* ======================================================*/
 
 /*
 Offset: It is used to specify the offset of the first row to be returned.
@@ -13,15 +29,6 @@ SELECT contact_id, CONCAT(firstname,' ', lastname) as fullname,
 FROM contact  
 ORDER BY msg_count desc, contact_id asc, fullname asc LIMIT 0, 20;
 
-/* Get contact with fullname like param, order by msg_count desc*/
-SELECT contact_id, CONCAT(firstname,' ', lastname) as fullname,
-		mobile_no, contact_type_id, user_id, msg_count 
-FROM contact 
-WHERE CONCAT(firstname,' ', lastname) like '%2%' 
-ORDER BY msg_count desc, contact_id asc, fullname asc LIMIT 41,20;
-                            
-CALL `amiseq_sms_html`.`insertIntoContact`();
-CALL `amiseq_sms_html`.`insertIntoMessage`();
 
 /* if the message is received from a contact, than the user_id would be null*/
 update message set user_id = null where message_id = 2;
@@ -44,4 +51,34 @@ FROM message right outer join user on message.user_id=user.user_id
 								and message.contact_id=1
                                 and message.user_id is null
 order by msg_date desc;
+/* =============== */
+select * from contact where contact_id =1;
+/* ============================================================= */
+DELIMITER $$
+CREATE TRIGGER after_message_insert
+AFTER INSERT ON message FOR EACH ROW 
+BEGIN
+    DECLARE id_exists Boolean;
+    DECLARE AMISEQ_SMS_NO varchar(20) default '+15005550006';
+
+    #Check the contact table whether the contact_id exists in contact table.
+    SELECT 1 INTO id_exists
+    FROM contact
+    WHERE contact.contact_id = NEW.contact_id;
+
+    IF id_exists = 1 THEN
+		IF (STRCMP(NEW.msg_from, AMISEQ_SMS_NO) = 0) THEN #Amiseq send the message
+				UPDATE contact
+				SET msg_count = 0
+			WHERE contact_id = NEW.contact_id;
+		ELSE											  #Contact send the message
+			UPDATE contact
+				SET msg_count = msg_count + 1
+			WHERE contact_id = NEW.contact_id;		
+		END IF;
+    END IF;
+END;
+$$
+DELIMITER ;
+
 

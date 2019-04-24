@@ -5,11 +5,25 @@
     border-radius:10px;padding:5px;
     display:flex; 
 }
+
+.msj{
+    float:right;background:greenyellow;
+}
+
 .msj-rta{
     float:right;background:whitesmoke;
 }
-.msj{
-    float:left;background:greenyellow;
+
+.msj-rta:after{
+    width: 0;
+    height: 0;
+    content:"";
+    top:-5px;
+    left:14px;
+    position:relative;
+    border-style: solid;
+    border-width: 13px 13px 0 0;
+    border-color: whitesmoke transparent transparent transparent;           
 }
 
 .text{
@@ -62,16 +76,8 @@
     display:flex;
 }
 
-
-.msj-rta:after{
-    width: 0;
-    height: 0;
-    content:"";
-    top:-5px;
-    left:14px;
-    position:relative;
-    border-style: solid;
-    border-width: 13px 13px 0 0;
-    border-color: whitesmoke transparent transparent transparent;           
+.highlight {
+    background-color:aqua !important;
 }
+
 

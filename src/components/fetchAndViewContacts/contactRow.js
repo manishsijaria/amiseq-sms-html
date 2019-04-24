@@ -3,7 +3,10 @@ import React from 'react'
 import '../../css/contact.css'
 export default class ContactRow  extends React.Component {
     selected = (event) => {
-        this.props.onContactClick(event.currentTarget.dataset.id, event.currentTarget.dataset.fullname)
+        this.props.onContactClick(event.currentTarget.dataset.id, 
+                                  event.currentTarget.dataset.fullname,
+                                  event.currentTarget.dataset.contact_create_date,
+                                  event.currentTarget.dataset.added_by_username)
     }
     handelKeyPress = (e) => { 
         switch (e.keyCode) {
@@ -25,8 +28,12 @@ export default class ContactRow  extends React.Component {
         return(
             <div className={contactClassName} 
                  onClick={this.selected} 
+
                  data-id={contact.contact_id}
                  data-fullname={contact.fullname}
+                 data-contact_create_date={contact.contact_create_date}
+                 data-added_by_username={contact.added_by_username}
+                 
                  onKeyDown={this.handelKeyPress}
                  tabIndex={0} style={this.props.style} >
                 <div>

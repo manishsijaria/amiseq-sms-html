@@ -54,7 +54,10 @@ export default class MsgsTable extends React.PureComponent {
                         isVisible={isVisible}
                         
                         msg={this.props.msgs[index]}
-                        searchText={this.props.searchText}>
+                        searchText={this.props.searchText}
+                        contactFullname={this.props.contactFullname}
+                    >
+                        
                     </MsgRow>    
             </CellMeasurer>
         )        
@@ -69,7 +72,7 @@ export default class MsgsTable extends React.PureComponent {
         const { msgs } = this.props
         let fetchedRowCount = (msgs) ? msgs.length : 0
         let listHeight = this.props.heightInPx
-        const rowHeight = 50;
+        const rowHeight = 60; //50;
         const rowWidth = this.props.rightSplitPaneWidth
         let NoMsgsMsg = (this.props.rowCount === undefined || this.props.rowCount === 0) ? 
                                 <div><span>No Messages !                               
@@ -81,7 +84,7 @@ export default class MsgsTable extends React.PureComponent {
             rows.push(<MsgRow
                msg={msg}
                searchText={searchText} 
-               fullname={fullname}
+               contactFullname={contactFullname}
                 />
             )
         })
@@ -118,10 +121,10 @@ export default class MsgsTable extends React.PureComponent {
                                                     onScroll={this._onScroll}
                                                     
                                                     deferredMeasurementCache={this._cache}
-                                                    rowHeight={this._cache.rowHeight}
+                                                    rowHeight={rowHeight} //{this._cache.rowHeight}
 
                                                     searchText={this.props.searchText}
-                                                    fullname={this.props.fullname}
+                                                    contactFullname={this.props.contactFullname}
 
                                                     >
                                                     {/* when the searchText prop changes the list is rerendered, and highlighted by css */ }

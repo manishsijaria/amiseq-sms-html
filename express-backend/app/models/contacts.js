@@ -44,10 +44,19 @@ module.exports.deleteContact = (contact_id , callback) => {
 }
 
 module.exports.getContacts = (offset, count, filterText, callback) => {
-    var selectClause = `SELECT contact_id, CONCAT(firstname,' ', lastname) as fullname,
-                                mobile_no, contact_type_id, user_id, msg_count FROM 
-                            contact`  
-    var whereClause = (filterText) ? ` WHERE CONCAT(firstname,' ', lastname) like '%` + filterText + `%'` : ``
+    var selectClause = `SELECT contact_id, CONCAT(contact.firstname,' ', contact.lastname) as fullname,
+                                mobile_no, contact_type_id, contact.user_id, msg_count,
+                                contact.date_created, DATE_FORMAT(contact.date_created,"%b %d, %Y %l:%i %p") as contact_create_date,
+                                CONCAT(user.firstname, ' ', user.lastname) as added_by_username
+                        FROM  contact, user`
+    var whereCondition1 = ` contact.user_id = user.user_id`
+    var whereCondition2 = (filterText) ? ` CONCAT(contact.firstname,' ', contact.lastname) like '%` + filterText + `%'` : ``                         
+    
+    var whereClause = ` WHERE ` + whereCondition1
+    if(whereCondition2) {
+        whereClause = whereClause +  ` AND ` + whereCondition2   
+    } 
+
     var  orderByClause = ` ORDER BY msg_count desc, contact_id asc, fullname asc LIMIT ` + offset + `,` + count
     var queryContacts = selectClause + whereClause + orderByClause
 

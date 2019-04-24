@@ -3,12 +3,62 @@ var twilio = require('twilio')
 var fs = require('fs');
 const path = require('path')
 
+
+const utils_sql_queries = {
+    INSERT_MESSAGE: `INSERT INTO message(msg_from,msg_to,sms_text,contact_id,user_id) VALUES(?,?,?,?,?)`,
+}
+
+module.exports.sendMsgToContacts = (user_id, smsText, contactList, connection) => {
+    var twilioClient = new twilio(CONSTANTS.TWILIO_SID, CONSTANTS.TWILIO_TOKEN)                            
+    //for each client 
+    let arrayLength = contactList.length
+    for(let i=0; i < arrayLength; i++) {
+        //get the mobile no, and send message, smsText
+        twilioClient.messages.create({to: contactList[i].mobile_no,
+                            from: CONSTANTS.TWILIO_AMISEQ_NO,
+                            body: smsText},
+        (err, messageData) => {
+            if(err) {
+                //log err msg in client_msg table.
+                this.insertToMessage(connection,  
+                                     CONSTANTS.TWILIO_AMISEQ_NO, 
+                                     contactList[i].mobile_no, 
+                                     err.message,
+                                     contactList[i].contact_id,
+                                     user_id 
+                                     )
+                console.log(err)
+            } else {
+                this.insertToMessage(connection, 
+                                     CONSTANTS.TWILIO_AMISEQ_NO, 
+                                     contactList[i].mobile_no, 
+                                     smsText,
+                                     contactList[i].contact_id,
+                                     user_id 
+                                     )
+
+                // print SID of the message you just sent
+                console.log(messageData.sid);
+            }
+        })  
+    }
+}
+
+module.exports.insertToMessage = (connection, from, to, text, contact_id, user_id) => {
+    connection.query(utils_sql_queries.INSERT_MESSAGE,
+        [from, to, text ,contact_id, user_id ],
+        function(err,result) {
+                if(err) {  console.log(err)  }
+        })   
+}
+
+//##################### Delete Below Code ####################
+
 const sql_queries = {
     INSERT_CLIENT: `INSERT INTO client_msg(msg_from,msg_to,sms_text,client_id) VALUES(?,?,?,?)`,
     INSERT_CANDIDATE: `INSERT INTO candidate_msg(msg_from,msg_to,sms_text,candidate_id) VALUES(?,?,?,?)`,
     SELECT_CANDIDATE_RESUME_FILENAME: `SELECT resume_filename from candidate WHERE candidate.candidate_id IN `,
 }
-
 
 /*
 params:

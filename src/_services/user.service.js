@@ -2,7 +2,8 @@
 export const userService = {
     login,
     logout,
-    register
+    register,
+    smsSend,
 }
 
 function login(username, password) {
@@ -54,5 +55,23 @@ function register(user) {
         })
         .then(user => { return user})
         .catch(err => { console.log(err)})
+}
+
+function smsSend(user_id, smsText, contactArray) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json'},
+        body: JSON.stringify({user_id: user_id, smsText: smsText , contactArray: contactArray })
+    }
+    //alert(JSON.stringify({smsText: smsText , clientArray: clientArray }))
+    return fetch('/users/smsSend' , requestOptions)
+            .then(response => {
+                if(response.ok) {
+                    return response.json()
+                }
+                throw new Error("Error in sending SMS to contacts")
+            })
+            .then(success => {return success})
+            .catch(err => {console.log(err)})
 }
 
