@@ -4,7 +4,7 @@ var modelsUtils = require('./modelsUtils')
 module.exports.authenticate = (req, callback) => {
     var getUsersByUsernamePassword = 'select * from user where username=? and password=?'
     getConnection((err,connection)=> {
-        connection.query(getUsersByUsernamePassword,[req.body.username,req.body.password],(error,result) => {
+        connection.query(getUsersByUsernamePassword,[req.body.username,req.body.password],(err,result) => {
             connection.release()
             if(err) {
                 callback(null,err)
@@ -17,7 +17,7 @@ module.exports.authenticate = (req, callback) => {
                             password: req.body.password},null)
                     
                 } else {
-                    var err = 'invalid credentials'
+                    err = 'invalid credentials'
                     console.log(err)
                     callback(null,err)
                 }
