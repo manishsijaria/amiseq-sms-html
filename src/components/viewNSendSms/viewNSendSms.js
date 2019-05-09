@@ -15,20 +15,25 @@ class ViewNSendSms extends React.Component {
     constructor(props) {
         super(props);
         this.state = { contactSelected: ContectSelectedConstants.DEFAULT_CONTACT, 
-                        heightInPx: 0,
-                        horizontal_top_split_pane_height: this.props.heightInPx - SplitPaneConstants.SEND_SMS_SIZE - SplitPaneConstants.RESIZER_OFFSET
+                        horizontal_top_split_pane_height: this.props.heightInPx - SplitPaneConstants.SEND_SMS_SIZE ,
+                        heightOfSMSComponent: SplitPaneConstants.SEND_SMS_SIZE 
                     };
         this.offset = [];
     }    
-    /*
-    componentWillMount() {
-        this.setStateOnTimer()
-        //The setInterval() method calls a function or evaluates an expression at specified intervals (in milliseconds).
-        //The setInterval() method will continue calling the function until clearInterval() is called, or the window is closed.
-        this.timerID = setInterval(() => this.setStateOnTimer(), 20000)
-        //this.setStateOnTimer()
+    
+   static getDerivedStateFromProps(props, state) {
+        if (props.heightInPx !== (state.horizontal_top_split_pane_height + 
+                                SplitPaneConstants.SEND_SMS_SIZE 
+                                )) {
+            return {
+                horizontal_top_split_pane_height: props.heightInPx - state.heightOfSMSComponent ,
+                heightOfSMSComponent : state.heightOfSMSComponent
+            };
+        }
+        // Return null if the state hasn't changed
+        return null;
     }
-    */
+
     componentWillUnmount() {
         clearInterval(this.timerID)
     }
@@ -41,8 +46,6 @@ class ViewNSendSms extends React.Component {
             
             clearInterval(this.timerID)
             this.timerID = setInterval(() => this.setStateOnTimer(), TIMER_INTERVAL)    
-            
-            
         }
         
        let newMsgCount = this.props.contactMsgsCountArray[newContactSelected]
@@ -124,7 +127,10 @@ class ViewNSendSms extends React.Component {
     }
     _onDragFinished = (size) => {
         if(size) {
-            this.setState({ horizontal_top_split_pane_height: size - SplitPaneConstants.RESIZER_OFFSET})
+            this.setState({ 
+                horizontal_top_split_pane_height: size ,
+                heightOfSMSComponent: this.props.heightInPx - size 
+            })
         }
     }
     render() {
@@ -136,13 +142,13 @@ class ViewNSendSms extends React.Component {
             }
         }
         let count = (this.props.contactMsgsCountArray[contactSelected]) ? this.props.contactMsgsCountArray[contactSelected] :  msgs.length
-        
         return(
             <>  
                 <SplitPane split="horizontal"
                             minSize={this.props.heightInPx/2}
                             maxSize={this.props.heightInPx - SplitPaneConstants.MINIMUM_SEND_SMS_SIZE}
-                            defaultSize={this.props.heightInPx - SplitPaneConstants.SEND_SMS_SIZE - SplitPaneConstants.RESIZER_OFFSET}
+                            defaultSize={'85%'}  //{this.props.heightInPx - SplitPaneConstants.SEND_SMS_SIZE }
+                            size={this.state.horizontal_top_split_pane_height}
                             onDragFinished={this._onDragFinished}>
                     <div>
                         <SearchableTable msgs={msgs}
@@ -150,7 +156,7 @@ class ViewNSendSms extends React.Component {
                                     contactCreateDate={contactCreateDate}
                                     addedByUsername={addedByUsername}
                                     
-                                    heightInPx={this.state.horizontal_top_split_pane_height}
+                                    heightInPx={this.state.horizontal_top_split_pane_height }
                                     rightSplitPaneWidth={this.props.rightSplitPaneWidth}
 
                                     loadMoreRows={this.fetchMoreRows}
@@ -160,7 +166,7 @@ class ViewNSendSms extends React.Component {
                     <div>
                         <Sms contactSelected={contactSelected} 
                              rightSplitPaneWidth={this.props.rightSplitPaneWidth} 
-                             heightOfSmsComp={this.props.heightInPx - this.state.horizontal_top_split_pane_height}
+                             heightOfSmsComp={this.state.heightOfSMSComponent}
                         >
                         </Sms>
                     </div>

@@ -90,7 +90,7 @@ export default class MsgsTable extends React.PureComponent {
         })
         */
         return(
-            <div className="frame" style={{  height: this.props.heightInPx, 
+            <div className="frame" style={{  height: this.props.heightInPx , 
                                             width: this.props.rightSplitPaneWidth, 
                                              }}>
                 
