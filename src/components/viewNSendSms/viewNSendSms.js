@@ -18,6 +18,7 @@ class ViewNSendSms extends React.Component {
                         horizontal_top_split_pane_height: this.props.heightInPx - SplitPaneConstants.SEND_SMS_SIZE ,
                         heightOfSMSComponent: SplitPaneConstants.SEND_SMS_SIZE 
                     };
+        this.prevContactSelected = this.props.contactSelected;
         this.offset = [];
     }    
     
@@ -39,47 +40,80 @@ class ViewNSendSms extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
+        const { dispatch } = this.props
+
         let newContactSelected = this.props.contactSelected
+
         if(prevProps.contactSelected !== newContactSelected) {
-            const { dispatch } = this.props
+            this.prevContactSelected = prevProps.contactSelected
+
             dispatch(contactActions.getMsgsCount(newContactSelected)) 
             
             clearInterval(this.timerID)
             this.timerID = setInterval(() => this.setStateOnTimer(), TIMER_INTERVAL)    
         }
-        
-       let newMsgCount = this.props.contactMsgsCountArray[newContactSelected]
-       let prevMsgCount = prevProps.contactMsgsCountArray[newContactSelected]
+
+        let newMsgCount = this.props.contactMsgsCountArray[newContactSelected]
+        let prevMsgCount = prevProps.contactMsgsCountArray[newContactSelected] 
+
        /*
         TODO: presently fetchRowsOnChange resets the contactsMsgs [] , and refetches from beginning.
               later incremental fetch can be implemented for the latest(few) rows added, and can be appended in reducer.
         */
-        if(prevMsgCount !== newMsgCount) {
+       if(this.prevContactSelected !== newContactSelected && 
+            prevMsgCount !== newMsgCount && 
+            (newMsgCount > 0) //since "prevMsgCount === undefined and newMsgCount === 0"  is true
+            ) {
             //TODO: for incremental fetch the offset should not be [].
-            //      it should be offset of the last fetch + count + 1 i think.
-            this.offset = []
-            this.fetchRowsOnChange(newContactSelected, newMsgCount)
-        }
+            //      it should be offset of the last fetch + count  i think.
+            if(this.offset[newContactSelected]) {
+                //1. Get the count from last fetch  
+                let prevCount = this.offset[newContactSelected][this.offset[newContactSelected].length - 1]
+                //2. get the total item fetched till now, in min_start_index.
+                let min_start_index = this.offset[newContactSelected].length - 1 + prevCount 
+                //3. substract from the newMsgCount, from min_start_index to get the next fetch count.
+                let next_count = newMsgCount - min_start_index
+                //4. store the next_count to fetch in offset array.
+                this.offset[newContactSelected][min_start_index] = next_count
+                //5. since the new messages arrives on the top of records (from the query)
+                //   fetch from 0 index to next_count.
+                //   LAST PARAM OF of below code is append_in_the_end = true
+                //dispatch(contactActions.getContactMsgs(0,next_count, newContactSelected, true))
+                dispatch(contactActions.getContactMsgs(min_start_index,next_count, newContactSelected))
+            } else {
+                this.fetchRowsOnChange(newContactSelected, newMsgCount)
+            }
+        } 
         //this.fetchMoreRows({ startIndex: this._loadMoreRowsStartIndex, stopIndex: this._loadMoreRowsStopIndex})
     }
 
+    ifNotExistThanAddContactIDArrayInOffsetArray = (contact_id) => {
+        if(!this.offset[contact_id]) {
+            this.offset[contact_id] = []
+        }
+    }
+
     fetchRowsOnChange = (contact_id, RowCount) => {
-        let count
-        const { dispatch } = this.props        
+        let count 
+        const { dispatch } = this.props  
+        
+        this.ifNotExistThanAddContactIDArrayInOffsetArray(contact_id) 
+
         if(RowCount > FetchMsgsConstants.MINIMUM_BATCH_SIZE) {
             count = FetchMsgsConstants.MINIMUM_BATCH_SIZE - FetchMsgsConstants.MINIMUM_START_INDEX + 1
-            this.offset[FetchMsgsConstants.MINIMUM_START_INDEX] = count
+            
+            this.offset[contact_id][FetchMsgsConstants.MINIMUM_START_INDEX] = count
 
             dispatch(contactActions.getContactMsgs(FetchMsgsConstants.MINIMUM_START_INDEX,
-                count, 
-                contact_id))
+                    count, 
+                    contact_id))
         }
         else {
-            this.offset[FetchMsgsConstants.MINIMUM_START_INDEX] = RowCount
+            this.offset[contact_id][FetchMsgsConstants.MINIMUM_START_INDEX] = RowCount
 
             dispatch(contactActions.getContactMsgs(FetchMsgsConstants.MINIMUM_START_INDEX,
-                RowCount, 
-                contact_id))
+                    RowCount, 
+                    contact_id))
         }  
     }
 
@@ -94,8 +128,8 @@ class ViewNSendSms extends React.Component {
    fetchMoreRows = ({startIndex, stopIndex}) => {
         //Note: if the scrollbar is kept pressed, same startIndex is asked with different stopIndex(count)
         //      therefore caching the startIndex to avoid the same call with startIndex !!.
-        if(!this.offset[startIndex]) {
-            this.offset[startIndex] = stopIndex - startIndex + 1
+        if(!this.offset[this.props.contactSelected][startIndex]) {
+            this.offset[this.props.contactSelected][startIndex] = stopIndex - startIndex + 1
             
             //Now feth the data, since it does not exists in offset array.
             const { dispatch } = this.props
@@ -109,22 +143,9 @@ class ViewNSendSms extends React.Component {
         const { dispatch } = this.props
         let number = this.props.contactSelected
         
-        
         dispatch(contactActions.getMsgsCount(number))
-        /*
-        setTimeout(() =>{
-            
-            if(this.state.msgs.length !== this.props.MsgsCount) {
-                dispatch(contactActions.getMsgs(number))
-                setTimeout(()=>{
-                    const { contactMsgArray } = this.props
-                    let msgs = contactMsgArray[number]
-                    this.setState({ msgs: msgs})
-                },1000)        
-            }
-        },1000)
-         */
     }
+
     _onDragFinished = (size) => {
         if(size) {
             this.setState({ 
@@ -133,6 +154,7 @@ class ViewNSendSms extends React.Component {
             })
         }
     }
+
     render() {
         const { contactsMsgArray, contactSelected, contactFullname, contactCreateDate,addedByUsername } = this.props
         let msgs = []

@@ -11,6 +11,7 @@ update user set user_id =1 where user_id = 2;
 CALL `amiseq_sms_html`.`insertIntoContact`();
 select * from contact;
 
+delete from message;
 CALL `amiseq_sms_html`.`insertIntoMessage`();
 select * from message;
 update contact SET mobile_no = '+14108675310' where contact_id = 1;
@@ -38,20 +39,24 @@ update message set user_id = null where message_id = 2;
   StackOverflow question:
   https://stackoverflow.com/questions/55651051/query-needed-to-retrive-all-the-rows-from-one-table-joined-with-other-table
 */
-SELECT message_id,msg_date, DATE_FORMAT(msg_date,"%b %d, %Y %l:%i %p") as message_date , 
-          msg_from, msg_to, sms_text, contact_id, 
-       message.user_id,  CONCAT(user.firstname,' ', user.lastname) as fullname   
-FROM message left outer join user on message.user_id=user.user_id 
-                               and message.contact_id=1
-UNION ALL
- SELECT message_id, msg_date, DATE_FORMAT(msg_date,"%b %d, %Y %l:%i %p") as message_date , 
-         msg_from, msg_to, sms_text, contact_id, 
-       message.user_id, CONCAT(user.firstname,' ', user.lastname) as fullname    
-FROM message right outer join user on message.user_id=user.user_id 
-								and message.contact_id=1
-                                and message.user_id is null
-order by msg_date desc;
+
+SELECT message_id,msg_date, DATE_FORMAT(msg_date,"%b %d, %Y %l:%i %p") as message_date ,
+                                msg_from, msg_to, sms_text, contact_id,
+                                message.user_id,  CONCAT(user.firstname,' ', user.lastname) as fullname
+                        FROM message left outer join user on message.user_id=user.user_id
+                                                             where message.contact_id=1 
+UNION ALL  SELECT message_id, msg_date, DATE_FORMAT(msg_date,"%b %d, %Y %l:%i %p") as message_date ,
+                            msg_from, msg_to, sms_text, contact_id,
+                            message.user_id, CONCAT(user.firstname,' ', user.lastname) as fullname
+                    FROM message right outer join user on message.user_id=user.user_id
+                                                          where message.contact_id=1 and message.user_id is null  
+ORDER BY msg_date desc LIMIT 0,1;
+
 /* =============== */
+select * from user;
+
+select * from message;
+
 select * from contact where contact_id =1;
 /* ============================================================= */
 DELIMITER $$

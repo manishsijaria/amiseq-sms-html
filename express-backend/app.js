@@ -65,7 +65,7 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 //============= socket.io ========================
-io = require('socket.io').listen(server)
+var io = require('socket.io').listen(server)
 var interval1;
 var clients = io.of('/clients')
   .on("connection", socket => {

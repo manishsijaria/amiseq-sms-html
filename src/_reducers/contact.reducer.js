@@ -1,4 +1,4 @@
-import { contactConstants , msgConstants, contactMsgConstants } from '../_constants'
+import { contactConstants , msgConstants, contactMsgConstants, userConstants } from '../_constants'
 
 export function contactsGet(state = {contacts: []}, action) {
     switch(action.type) {
@@ -42,7 +42,10 @@ export function contactMsgsCount(state = {contactMsgsCountArray: []}, action) {
         case msgConstants.GET_MSGS_COUNT:
             let newArray = JSON.parse(JSON.stringify(state.contactMsgsCountArray)) 
             newArray[action.contact_id] = action.count
-            return Object.assign({}, state, {contactMsgsCountArray: newArray })  
+            return Object.assign({}, state, {contactMsgsCountArray: newArray }) 
+        
+        case userConstants.LOGOUT:
+            return {contactMsgsCountArray: []}
         default:
             return state
     }
@@ -52,20 +55,22 @@ export function contactMsgs(state = {contactsMsgArray:[]}, action) {
     let newArray
     switch(action.type) {
         case contactMsgConstants.GET_CONTACT_MSGS_SUCCESS:
-            let reverseMsgs = action.contactMsgs.reverse()
-            //alert('action.client_id=' + action.client_id)
+            //let reverseMsgs = action.contactMsgs.reverse()
             newArray = JSON.parse(JSON.stringify(state.contactsMsgArray))
             if(!newArray[action.contact_id]) {
                 newArray[action.contact_id] = []
             } 
+
             /*
-            let existingArray = newArray[action.contact_id]
-            for(let i=reverseMsgs.length -1; i >= 0; i--) {
-                existingArray[reverseMsgs[i].message_id] = reverseMsgs[i]  
+            if(action.append_in_the_end === false) {
+                newArray[action.contact_id] =  [...reverseMsgs, ...newArray[action.contact_id]]
+            } else {
+                newArray[action.contact_id] =  [...newArray[action.contact_id], ...reverseMsgs]
             }
-            newArray[action.contact_id] = existingArray 
             */
-            newArray[action.contact_id] =  [...reverseMsgs, ...newArray[action.contact_id]]
+           
+            //Append at the end of state. 
+            newArray[action.contact_id] =  [...newArray[action.contact_id], ...action.contactMsgs]
             return Object.assign({}, state, {contactsMsgArray: newArray }) 
 
         case contactMsgConstants.GET_CONTACT_MSGS_FAILURE:
@@ -75,7 +80,10 @@ export function contactMsgs(state = {contactsMsgArray:[]}, action) {
             newArray = JSON.parse(JSON.stringify(state.contactsMsgArray))
             newArray[action.contact_id] = []
             return Object.assign({}, state, {contactsMsgArray: newArray }) 
-            
+
+        case userConstants.LOGOUT:
+            return {contactsMsgArray:[]}
+
         default:
             return state
     }

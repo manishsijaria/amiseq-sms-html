@@ -100,9 +100,11 @@ function getMsgsCount( contact_id) {
 
 function getContactMsgs(offset, count, contact_id) {
     return (dispatch) => {
+        /*
         if(offset === FetchMsgsConstants.MINIMUM_START_INDEX) {
             dispatch(reset(contact_id))
         }
+        */
         contactServices.getContactMsgs(offset, count, contact_id)
         .then(contactMsgs => {
             if(!contactMsgs || contactMsgs === undefined) {

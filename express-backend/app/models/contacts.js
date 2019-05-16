@@ -100,12 +100,11 @@ module.exports.getContactsCount = (filterText, callback) => {
 }
 
 module.exports.getMsgsCount = (contact_id, callback) => {
-    var queryContactMsgsCount = `SELECT count(*) as msgsCount 
-                                FROM 
-                                message WHERE contact_id=` + contact_id
-    console.log('queryContactMsgsCount=' + queryContactMsgsCount)
+    let queryContactMsgsCount = this.getContactMsgsQuery(-1,-1,contact_id)
+    let fullQuery = ` SELECT count(*) as msgsCount FROM (` + queryContactMsgsCount + `) X`
+    //console.log('queryContactMsgsCount=' + fullQuery)
     getConnection((err,connection)=> {
-        connection.query(queryContactMsgsCount, [], (err, result) => {
+        connection.query(fullQuery, [], (err, result) => {
             connection.release()
             if(err) {
                 callback(null,err)
@@ -119,22 +118,31 @@ module.exports.getMsgsCount = (contact_id, callback) => {
     })         
 }
 
-module.exports.getContactMsgs = (offset, count, contact_id, callback) => {
-
-    var leftJoin = `SELECT message_id,msg_date, DATE_FORMAT(msg_date,"%b %d, %Y %l:%i %p") as message_date , 
+// private function
+module.exports.getContactMsgsQuery = (offset,count, contact_id) => {
+    let leftJoin = `SELECT message_id,msg_date, DATE_FORMAT(msg_date,"%b %d, %Y %l:%i %p") as message_date , 
                                 msg_from, msg_to, sms_text, contact_id, 
                                 message.user_id,  CONCAT(user.firstname,' ', user.lastname) as fullname   
                         FROM message left outer join user on message.user_id=user.user_id 
-                                                             and message.contact_id=` + contact_id
-    var rightJoin = `SELECT message_id, msg_date, DATE_FORMAT(msg_date,"%b %d, %Y %l:%i %p") as message_date , 
+                                                             where message.contact_id=` + contact_id
+    let rightJoin = `SELECT message_id, msg_date, DATE_FORMAT(msg_date,"%b %d, %Y %l:%i %p") as message_date , 
                             msg_from, msg_to, sms_text, contact_id, 
                             message.user_id, CONCAT(user.firstname,' ', user.lastname) as fullname    
                     FROM message right outer join user on message.user_id=user.user_id 
-                                                          and message.contact_id=` + contact_id +
+                                                          where message.contact_id=` + contact_id +
                                                           ` and message.user_id is null`
                            
-    var orderByClause = `  ORDER BY msg_date desc LIMIT ` + offset + `,` + count
-    var queryContactMsgs = leftJoin + ` UNION ALL ` + rightJoin + orderByClause
+    let orderByClause = `  ORDER BY msg_date asc ` 
+    let limitClause = ``
+    if(offset !== -1 && count !== -1) {
+        limitClause = ` LIMIT ` + offset + `,` + count
+    }
+    let queryContactMsgs = leftJoin + ` UNION ALL ` + rightJoin + orderByClause + limitClause
+    return queryContactMsgs;
+}
+
+module.exports.getContactMsgs = (offset, count, contact_id, callback) => {
+    let queryContactMsgs = this.getContactMsgsQuery(offset,count,contact_id)
 
     getConnection((err,connection)=> {
         connection.query(queryContactMsgs, [], (err, result) => {
@@ -145,9 +153,12 @@ module.exports.getContactMsgs = (offset, count, contact_id, callback) => {
                 console.log('Query:' + queryContactMsgs)
             } else {
                 callback(result,null)
+                //console.log('----------------------')
+                //console.log(queryContactMsgs)
+                //console.log('----------------------')
                 console.log("offset: " + offset + ", count:" + count)
                 //console.log(JSON.stringify(result.length))
-                //console.log(JSON.stringify(result))
+                console.log(JSON.stringify(result))
             }
         })
     })

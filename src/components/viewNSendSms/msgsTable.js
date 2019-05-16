@@ -15,24 +15,36 @@ export default class MsgsTable extends React.PureComponent {
         //Since the width of the rows doesn’t need to be calculated, the fixedWidth property is set to true
         this._cache = new CellMeasurerCache({
                                 fixedWidth: true,
-                                minHeight: 50,
+                                defaultHeight: 70,
                             });
+
+        this.state = { scroll_to_row: null}
+        this.rowHeight = 70; //50;
     }
 
     componentDidUpdate(prevProps, prevState) {
-        //this._cache.clearAll();
-
         if(prevProps.msgs.length !== this.props.msgs.length) {
+            /*
             if (this.listRef) {
                 this._cache.clearAll();
-                //alert(typeof(this.listRef))
                 this.listRef.recomputeRowHeights(0);
             }
+            */
+           this.setState({
+                scroll_to_row:  this.props.msgs.length - 1,
+            })
+        }
+    }
+
+    _onScroll = ({clientHeight,scrollHeight,scrollTop}) => {
+        if (this.state.scroll_to_row !== null && 
+            scrollTop === this.row_height * this.scroll_to_row) {
+            this.setState({scroll_to_row: null})
         }
     }
 
     isRowLoaded = ({index}) => {
-        return !!this.props.msgs[index]
+        return  index < this.props.msgs.length; //!!this.props.msgs[index]
     }
 
     rowRenderer = ({ key, index, parent, style, isScrolling, isVisible }) => {
@@ -45,7 +57,8 @@ export default class MsgsTable extends React.PureComponent {
                 columnIndex={0}
                 key={key}
                 rowIndex={index}
-                parent={parent}> {/* CellMeasurer takes the parent component (List) where it’s going to be rendered */}            
+                parent={parent}
+                > {/* CellMeasurer takes the parent component (List) where it’s going to be rendered */}            
                     <MsgRow 
                         key={key} 
                         index={index}
@@ -63,16 +76,12 @@ export default class MsgsTable extends React.PureComponent {
         )        
     }
 
-    _onScroll = ({clientHeight,scrollHeight,scrollTop}) => {
-        if(scrollTop !== 0) {
-            //alert(scrollTop)
-        }
-    }
+
     render() {
         const { msgs } = this.props
         let fetchedRowCount = (msgs) ? msgs.length : 0
         let listHeight = this.props.heightInPx
-        const rowHeight = 60; //50;
+        
         const rowWidth = this.props.rightSplitPaneWidth
         let NoMsgsMsg = (this.props.rowCount === undefined || this.props.rowCount === 0) ? 
                                 <div><span>No Messages !                               
@@ -121,7 +130,8 @@ export default class MsgsTable extends React.PureComponent {
                                                     onScroll={this._onScroll}
                                                     
                                                     deferredMeasurementCache={this._cache}
-                                                    rowHeight={rowHeight} //{this._cache.rowHeight}
+                                                    rowHeight={this.rowHeight} //{this._cache.rowHeight}
+                                                    scrollToRow={this.state.scroll_to_row}
 
                                                     searchText={this.props.searchText}
                                                     contactFullname={this.props.contactFullname}
