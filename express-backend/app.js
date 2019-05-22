@@ -8,8 +8,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var CONSTANTS = require('./config/constants')
-var clientsModels = require('../express-backend/app/models/clients')
-var candidatesModels = require('../express-backend/app/models/candidates')
 
 //var index = require('./routes/index');
 //var users = require('./routes/users');
