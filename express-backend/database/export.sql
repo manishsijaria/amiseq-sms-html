@@ -54,9 +54,10 @@ CREATE TABLE IF NOT EXISTS `amiseq_sms_html`.`contact` (
   `lastname` VARCHAR(100) NULL DEFAULT NULL,
   `mobile_no` VARCHAR(20) NULL DEFAULT NULL COMMENT 'mobile no should be unique for contacts.',
   `contact_type_id` INT(11) NOT NULL COMMENT 'Foreign key of contact_type, there can be more than one contact having the same contact_type_id.',
-  `user_id` INT(11) NOT NULL,
-  `msg_count` INT(11) NULL DEFAULT '0',
-  `date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `user_id` INT(11) NOT NULL COMMENT 'The user id of the user(recruiter) who created this contact.',
+  `date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'The date on which the contact is created.',
+  `msg_count` INT(11) NULL DEFAULT 0 COMMENT 'This filed is updated by the trigger on message table(after row insert). Default value is 0.',
+  `msg_date` DATETIME NULL DEFAULT NULL COMMENT 'This filed is updated by the trigger on message table(after row insert). Default\nNULL value of field.',
   PRIMARY KEY (`contact_id`),
   UNIQUE INDEX `mobile_no_UNIQUE` (`mobile_no` ASC),
   INDEX `fk_contacts_contact_type_idx` (`contact_type_id` ASC),
@@ -130,7 +131,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `insertIntoMessage`()
 BEGIN
 declare i int default 1;
 declare textSMS varchar(1024) default '';
-	while (i < 225) do 
+	while (i < 31) do 
 		if (CHAR_LENGTH(textSMS) <= 160) THEN
 			set textSMS = CONCAT( textSMS , ' Hello World ' , i);
         end if;
@@ -167,11 +168,11 @@ BEGIN
     IF id_exists = 1 THEN
 	IF (STRCMP(NEW.msg_from, AMISEQ_SMS_NO) = 0) THEN #Amiseq send the message
 	        UPDATE contact
-        	SET msg_count = 0
+        	SET msg_count = 0, msg_date = null
 		WHERE contact_id = NEW.contact_id;
 	ELSE											  #Contact send the message
 		UPDATE contact
-        	SET msg_count = msg_count + 1
+        	SET msg_count = msg_count + 1, msg_date = NOW()
 		WHERE contact_id = NEW.contact_id;		
 	END IF;
     END IF;

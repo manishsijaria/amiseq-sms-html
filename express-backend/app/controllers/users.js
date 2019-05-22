@@ -38,13 +38,16 @@ router.post('/smsSend', (req, res) => {
     console.log('Here')
     const {user_id, smsText, contactArray } = req.body
     console.log('contactArray.length=' + contactArray.length)
-    usersModel.smsSend(user_id,smsText, contactArray,
+    usersModel.smsSend(user_id,smsText, contactArray,req.app.get('socketio'),
         (result,err) => {
             if(err) {
                 return res.status(404).json(JSON.stringify({msg:err})) 
             }
-            else { return res.status(200).json(JSON.stringify(result)) }
-        })
+            else {             
+                return res.status(200).json(JSON.stringify(result)) 
+            }
+    })
+    
 })
 
 

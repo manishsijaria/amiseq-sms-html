@@ -38,14 +38,27 @@ export function contactsCount(state = 0, action) {
 }
 
 export function contactMsgsCount(state = {contactMsgsCountArray: []}, action) {
+    let newArray
     switch(action.type) {
         case msgConstants.GET_MSGS_COUNT:
-            let newArray = JSON.parse(JSON.stringify(state.contactMsgsCountArray)) 
+            newArray = JSON.parse(JSON.stringify(state.contactMsgsCountArray)) 
             newArray[action.contact_id] = action.count
             return Object.assign({}, state, {contactMsgsCountArray: newArray }) 
         
+        case msgConstants.INCREMENT_MSGS_COUNT:
+            newArray = JSON.parse(JSON.stringify(state.contactMsgsCountArray)) 
+            
+            //if it has msgs count via GET_MSGS_COUNT earlier.
+            //earlier GET_MSGS_COUNT might have returned 0, for new contact.
+            if(newArray[action.contact_id] || 
+                (newArray[action.contact_id] === 0) ) { 
+                newArray[action.contact_id] = newArray[action.contact_id] + action.by
+            }
+            return Object.assign({}, state, {contactMsgsCountArray: newArray }) 
+
         case userConstants.LOGOUT:
             return {contactMsgsCountArray: []}
+            
         default:
             return state
     }

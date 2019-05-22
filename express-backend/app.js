@@ -1,6 +1,6 @@
+
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
 var morgan = require('morgan');
 var winston = require('./config/winston');
 
@@ -66,44 +66,10 @@ server.on('error', onError);
 server.on('listening', onListening);
 //============= socket.io ========================
 var io = require('socket.io').listen(server)
-var interval1;
-var clients = io.of('/clients')
-  .on("connection", socket => {
-      console.log(socket.id)
-      if(interval1) {
-        clearInterval(interval1)
-      }
-      interval1 = setInterval(()=> getClientsMsgsAndEmit(clients), 20000)
-      socket.on("disconnect", () => {
-        clearInterval(interval1)
-        console.log("Client disconnected");
-      })
-})
-var interval2;
-var candidates = io.of('/candidates')
-  .on("connection", socket => {
-      console.log(socket.id)
-      if(interval2) {
-        clearInterval(interval2)
-      }
-      interval2 = setInterval(()=> getCandidatesMsgsAndEmit(candidates), 23000)
-      socket.on("disconnect", () => {
-        clearInterval(interval2)
-        console.log("Client disconnected");
-      })
-})
 
-function getClientsMsgsAndEmit(clients) {
-  clientsModels.clients_msg_count_array((arr)=>{
-    //console.log(JSON.stringify(arr))
-    clients.emit("clients-msgs", arr)
-  })
-}
-function getCandidatesMsgsAndEmit(candidates) {
-  candidatesModels.candidates_msg_count_array((arr) => {
-    candidates.emit("candidates-msgs", arr)
-  })
-}
+//KB: set the io in app, so that it can be retrived from routes req object later.
+app.set('socketio', io)
+
 //============================================
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

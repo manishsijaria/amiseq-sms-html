@@ -8,7 +8,7 @@ const utils_sql_queries = {
     INSERT_MESSAGE: `INSERT INTO message(msg_from,msg_to,sms_text,contact_id,user_id) VALUES(?,?,?,?,?)`,
 }
 
-module.exports.sendMsgToContacts = (user_id, smsText, contactList, connection) => {
+module.exports.sendMsgToContacts = (user_id, smsText, contactList, connection,io) => {
     var twilioClient = new twilio(CONSTANTS.TWILIO_SID, CONSTANTS.TWILIO_TOKEN)                            
     //for each client 
     let arrayLength = contactList.length
@@ -20,14 +20,24 @@ module.exports.sendMsgToContacts = (user_id, smsText, contactList, connection) =
         (err, messageData) => {
             if(err) {
                 //log err msg in client_msg table.
-                this.insertToMessage(connection,  
-                                     CONSTANTS.TWILIO_AMISEQ_NO, 
-                                     contactList[i].mobile_no, 
-                                     err.message,
-                                     contactList[i].contact_id,
-                                     user_id 
-                                     )
+                //err.code === 'ETIMEDOUT' internet connection failed on 
+                //                         SMS application hosting network
+                //                         don't log this message.
+                /*
+                if(err.code !== 'ETIMEDOUT') {
+                    
+                    this.insertToMessage(connection,  
+                                        CONSTANTS.TWILIO_AMISEQ_NO, 
+                                        contactList[i].mobile_no, 
+                                        err.message,
+                                        contactList[i].contact_id,
+                                        user_id 
+                                        )
+                }
+                */
+                console.log('============ Error  in sending message from Server to twilio =========')
                 console.log(err)
+                console.log('=======================================================================')
             } else {
                 this.insertToMessage(connection, 
                                      CONSTANTS.TWILIO_AMISEQ_NO, 
@@ -36,12 +46,19 @@ module.exports.sendMsgToContacts = (user_id, smsText, contactList, connection) =
                                      contactList[i].contact_id,
                                      user_id 
                                      )
-
                 // print SID of the message you just sent
                 console.log(messageData.sid);
+                this.sendAndReceiveNotification(io, contactList[i].contact_id)
+                
             }
         })  
     }
+}
+
+module.exports.sendAndReceiveNotification = (io, contact_id) => {
+    let sendAndReceiveNSP= io.of('/sendAndReceive');
+    console.log('=====sending incrementMsgsCount to sockets ========')
+    sendAndReceiveNSP.emit('incrementMsgsCount', {contact_id: contact_id, by: 1}); 
 }
 
 module.exports.insertToMessage = (connection, from, to, text, contact_id, user_id) => {

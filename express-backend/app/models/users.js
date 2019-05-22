@@ -49,7 +49,7 @@ module.exports.register = (req, callback) => {
    })    
 }
 
-module.exports.smsSend = (user_id, smsText, contactArray,callback) => {
+module.exports.smsSend = (user_id, smsText, contactArray,io, callback) => {
     let getContacts = `SELECT contact_id, mobile_no from contact `
     getContacts = getContacts + `WHERE contact_id IN(` + contactArray.join(',') + `)`
     console.log(getContacts)
@@ -62,7 +62,7 @@ module.exports.smsSend = (user_id, smsText, contactArray,callback) => {
                 //got the result of select
                 let contactList = JSON.parse(JSON.stringify(result))
                 //call the function to send message to client.
-                modelsUtils.sendMsgToContacts(user_id, smsText, contactList, connection)
+                modelsUtils.sendMsgToContacts(user_id, smsText, contactList, connection, io)
             }
         })
         connection.release()

@@ -8,10 +8,10 @@ import { SplitPaneConstants, ContectSelectedConstants } from '../../_constants'
 
 import  SearchableTable  from '../viewNSendSms/searchableTable'
 import { Sms } from './sms'
+import { incrementMsgsCount } from '../socketAPI/incrementMsgsCount'
 
-const TIMER_INTERVAL = 20000
+//const TIMER_INTERVAL = 20000
 class ViewNSendSms extends React.Component {
-    
     constructor(props) {
         super(props);
         this.state = { contactSelected: ContectSelectedConstants.DEFAULT_CONTACT, 
@@ -22,7 +22,7 @@ class ViewNSendSms extends React.Component {
         this.offset = [];
     }    
     
-   static getDerivedStateFromProps(props, state) {
+    static getDerivedStateFromProps(props, state) {
         if (props.heightInPx !== (state.horizontal_top_split_pane_height + 
                                 SplitPaneConstants.SEND_SMS_SIZE 
                                 )) {
@@ -35,8 +35,17 @@ class ViewNSendSms extends React.Component {
         return null;
     }
 
+    componentDidMount() {
+        const { dispatch } = this.props
+        
+        incrementMsgsCount( (err, data) => { 
+                                //alert('data.contact_id:' + data.contact_id + ' data.by:' + data.by) 
+                                dispatch(contactActions.incrementMsgsCount(data.contact_id,data.by) ) 
+                            });
+    }
+
     componentWillUnmount() {
-        clearInterval(this.timerID)
+        //clearInterval(this.timerID)
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -49,8 +58,8 @@ class ViewNSendSms extends React.Component {
 
             dispatch(contactActions.getMsgsCount(newContactSelected)) 
             
-            clearInterval(this.timerID)
-            this.timerID = setInterval(() => this.setStateOnTimer(), TIMER_INTERVAL)    
+            //clearInterval(this.timerID)
+            //this.timerID = setInterval(() => this.setStateOnTimer(), TIMER_INTERVAL)    
         }
 
         let newMsgCount = this.props.contactMsgsCountArray[newContactSelected]
@@ -138,13 +147,15 @@ class ViewNSendSms extends React.Component {
                                             this.props.contactSelected))
         }
     }
-
+   
+    /*
     setStateOnTimer = () => {
         const { dispatch } = this.props
         let number = this.props.contactSelected
         
         dispatch(contactActions.getMsgsCount(number))
     }
+    */
 
     _onDragFinished = (size) => {
         if(size) {

@@ -12,6 +12,7 @@ export const contactActions = {
     getContacts,
     getContactsCount,
     getMsgsCount,
+    incrementMsgsCount,
     getContactMsgs,
 }
 
@@ -96,6 +97,13 @@ function getMsgsCount( contact_id) {
         })
     }
     function success(count) { return {type: msgConstants.GET_MSGS_COUNT, contact_id, count }}
+}
+
+function incrementMsgsCount(contact_id, by) {
+    return (dispatch) => {
+        dispatch(success(contact_id, by))
+    }
+    function success(contact_id, by) { return {type: msgConstants.INCREMENT_MSGS_COUNT, contact_id, by} }
 }
 
 function getContactMsgs(offset, count, contact_id) {

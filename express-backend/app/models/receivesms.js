@@ -4,12 +4,15 @@ var modelsUtils = require('./modelsUtils')
 var twilio = require('twilio')
 var CONSTANTS = require('../../config/constants')
 
-module.exports.twiliopost = (req, callback) => {
+module.exports.twiliopost = (req, io, callback) => {
     //get the request params, From
     const { MessageSid, AccountSid, MessagingServiceSid,
             From, To, Body } = req.body
+    console.log('=========== req.body of /receivesms/twiliopost ========== ')
+    console.log(req.body)
+    console.log('========================================================== ')
     //if From found in contact table, 
-    const queryContact = `SELECT contact_id, mobile_no FROM contact WHERE mobile_no=` + `'` + From + `'`
+    const queryContact = `SELECT contact_id, mobile_no FROM contact WHERE mobile_no='` + From + `'`
     getConnection((err,connection)=> {
         connection.query(queryContact, [], (err, result) => {
             if(err) {
@@ -18,6 +21,7 @@ module.exports.twiliopost = (req, callback) => {
                 callback(null,err)
             } else {
                 if(result.length) { //Found in contact table.
+                    console.log(MessageSid);
                     //found, post the Body in message table.
                     modelsUtils.insertToMessage(connection,
                                                 From,
@@ -25,6 +29,7 @@ module.exports.twiliopost = (req, callback) => {
                                                 Body, 
                                                 result[0].contact_id,
                                                 null) //null for user_id
+                    modelsUtils.sendAndReceiveNotification(io, result[0].contact_id)            
                 } 
             }
         })

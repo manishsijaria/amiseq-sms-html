@@ -17,7 +17,8 @@ export const contactConstants = {
 }
 
 export const msgConstants = {
-    GET_MSGS_COUNT : 'GET_MSGS_COUNT'
+    GET_MSGS_COUNT : 'GET_MSGS_COUNT',
+    INCREMENT_MSGS_COUNT : 'INCREMENT_MSGS_COUNT'
 }
 
 export const contactMsgConstants = {
