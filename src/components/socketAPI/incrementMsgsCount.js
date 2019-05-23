@@ -1,6 +1,6 @@
 
 
-import { ServerConstants } from '../../../_constants'
+import { ServerConstants } from '../../_constants'
 
 import socketIOClient  from 'socket.io-client';
 

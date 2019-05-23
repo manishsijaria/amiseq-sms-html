@@ -5,6 +5,7 @@ import ContactRow from './contactRow'
 import {  InfiniteLoader, List } from 'react-virtualized'
 import 'react-virtualized/styles.css'
 import { FetchContactConstants } from '../../_constants'
+import { incrementMsgsCount } from '../socketAPI/incrementMsgsCount'
 
 export default class ContactTable  extends React.PureComponent {
     constructor(props) {
@@ -12,6 +13,26 @@ export default class ContactTable  extends React.PureComponent {
         this.listRef = React.createRef()
         this.InfiniteLoaderRef = React.createRef()
     }
+
+    componentDidMount() {
+        //const { dispatch } = this.props
+
+        incrementMsgsCount( (err, data) => { 
+            //alert('data.contact_id:' + data.contact_id + ' data.by:' + data.by) 
+            //dispatch(contactActions.incrementMsgsCount(data.contact_id,data.by) ) 
+            this.props.onOrderChange()           
+        });
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if( (prevProps.filterText !== this.props.filterText) ||
+            (prevProps.orderChanged !== this.props.orderChanged) ) {
+            if(this.InfiniteLoaderRef) {
+                this.InfiniteLoaderRef.resetLoadMoreRowsCache(true);
+            }
+        }  
+    }    
+
     isRowLoaded = ({index}) => {
         return !!this.props.contacts[index]
     }
@@ -32,13 +53,7 @@ export default class ContactTable  extends React.PureComponent {
         )
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        if(prevProps.filterText !== this.props.filterText) {
-            if(this.InfiniteLoaderRef) {
-                this.InfiniteLoaderRef.resetLoadMoreRowsCache(true);
-            }
-        }  
-    }
+
     selected = (contact_id, fullname, contact_create_date, added_by_username) => {
         this.props.onContactClick(contact_id, fullname, contact_create_date, added_by_username)
     }

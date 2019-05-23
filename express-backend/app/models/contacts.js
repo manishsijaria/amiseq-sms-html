@@ -69,9 +69,12 @@ module.exports.getContacts = (offset, count, filterText, callback) => {
                 console.log('Query:' + queryContacts)
             } else {
                 callback(result,null)
-                winston.log("info", result )
-                console.log(JSON.stringify(result.length))
-                console.log(JSON.stringify(result))
+                console.log('========================= getContacts query =========================')
+                console.log(queryContacts)
+                console.log('=====================================================================')
+                //winston.log("info", result )
+                //console.log(JSON.stringify(result.length))
+                //console.log(JSON.stringify(result))
             }
         })
     })    
@@ -153,12 +156,12 @@ module.exports.getContactMsgs = (offset, count, contact_id, callback) => {
                 console.log('Query:' + queryContactMsgs)
             } else {
                 callback(result,null)
-                //console.log('----------------------')
+                //console.log('========================= getContactMsgs query =========================')
                 //console.log(queryContactMsgs)
-                //console.log('----------------------')
+                //console.log('========================================================================')
                 console.log("offset: " + offset + ", count:" + count)
                 //console.log(JSON.stringify(result.length))
-                console.log(JSON.stringify(result))
+                //console.log(JSON.stringify(result))
             }
         })
     })

@@ -41,7 +41,7 @@ const fetchedContacts =
 export default class FetchAndFilterContactTable  extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { filterText: ''}
+        this.state = { filterText: '', orderChanged: false}
     }
     componentWillMount() {
         const { dispatch } = this.props
@@ -88,6 +88,14 @@ export default class FetchAndFilterContactTable  extends React.Component {
         dispatch(contactActions.getContactsCount(filterText))
 
     }
+
+    handelOrderChange = () => {
+        this.setState(prevState => ({
+            orderChanged: !prevState.orderChanged
+        }))
+        this.fetchRowsOnCountChange(this.props.count)
+    }
+
     selected = (contact_id, fullname, contact_create_date, added_by_username) => {
         this.props.onContactClick(contact_id, fullname, contact_create_date, added_by_username)
     }
@@ -111,7 +119,11 @@ export default class FetchAndFilterContactTable  extends React.Component {
                                     leftSplitPaneWidth={this.props.leftSplitPaneWidth}
                     />
                    <ContactTable contacts={contacts} 
-                                filterText={filterText} 
+                                filterText={filterText}
+                                
+                                onOrderChange={this.handelOrderChange}
+                                orderChanged={this.state.orderChanged}
+
                                 contactSelected={this.props.contactSelected}
                                 onContactClick={this.selected}
                                 onContactDelete={this.deleteContact}

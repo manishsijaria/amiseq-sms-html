@@ -168,7 +168,7 @@ BEGIN
     IF id_exists = 1 THEN
 	IF (STRCMP(NEW.msg_from, AMISEQ_SMS_NO) = 0) THEN #Amiseq send the message
 	        UPDATE contact
-        	SET msg_count = 0, msg_date = null
+        	SET msg_count = 0, msg_date = NOW()
 		WHERE contact_id = NEW.contact_id;
 	ELSE											  #Contact send the message
 		UPDATE contact

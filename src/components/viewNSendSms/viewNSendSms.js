@@ -39,9 +39,9 @@ class ViewNSendSms extends React.Component {
         const { dispatch } = this.props
         
         incrementMsgsCount( (err, data) => { 
-                                //alert('data.contact_id:' + data.contact_id + ' data.by:' + data.by) 
-                                dispatch(contactActions.incrementMsgsCount(data.contact_id,data.by) ) 
-                            });
+            //alert('data.contact_id:' + data.contact_id + ' data.by:' + data.by) 
+            dispatch(contactActions.incrementMsgsCount(data.contact_id,data.by) ) 
+        });
     }
 
     componentWillUnmount() {

@@ -14,8 +14,8 @@ select * from contact;
 delete from message;
 CALL `amiseq_sms_html`.`insertIntoMessage`();
 select * from message;
-update contact SET mobile_no = '+14108675310' where contact_id = 1;
-
+/* update contact SET mobile_no = '+14108' where contact_id = 1; */
+update contact SET mobile_no = '+14108675310' where contact_id = 15;
 /* ======================================================*/
 
 /*

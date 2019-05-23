@@ -8,9 +8,9 @@ module.exports.twiliopost = (req, io, callback) => {
     //get the request params, From
     const { MessageSid, AccountSid, MessagingServiceSid,
             From, To, Body } = req.body
-    console.log('=========== req.body of /receivesms/twiliopost ========== ')
+    console.log('================= req.body of /receivesms/twiliopost ================')
     console.log(req.body)
-    console.log('========================================================== ')
+    console.log('=====================================================================')
     //if From found in contact table, 
     const queryContact = `SELECT contact_id, mobile_no FROM contact WHERE mobile_no='` + From + `'`
     getConnection((err,connection)=> {
