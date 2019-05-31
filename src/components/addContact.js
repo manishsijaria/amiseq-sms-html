@@ -2,7 +2,7 @@ import React from 'react'
 import '../css/generic-form.css'
 import {connect} from 'react-redux'
 import { contactTypeActions, contactActions } from '../_actions'
-
+import { push } from 'connected-react-router'
 class AddContact extends React.Component {
     constructor(props) {
         super(props)
@@ -34,7 +34,7 @@ class AddContact extends React.Component {
                 this.setState({  contact: { ...contact, [name] : value,  user_id: user.user_id } }) 
         }
     }
-    handleSubmit = (event) => {
+    handelSubmit = (event) => {
         event.preventDefault()
         const { dispatch } = this.props
 
@@ -54,6 +54,12 @@ class AddContact extends React.Component {
         }
     }
     
+    handelCancel = (event) => {
+        const { dispatch } = this.props
+        event.preventDefault()
+        dispatch(push('/landingpage'))
+    }
+
     render() {
         const { firstname, lastname, mobile_no, contact_type_id } = this.state.contact
         const { contactTypes, alert  } = this.props
@@ -78,7 +84,7 @@ class AddContact extends React.Component {
                     }
                 </div>
                 <div className='formcontainer'>
-                    <form name="form" onSubmit={this.handleSubmit}>
+                    <form name="form" onSubmit={this.handelSubmit}>
                         <label for="firstname"><b>Firstname</b></label>
                         <input type="text" name="firstname" value={firstname} onChange={this.handelChange} placeholder="Contact's first name" required/>
 
@@ -93,7 +99,7 @@ class AddContact extends React.Component {
                                 {/*<option>{' '}</option> */}
                                 {tagOptions}
                         </select>
-
+                        <button type="button" onClick={this.handelCancel}>Cancel</button>
                         <input type="submit" value="Submit"/>
                     </form>
                 </div>

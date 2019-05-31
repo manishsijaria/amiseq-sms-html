@@ -5,7 +5,8 @@ var pool = mysql.createPool({
     port : '3306',
     user : 'root',
     password : 'root',
-    database : 'amiseq_sms_html'
+    database : 'amiseq_sms_html',
+    timezone: 'UTC+0'
 }); 
 //NOTE: you don't need to connect after getting the connection from the pool.
 var getConnection = (callback) => {

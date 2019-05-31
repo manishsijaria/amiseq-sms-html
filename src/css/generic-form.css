@@ -63,7 +63,7 @@ input:invalid  {
     box-shadow: 0 0 5px 1px red;
 }
   
-input[type=submit] { 
+input[type=submit] , button[type=button] { 
     width: 98%;
     padding: 5px;
     border-radius: 5px;

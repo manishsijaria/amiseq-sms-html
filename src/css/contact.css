@@ -33,20 +33,29 @@
 }
 
 .contact_row_selected {
-  background-color: rgb(238, 101, 38);
+  /* background-color: rgb(234,234,87); */
+  background-color: rgb(234,234,87);
+  background-image: url('../images/circles.png');  
   border-radius: 3%;
+}
+
+.contact_row_msg {
+  /* space on top and right of oval */
+  margin-top: 1px;
+  margin-right: 5%;
+  color: rgb(9,210,97);
 }
 
 .contact_row_msg_count_oval {
   width: 30px;
-  height: 20px;
+  height: 18px;
   background: rgb(9,210,97);
   border-radius: 40%;
   text-align: center; 
   color: white;
   /* space on top and right of oval */
-  margin-top: 3px;
-  margin-right: 8px;
+  margin-top: 1px;
+  margin-right: 5%;
 }
 
 /* msg_count of contacts in left pane, within <small> tags */

@@ -18,7 +18,7 @@ export default class MsgRow  extends React.Component {
                                 <div className="msj-rta macro" >
                                     <div className="text text-r" >
                                         <p>{msg.sms_text}</p>
-                                        <p><small>Amiseq {msg.fullname} : {msg.message_date}</small></p>
+                                        <p><small>Amiseq {msg.fullname} : {msg.message_date.toLowerCase()}</small></p>
                                     </div>
                                 </div>
                         </li>
@@ -28,7 +28,7 @@ export default class MsgRow  extends React.Component {
                                 <div className="msj macro">
                                     <div className="text text-l">
                                         <p> {msg.sms_text} </p>
-                                        <p><small>{contactFullname} : {msg.message_date}</small></p>
+                                        <p><small>{contactFullname} : {msg.message_date.toLowerCase()}</small></p>
                                     </div>
                                 </div>
                             </li>
@@ -43,7 +43,7 @@ export default class MsgRow  extends React.Component {
                             <div className="msj-rta macro">
                                 <div className="text text-r">
                                     <p>{leftText}<span className='highlight'>{highlightText}</span>{rightText}</p>
-                                    <p><small>Amiseq {msg.fullname} : {msg.message_date}</small></p>
+                                    <p><small>Amiseq {msg.fullname} : {msg.message_date.toLowerCase()}</small></p>
                                 </div>
                             </div>
                         </li>
@@ -52,7 +52,7 @@ export default class MsgRow  extends React.Component {
                                 <div className="msj macro">
                                     <div className="text text-l">
                                         <p> {leftText}<span className='highlight'>{highlightText}</span>{rightText}</p>
-                                        <p><small>{contactFullname} : {msg.message_date}</small></p>
+                                        <p><small>{contactFullname} : {msg.message_date.toLowerCase()}</small></p>
                                     </div>
                                 </div>
                             </li>

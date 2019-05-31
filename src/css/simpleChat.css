@@ -7,7 +7,7 @@
 }
 
 .msj{
-    float:right;background:greenyellow;
+    float:right;background:greenyellow;;
 }
 
 .msj-rta{
@@ -35,7 +35,7 @@
      width:100%;margin-top:0;margin-bottom:auto;line-height: 13px;font-size: 12px;
 }
 .text > p:last-of-type{
-    width:100%;text-align:right;color:silver;margin-bottom:-7px;margin-top:auto;
+    width:100%;text-align:right;color:rgb(218, 151, 151);margin-bottom:-7px;margin-top:auto;
 }
 .text-l{
     float:left;padding-right:10px;
@@ -61,10 +61,10 @@
 }
 
 .frame{
-    background:#e0e0de;
-    /* border-radius:10px; */
-    /* height:300px; */
-    overflow:hidden;  /*TODO hidden */
+    /* background:#e0e0de; */
+    background-color: rgb(234,234,87);
+    background-image: url('../images/circles.png'); /* url("https://www.transparenttextures.com/patterns/circles.png");    */
+    overflow:hidden;  
     padding:0;
     top: 0px;
     position: relative;

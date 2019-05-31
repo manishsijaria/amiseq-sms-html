@@ -10,8 +10,8 @@ export const FetchMsgsConstants = {
 
 
 export const SplitPaneConstants = {
-    LEFT_CONTACT_PANE_MIN_SIZE : 250,
-    LEFT_CONTACT_PANE_DEFAULT_SIZE : 250,
+    LEFT_CONTACT_PANE_MIN_SIZE : 300,
+    LEFT_CONTACT_PANE_DEFAULT_SIZE : 300,
     RESIZER_OFFSET: 5,
     MINIMUM_SEND_SMS_SIZE: 20,
     SEND_SMS_SIZE: 60,

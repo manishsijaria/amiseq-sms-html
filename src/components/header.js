@@ -36,7 +36,9 @@ class Header extends React.Component {
         return(
             <div className="navbar ">
                 <NavLink to='/home'>Home</NavLink>
-                <NavLink to='/addcontact'>Add Contact</NavLink>
+                {this.props.loggedIn ? 
+                    <NavLink to='/addcontact'>Add Contact</NavLink>
+                    : ''}
                 <div className="dropdown" onBlur={this._onBlur}>
                     <span style={{display: 'inline-block', width: '150px'}}>{loggedInUser}</span>
                     

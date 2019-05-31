@@ -45,8 +45,8 @@ module.exports.deleteContact = (contact_id , callback) => {
 
 module.exports.getContacts = (offset, count, filterText, callback) => {
     var selectClause = `SELECT contact_id, CONCAT(contact.firstname,' ', contact.lastname) as fullname,
-                                mobile_no, contact_type_id, contact.user_id, msg_count, msg_date,
-                                contact.date_created, DATE_FORMAT(contact.date_created,"%b %d, %Y %l:%i %p") as contact_create_date,
+                                mobile_no, contact_type_id, contact.user_id, msg_count, msg_date, NOW() as todays_date, 
+                                contact.date_created, DATE_FORMAT(contact.date_created, "%m/%d/%Y")  as contact_create_date,
                                 CONCAT(user.firstname, ' ', user.lastname) as added_by_username
                         FROM  contact, user`
     var whereCondition1 = ` contact.user_id = user.user_id`
@@ -71,10 +71,10 @@ module.exports.getContacts = (offset, count, filterText, callback) => {
                 callback(result,null)
                 console.log('========================= getContacts query =========================')
                 console.log(queryContacts)
-                console.log('=====================================================================')
                 //winston.log("info", result )
                 //console.log(JSON.stringify(result.length))
-                //console.log(JSON.stringify(result))
+                console.log(JSON.stringify(result))
+                console.log('=====================================================================')
             }
         })
     })    
@@ -123,12 +123,13 @@ module.exports.getMsgsCount = (contact_id, callback) => {
 
 // private function
 module.exports.getContactMsgsQuery = (offset,count, contact_id) => {
-    let leftJoin = `SELECT message_id,msg_date, DATE_FORMAT(msg_date,"%b %d, %Y %l:%i %p") as message_date , 
+    //DATE_FORMAT(msg_date,"%b %d, %Y %l:%i %p") as message_date
+    let leftJoin = `SELECT message_id,msg_date, DATE_FORMAT(msg_date, "%m/%d/%Y %l:%i %p") as message_date, 
                                 msg_from, msg_to, sms_text, contact_id, 
                                 message.user_id,  CONCAT(user.firstname,' ', user.lastname) as fullname   
                         FROM message left outer join user on message.user_id=user.user_id 
                                                              where message.contact_id=` + contact_id
-    let rightJoin = `SELECT message_id, msg_date, DATE_FORMAT(msg_date,"%b %d, %Y %l:%i %p") as message_date , 
+    let rightJoin = `SELECT message_id, msg_date, DATE_FORMAT(msg_date, "%m/%d/%Y %l:%i %p") as message_date, 
                             msg_from, msg_to, sms_text, contact_id, 
                             message.user_id, CONCAT(user.firstname,' ', user.lastname) as fullname    
                     FROM message right outer join user on message.user_id=user.user_id 
