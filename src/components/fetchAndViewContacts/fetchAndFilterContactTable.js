@@ -49,7 +49,9 @@ export default class FetchAndFilterContactTable  extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if(prevProps.count !== this.props.count) {
+        if(prevProps.count !== this.props.count 
+            || prevState.filterText !== this.state.filterText) 
+            {
             this.fetchRowsOnCountChange(this.props.count)
         }  
     }
@@ -85,8 +87,7 @@ export default class FetchAndFilterContactTable  extends React.Component {
             filterText: filterText
         })
         const { dispatch } = this.props
-        dispatch(contactActions.getContactsCount(filterText))
-
+        dispatch(contactActions.getContactsCount(filterText))    
     }
 
     handelOrderChange = () => {

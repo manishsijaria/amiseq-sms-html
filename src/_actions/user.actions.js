@@ -25,6 +25,7 @@ function login(username, password) {
                         dispatch(failure(e))
                         dispatch(alertActions.error(e))    
                     } else {
+                        dispatch(alertActions.clear())
                         let Parseduser = JSON.parse(user)
                         dispatch(success(Parseduser))
                         dispatch(push('/landingpage'))
@@ -55,9 +56,10 @@ function register(user) {
                         dispatch(alertActions.error(e))    
                     } else {
                         //alert(JSON.stringify(user))
+                        dispatch(alertActions.clear())  
                         dispatch(success());
-                        dispatch(push('/login'))
                         dispatch(alertActions.success('Registration successful'));
+                        dispatch(push('/login'))
                     }
                 } 
             );

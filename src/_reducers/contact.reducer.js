@@ -4,9 +4,14 @@ export function contactsGet(state = {contacts: []}, action) {
     switch(action.type) {
         case contactConstants.GET_CONTACTS_FAILURE:
             return {contacts: []}
+            
         case contactConstants.GET_CONTACTS_SUCCESS:
             return {contacts: [...state.contacts, ...action.contacts]}
+
         case contactConstants.RESET_CONTACTS:
+            return {contacts: []}
+
+        case userConstants.LOGOUT:
             return {contacts: []}
 
         case contactConstants.ADD_CONTACT_SUCCESS:
@@ -32,6 +37,8 @@ export function contactsCount(state = 0, action) {
         case contactConstants.GET_CONTACTS_COUNT_SUCCESS:
             //alert(action.count)
             return action.count 
+        case userConstants.LOGOUT:
+            return 0        
         default:
             return state
     }
