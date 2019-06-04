@@ -1,5 +1,5 @@
 
-import { contactConstants, msgConstants,contactMsgConstants, FetchMsgsConstants  } from '../_constants'
+import { contactConstants, msgConstants,contactMsgConstants } from '../_constants'
 import { contactServices } from "../_services";
 
 import { push } from 'connected-react-router'
@@ -108,11 +108,6 @@ function incrementMsgsCount(contact_id, by) {
 
 function getContactMsgs(offset, count, contact_id) {
     return (dispatch) => {
-        /*
-        if(offset === FetchMsgsConstants.MINIMUM_START_INDEX) {
-            dispatch(reset(contact_id))
-        }
-        */
         contactServices.getContactMsgs(offset, count, contact_id)
         .then(contactMsgs => {
             if(!contactMsgs || contactMsgs === undefined) {
@@ -123,10 +118,8 @@ function getContactMsgs(offset, count, contact_id) {
                 let ParsedContactMsgs = JSON.parse(contactMsgs)
                 dispatch(success(contact_id,ParsedContactMsgs)) 
             }
-
         })
     }
     function failure(error) { return {type: contactMsgConstants.GET_CONTACT_MSGS_FAILURE, error }}
     function success(contact_id, contactMsgs) { return {type: contactMsgConstants.GET_CONTACT_MSGS_SUCCESS, contact_id, contactMsgs }}      
-    function reset(contact_id) { return {type: contactMsgConstants.RESET_MSGS, contact_id }}
 }

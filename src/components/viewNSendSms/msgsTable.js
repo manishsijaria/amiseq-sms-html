@@ -11,7 +11,6 @@ export default class MsgsTable extends React.PureComponent {
         this.listRef = React.createRef()
         this.InfiniteLoaderRef = React.createRef()
 
-
         //Since the width of the rows doesn’t need to be calculated, the fixedWidth property is set to true
         this._cache = new CellMeasurerCache({
                                 fixedWidth: true,
@@ -76,32 +75,19 @@ export default class MsgsTable extends React.PureComponent {
         )        
     }
 
-
     render() {
-        const { msgs } = this.props
+        const { msgs , heightInPx, rightSplitPaneWidth  } = this.props
         let fetchedRowCount = (msgs) ? msgs.length : 0
-        let listHeight = this.props.heightInPx
-        
-        const rowWidth = this.props.rightSplitPaneWidth
+
         let NoMsgsMsg = (this.props.rowCount === undefined || this.props.rowCount === 0) ? 
                                 <div><span>No Messages !                               
                                      </span>
                                 </div> : ''
-        /*
-        const rows = []
-        msgs.forEach((msg) => {
-            rows.push(<MsgRow
-               msg={msg}
-               searchText={searchText} 
-               contactFullname={contactFullname}
-                />
-            )
-        })
-        */
+
         return(
-            <div className="frame" style={{  height: this.props.heightInPx , 
-                                            width: this.props.rightSplitPaneWidth, 
-                                             }}>
+            <div className="frame" style={{  height: heightInPx , 
+                                             width: rightSplitPaneWidth, 
+                                          }}>
                 
                     <ul className="ulclass"> 
                         {(NoMsgsMsg) ? NoMsgsMsg : 

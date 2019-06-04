@@ -7,7 +7,7 @@ import  { ServerConstants } from '../../_constants'
 class Sms extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { smsText: '', submitted: false  }
+        this.state = { smsText: ''  }
     }
     handelChange = (event) => {
         const { name, value } = event.target
@@ -18,8 +18,7 @@ class Sms extends React.Component {
 
     handleSubmit = (event) => {
         event.preventDefault()
-        this.setState({ submitted: true })
-        
+                
         if(this.state.smsText === '') { return  }
         this.sendSms()
     }
@@ -33,11 +32,11 @@ class Sms extends React.Component {
         //alert('user id:' + user.user_id)
         dispatch(userActions.smsSend(user.user_id, smsText, Arr,false) )
 
-        this.setState({smsText: '', submitted: false})        
+        this.setState({smsText: ''})        
     }
 
     render() {
-        const { smsText, submitted } = this.state
+        const { smsText } = this.state
         let { rightSplitPaneWidth, heightOfSmsComp } = this.props
         heightOfSmsComp = heightOfSmsComp - 25
         let marginLeftOfSubmit = 10;
