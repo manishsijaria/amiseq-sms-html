@@ -65,6 +65,9 @@ server.on('listening', onListening);
 //============= socket.io ========================
 var io = require('socket.io').listen(server)
 
+//https://stackoverflow.com/questions/20144414/socket-io-connection-to-server-doesnt-work-sometimes
+//io.set('transports', ['xhr-polling']);
+
 //KB: set the io in app, so that it can be retrived from routes req object later.
 app.set('socketio', io)
 

@@ -47,18 +47,23 @@ module.exports.sendMsgToContacts = (user_id, smsText, contactList, connection,io
                                      user_id 
                                      )
                 // print SID of the message you just sent
+                console.log('============= Msg Send to Contacts ===================================')
                 console.log(messageData.sid);
+                console.log(smsText)
+                console.log('=======================================================================')
                 this.sendAndReceiveNotification(io, contactList[i].contact_id)
-                
             }
         })  
     }
 }
 
 module.exports.sendAndReceiveNotification = (io, contact_id) => {
-    let sendAndReceiveNSP= io.of('/sendAndReceive');
-    console.log('=====sending incrementMsgsCount to sockets ========')
-    sendAndReceiveNSP.emit('incrementMsgsCount', {contact_id: contact_id, by: 1}); 
+    //KB: Trigger requires certain time to update the contact table, therefore 500ms delay.
+    setTimeout(()=> {
+        let sendAndReceiveNSP= io.of('/sendAndReceive');
+        console.log('=====sending incrementMsgsCount to sockets ========')
+        sendAndReceiveNSP.emit('incrementMsgsCount', {contact_id: contact_id, by: 1}); 
+    },500)  
 }
 
 module.exports.insertToMessage = (connection, from, to, text, contact_id, user_id) => {

@@ -55,7 +55,7 @@ class Sms extends React.Component {
                 <textarea  name="smsText" 
                     value = {smsText}
                     onChange={this.handelChange} 
-                    placeholder="Please enter the Message to Send..."
+                    placeholder="Please enter the message to send..."
                     style={{ width: `${rightSplitPaneWidth }px`, 
                              height: `${heightOfSmsComp}px`,
                              }}

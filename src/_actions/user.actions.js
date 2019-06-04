@@ -82,6 +82,7 @@ function smsSend(user_id , smsText, contactArray, bDispatchAlert=true) {
                 dispatch(alertActions.error(e))
             } else {
                 //let ParsedSuccess = JSON.parse(success)
+                dispatch(alertActions.clear())
                 if(!bDispatchAlert) { return }
                 dispatch(alertActions.success('SMS send to selected contacts'))
             }            
