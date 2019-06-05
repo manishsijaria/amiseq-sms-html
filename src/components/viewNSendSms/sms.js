@@ -2,7 +2,7 @@
 import React  from 'react'
 import { connect } from 'react-redux'
 import { userActions } from '../../_actions'
-import  { ServerConstants } from '../../_constants'
+import  { ServerConstants, ContectSelectedConstants } from '../../_constants'
 
 class Sms extends React.Component {
     constructor(props) {
@@ -37,7 +37,7 @@ class Sms extends React.Component {
 
     render() {
         const { smsText } = this.state
-        let { rightSplitPaneWidth, heightOfSmsComp } = this.props
+        let { rightSplitPaneWidth, heightOfSmsComp, contactSelected } = this.props
         heightOfSmsComp = heightOfSmsComp - 25
         let marginLeftOfSubmit = 10;
         rightSplitPaneWidth = rightSplitPaneWidth - (2 * marginLeftOfSubmit)
@@ -60,11 +60,14 @@ class Sms extends React.Component {
                              }}
                     maxlength={ServerConstants.TWILIO_MSG_LENGTH}
                     spellcheck={true}
+                    disabled = {(ContectSelectedConstants.DEFAULT_CONTACT === contactSelected) ? 'disabled' : ''}
                 />
                 <input type="submit" value="Send SMS" 
                         style={{ marginLeft: `${marginLeftOfSubmit}px`, 
                                  width: `${widthOfSubmit - marginLeftOfSubmit}px`, 
-                                 height: `48px`}}>
+                                 height: `48px`}}
+                        disabled = {(ContectSelectedConstants.DEFAULT_CONTACT === contactSelected) ? true : false}
+                >
                 </input>
             </form>
         )

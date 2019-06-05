@@ -99,8 +99,10 @@ class AddContact extends React.Component {
                                 {/*<option>{' '}</option> */}
                                 {tagOptions}
                         </select>
-                        <button type="button" onClick={this.handelCancel}>Cancel</button>
-                        <input type="submit" value="Submit"/>
+                        <div className='divButtons'>
+                            <button type="button" onClick={this.handelCancel}>Cancel</button>
+                            <input type="submit" value="Submit"/>
+                        </div>
                     </form>
                 </div>
             </div>

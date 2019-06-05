@@ -57,7 +57,7 @@ class Login extends React.Component {
         return(
             <div>
                 <div className='formheader'>
-                    <h3>Login</h3>
+                    <h3>Sign In</h3>
                 </div>
                 <div className='alert-div'>
                   {(alert !== undefined && alert.message !== '')  &&

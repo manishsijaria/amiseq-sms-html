@@ -4,6 +4,7 @@ import '../css/generic-form.css'
 
 import { connect } from 'react-redux'
 import { userActions } from '../_actions'
+import { push } from 'connected-react-router'
 
 class Register extends React.Component {
     constructor(props) {
@@ -36,13 +37,19 @@ class Register extends React.Component {
            }
     }
 
+    handelCancel = (event) => {
+        const { dispatch } = this.props
+        event.preventDefault()
+        dispatch(push('/'))
+    }
+
     render() {
         const { user } = this.state
         const { alert  } = this.props
         return(
             <div>
                 <div className='formheader'>
-                    <h3>Register User</h3>
+                    <h3>Sign Up</h3>
                 </div>
                 <div className='alert-div'>
                   {(alert !== undefined && alert.message !== '')  &&
@@ -51,22 +58,24 @@ class Register extends React.Component {
                 </div>                
                 <div className='formcontainer'>
                     <form name="form" onSubmit={this.handleSubmit}>
-                        <label for="firstname"><b>Firstname</b></label>
+                        <label for="firstname"><b>First Name</b></label>
                         <input type="text" name="firstname" value={user.firstname} onChange={this.handelChange} placeholder="Enter your first name" required/>
                         
-                        <label for="lastname"><b>Lastname</b></label>
+                        <label for="lastname"><b>Last Name</b></label>
                         <input type="text" name="lastname" value={user.lastname} onChange={this.handelChange} placeholder="Enter your last name" required/>
                         
                         <label for="email"><b>Email</b></label>
-                        <input type="text" name="email" value={user.email} onChange={this.handelChange} placeholder="someone@gmail.com" required/>
+                        <input type="text" name="email" value={user.email} onChange={this.handelChange} placeholder="someone@amiseq.com" required/>
 
                         <label for="username"><b>Username</b></label>
                         <input type="text" name="username" value={user.username} onChange={this.handelChange} placeholder="Enter your login username" required/>
 
                         <label for="password"><b>Password</b></label>
                         <input type="password" name="password" value={user.password} onChange={this.handelChange} required/>
-
-                        <input type="submit" value="Submit"/>
+                        <div className='divButtons'>
+                            <button type="button" onClick={this.handelCancel}>Cancel</button>
+                            <input type="submit" value="Submit"/>
+                        </div>
                     </form>
                 </div>
             </div>            

@@ -6,7 +6,7 @@ import { Register }  from './register'
 import { AddContact } from './addContact'
 import '../css/overall-layout.css'
 
-
+const NotFound = () => 'Page Not Found. Please enter valid URL.'
 export default class Main extends React.Component {
     render() {
         return(
@@ -17,6 +17,7 @@ export default class Main extends React.Component {
                     <Route path="/logout" component={Login} />
                     <Route path="/register@1234" component={Register} />
                     <Route path="/addcontact" component={AddContact}/>
+                    <Route path="*" component={NotFound}/>
                 </Switch>
             </div>
         )

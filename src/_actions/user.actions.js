@@ -51,7 +51,7 @@ function register(user) {
                 user => { 
                     if(!user || user === 'undefined') {
                         //alert(JSON.stringify(user))
-                        let e = 'Username or Email already registered'
+                        let e = 'Email or  Username already registered'
                         dispatch(failure(e))
                         dispatch(alertActions.error(e))    
                     } else {
