@@ -13,12 +13,12 @@ module.exports.addContact = (req, callback) => {
                 connection.release()
                 if(err) {
                     callback(null,err)
-                    console.log('error in inserting contact' + err);                                
+                    winston.log('error','error in inserting contact' + err);                                
                 } else {
                     //NOTE: The response must be a JSON string, so that it is caught on the react-client properly.
                     //      Otherwise Err: net::ERR_EMPTY_RESPONSE TypeError: Failed to fetch  occures.
                     var success_msg = 'Insert Successful id=' + result.insertId;
-                    console.log('insert successful : ' + success_msg);
+                    winston.log('info','insert successful : ' + success_msg);
                     callback({ contact_id: result.insertId, firstname, lastname, mobile_no, contact_type_id, user_id },null)
                 }
             })
@@ -32,10 +32,10 @@ module.exports.deleteContact = (contact_id , callback) => {
             connection.release()
             if(err) {
                 callback(null,err)
-                console.log('Error in deleting Contact')
+                winston.log('error','Error in deleting Contact')
             } else {
-                console.log('result.length=' + JSON.stringify(result.length))
-                console.log('result=' + JSON.stringify(result))
+                winston.log('info','result.length=' + JSON.stringify(result.length))
+                winston.log('info','result=' + JSON.stringify(result))
                 callback(result,null)
             }
 
@@ -75,16 +75,16 @@ module.exports.getContacts = (offset, count, filterText, callback) => {
             connection.release()
             if(err) {
                 callback(null,err)
-                console.log('Error in getting Contacts list Error:' + err)
-                console.log('Query:' + queryContacts)
+                winston.log('error','Error in getting Contacts list Error:' + err)
+                winston.log('error','Query:' + queryContacts)
             } else {
                 callback(result,null)
-                console.log('========================= getContacts query =========================')
-                console.log(queryContacts)
+                winston.log('info','========================= getContacts query =========================')
+                winston.log('info',queryContacts)
                 //winston.log("info", result )
                 //console.log(JSON.stringify(result.length))
-                console.log(JSON.stringify(result))
-                console.log('=====================================================================')
+                winston.log('info',JSON.stringify(result))
+                winston.log('info','=====================================================================')
             }
         })
     })    
@@ -100,17 +100,17 @@ module.exports.getContactsCount = (filterText, callback) => {
         whereClause = ` WHERE ` + whereClause
     }
     var queryContactsCount = selectClause + whereClause
-    console.log(queryContactsCount)
+    winston.log('info', queryContactsCount)
     getConnection((err,connection)=> {
         connection.query(queryContactsCount, [], (err, result) => {
             connection.release()
             if(err) {
                 callback(null,err)
-                console.log('Error in getting contact count')
+                winston.log('error','Error in getting contact count')
             } else {
                 callback(result[0].count, null)
-                console.log(JSON.stringify(result.length))
-                console.log(JSON.stringify(result))
+                winston.log('info',result.length)
+                winston.log('info', result)
             }
         })
     })
@@ -125,11 +125,11 @@ module.exports.getMsgsCount = (contact_id, callback) => {
             connection.release()
             if(err) {
                 callback(null,err)
-                console.log('Error in getting Contacts Msgs Count')
+                winston.log('error','Error in getting Contacts Msgs Count')
             } else {
                 callback(result[0].msgsCount,null)
-                console.log(JSON.stringify(result.length))
-                console.log(JSON.stringify(result))
+                winston.log('info',result.length)
+                winston.log('info',result)
             }
         })
     })         
@@ -167,14 +167,14 @@ module.exports.getContactMsgs = (offset, count, contact_id, callback) => {
             connection.release()
             if(err) {
                 callback(null,err)
-                console.log('Error in getting contact Msgs list')
-                console.log('Query:' + queryContactMsgs)
+                winston.log('error','Error in getting contact Msgs list')
+                winston.log('info','Query:' + queryContactMsgs)
             } else {
                 callback(result,null)
                 //console.log('========================= getContactMsgs query =========================')
                 //console.log(queryContactMsgs)
                 //console.log('========================================================================')
-                console.log("offset: " + offset + ", count:" + count)
+                winston.log('info',"offset: " + offset + ", count:" + count)
                 //console.log(JSON.stringify(result.length))
                 //console.log(JSON.stringify(result))
             }

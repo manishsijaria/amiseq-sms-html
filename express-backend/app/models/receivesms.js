@@ -1,5 +1,6 @@
 
 var getConnection = require('../../config/dbconnection')
+var winston = require('../../config/winston');
 var modelsUtils = require('./modelsUtils')
 var twilio = require('twilio')
 var CONSTANTS = require('../../config/constants')
@@ -8,20 +9,20 @@ module.exports.twiliopost = (req, io, callback) => {
     //get the request params, From
     const { MessageSid, AccountSid, MessagingServiceSid,
             From, To, Body } = req.body
-    console.log('================= req.body of /receivesms/twiliopost ================')
-    console.log(req.body)
-    console.log('=====================================================================')
+    winston.log('info','================= req.body of /receivesms/twiliopost ================')
+    winston.log('info',req.body)
+    winston.log('info','=====================================================================')
     //if From found in contact table, 
     const queryContact = `SELECT contact_id, mobile_no FROM contact WHERE mobile_no='` + From + `'`
     getConnection((err,connection)=> {
         connection.query(queryContact, [], (err, result) => {
             if(err) {
-                console.log('Error in getting Contact Msgs list')
+                winston.log('error','Error in getting Contact Msgs list')
                 connection.release()
                 callback(null,err)
             } else {
                 if(result.length) { //Found in contact table.
-                    console.log(MessageSid);
+                    winston.log('info',MessageSid);
                     //found, post the Body in message table.
                     modelsUtils.insertToMessage(connection,
                                                 From,

@@ -1,10 +1,12 @@
+
+var winston = require('../../config/winston');
 var express = require('express')
 var router = express.Router()
 
 var contactsModel = require('../models/contacts')
 
 router.post('/addContact', (req, res) => {
-    console.log('/contacts/addContact post called');
+    winston.log('info', '/contacts/addContact post called');
     res.setHeader('Content-Type', 'application/json')
     contactsModel.addContact(req, (result,err) => {
         if(err) {
@@ -16,7 +18,7 @@ router.post('/addContact', (req, res) => {
 })
 
 router.delete('/delete', (req,res) => {
-    console.log('/delete called via delete ===')
+    winston.log('info','/contacts/delete called via post')
     //console.log(JSON.stringify(req.body))
     let { contact_id }  = JSON.parse(JSON.stringify(req.body))
     //console.log(JSON.stringify(clientArray))
@@ -29,7 +31,7 @@ router.delete('/delete', (req,res) => {
 })
 
 router.post('/getContacts/:offset/:count', (req, res) => {
-    console.log('/contacts/getContacts called via post===')
+    winston.log('info','/contacts/getContacts called via post')
     const { filterText } = req.body
 
     contactsModel.getContacts(parseInt(req.params.offset,10),
@@ -45,7 +47,7 @@ router.post('/getContacts/:offset/:count', (req, res) => {
 })
 
 router.post('/getContactsCount', (req, res) => {
-    console.log('/contacts/getContactsCount called via post===')
+    winston.log('info','/contacts/getContactsCount called via post===')
     const { filterText } = req.body
     console.log('filterText=' + filterText)
     contactsModel.getContactsCount(filterText, (result,err) => {
@@ -58,7 +60,7 @@ router.post('/getContactsCount', (req, res) => {
 })
 
 router.get('/getMsgsCount/:number', (req, res) => {
-    console.log('/contacts/getMsgsCount called via get===')
+    winston.log('info','/contacts/getMsgsCount called via get')
     
     contactsModel.getMsgsCount(parseInt(req.params.number,10), (result,err) => {
         if(err) { 
@@ -70,7 +72,7 @@ router.get('/getMsgsCount/:number', (req, res) => {
 })
 
 router.get('/getContactMsgs/:offset/:count/:contact_id', (req, res) => {
-    console.log('/contacts/getContactMsgs called via get===')
+    winston.log('info','/contacts/getContactMsgs called via get')
 
     contactsModel.getContactMsgs(parseInt(req.params.offset,10),
                                  parseInt(req.params.count,10),

@@ -1,4 +1,5 @@
 var getConnection = require('../../config/dbconnection')
+var winston = require('../../config/winston');
 var modelsUtils = require('./modelsUtils')
 
 module.exports.authenticate = (req, callback) => {
@@ -8,17 +9,17 @@ module.exports.authenticate = (req, callback) => {
             connection.release()
             if(err) {
                 callback(null,err)
-                console.log('Error during logging' + err)                              
+                winston.log('error','Error during logging' + err)                              
             } else {
                 if(result.length) {
-                    console.log('Login success !!')
+                    winston.log('info','Login success !!')
                     callback({user_id: result[0].user_id,
                             username: req.body.username, 
                             password: req.body.password},null)
                     
                 } else {
                     err = 'invalid credentials'
-                    console.log(err)
+                    winston.log('error',err)
                     callback(null,err)
                 }
             }
@@ -36,11 +37,11 @@ module.exports.register = (req, callback) => {
                        function(err, result) {
            connection.release();
            if(err) {
-                console.log('error in inserting user' + err);
+                winston.log('error','error in inserting user' + err);
                 callback(null,err)               
            } else {
                 var success_msg = 'Insert Successful id=' + result.insertId;
-                console.log('insert successful : ' + success_msg);
+                winston.log('info','insert successful : ' + success_msg);
                 callback({username: req.body.username, 
                             password: req.body.password},null)
                

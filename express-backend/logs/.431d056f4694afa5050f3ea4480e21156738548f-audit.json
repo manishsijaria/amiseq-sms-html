@@ -1,0 +1,14 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "D:\\Learning\\Reactjstest\\reactjs-twilio-tests\\amiseq-sms-html\\express-backend\\logs\\.431d056f4694afa5050f3ea4480e21156738548f-audit.json",
+    "files": [
+        {
+            "date": 1559833439627,
+            "name": "D:\\Learning\\Reactjstest\\reactjs-twilio-tests\\amiseq-sms-html\\express-backend\\logs\\app-2019-06-06.log",
+            "hash": "817d0a49f6d1078aafaa9f982dc14568"
+        }
+    ]
+}

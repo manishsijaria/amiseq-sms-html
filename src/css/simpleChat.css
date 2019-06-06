@@ -6,14 +6,30 @@
     display:flex; 
 }
 
+/* msj : message from contact */
 .msj{
-    float:right;background:greenyellow;
+    float:left;background:greenyellow;margin-left: 7% ;
 }
 
+/* msj-rta : message from Amiseq */
 .msj-rta{
-    float:right;background:whitesmoke;
+    float:right;background:whitesmoke; margin-right: -5%;
 }
 
+/* Add "<" before message from contact */
+.msj:before{
+    width: 0;
+    height: 0;
+    content:"";
+    top:-5px;
+    left:-14px;
+    position:relative;
+    border-style: solid;
+    border-width: 0 13px 13px 0;
+    border-color: transparent greenyellow transparent transparent;            
+}
+
+/* Add ">" after message from Amiseq */
 .msj-rta:after{
     width: 0;
     height: 0;
