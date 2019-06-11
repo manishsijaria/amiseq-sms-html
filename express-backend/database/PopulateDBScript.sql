@@ -1,13 +1,17 @@
 
 /*================== Populate DB Script ==================*/
+insert into user_type (user_type_id, type_name) 
+values (1, 'Super Admin'), (2, 'Admin'), (3, 'Recruiter');
+
 insert into contact_type (contact_type_id, type_name) 
 values (1, 'Candidate'), (2, 'Client'), (3, 'Others');
 
 /* add user manish manish from application */
 select * from user;
 delete from user;
-update user set user_id =1 where user_id = 2;
-                            
+update user set user_id =1 where user_id = 4;
+ 
+delete from contact;
 CALL `amiseq_sms_html`.`insertIntoContact`();
 select * from contact;
 

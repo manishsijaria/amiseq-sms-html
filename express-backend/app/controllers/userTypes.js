@@ -2,12 +2,12 @@ var winston = require('../../config/winston');
 var express = require('express')
 var router = express.Router()
 
-var contactTypesModel = require('../models/contactTypes')
+var userTypesModel = require('../models/userTypes')
 
-router.get('/getContactTypes', (req, res) => {
-    winston.log('info','/contactTypes/getContactTypes called via get')
+router.get('/getUserTypes', (req, res) => {
+    winston.log('info','/userTypes/getUserTypes called via get')
 
-    contactTypesModel.getContactTypes((result,err) => {
+    userTypesModel.getUserTypes((result,err) => {
         if(err) { 
             return res.status(404).json(JSON.stringify({msg:err})) 
         }

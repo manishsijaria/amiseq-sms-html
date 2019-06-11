@@ -3,12 +3,19 @@ import '../css/generic-form.css'
 import {connect} from 'react-redux'
 import { contactTypeActions, contactActions } from '../_actions'
 import { push } from 'connected-react-router'
+
+const CONTACT_TYPES = {
+    CANDIDATE : 1,
+    CLIENT : 2,
+    OTHERS: 3, 
+}
+
 class AddContact extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             contact: { firstname: '',  lastname: '', fullname:'', 
-                        mobile_no: '',  contact_type_id: '1', user_id: '' },
+                        mobile_no: '',  contact_type_id: CONTACT_TYPES.CANDIDATE, user_id: '' },
             submitted: false   
          }  
     }
@@ -16,7 +23,6 @@ class AddContact extends React.Component {
     componentWillMount() {
         const { dispatch } = this.props
         dispatch(contactTypeActions.getContactTypes())
-        
     }
 
     handelChange = (event) => {
@@ -85,16 +91,16 @@ class AddContact extends React.Component {
                 </div>
                 <div className='formcontainer'>
                     <form name="form" onSubmit={this.handelSubmit}>
-                        <label for="firstname"><b>Firstname</b></label>
+                        <label htmlFor="firstname"><b>Firstname</b></label>
                         <input type="text" name="firstname" value={firstname} onChange={this.handelChange} placeholder="Contact's first name" required/>
 
-                        <label for="lastname"><b>Lastname</b></label>
+                        <label htmlFor="lastname"><b>Lastname</b></label>
                         <input type="text" name="lastname" value={lastname} onChange={this.handelChange} placeholder="Contact's last name" required/>
 
-                        <label for="mobile_no"><b>Mobile No.</b></label>
+                        <label htmlFor="mobile_no"><b>Mobile No.</b></label>
                         <input type="text" name="mobile_no" value={mobile_no} onChange={this.handelChange} placeholder="+1xxxxxxxxxx" required/>
 
-                        <label for="contact_type_id"><b>Type</b></label>
+                        <label htmlFor="contact_type_id"><b>Type</b></label>
                         <select name="contact_type_id" value={contact_type_id} onChange={this.handelChange} >
                                 {/*<option>{' '}</option> */}
                                 {tagOptions}

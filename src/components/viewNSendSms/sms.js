@@ -58,8 +58,8 @@ class Sms extends React.Component {
                     style={{ width: `${rightSplitPaneWidth }px`, 
                              height: `${heightOfSmsComp}px`,
                              }}
-                    maxlength={ServerConstants.TWILIO_MSG_LENGTH}
-                    spellcheck={true}
+                    maxLength={ServerConstants.TWILIO_MSG_LENGTH}
+                    spellCheck={true}
                     disabled = {(ContectSelectedConstants.DEFAULT_CONTACT === contactSelected) ? 'disabled' : ''}
                 />
                 <input type="submit" value="Send SMS" 

@@ -29,11 +29,11 @@ module.exports.authenticate = (req, callback) => {
 
 module.exports.register = (req, callback) => {
    //prepare the insert query.
-   var insert_query = 'INSERT INTO user(email, firstname, lastname, username, password) VALUES (?,?,?,?,?)';
+   var insert_query = 'INSERT INTO user(user_type_id, email, firstname, lastname, username, password) VALUES (?,?,?,?,?,?)';
    //execute the query.
    getConnection((err,connection)=> {
        connection.query(insert_query,
-                       [req.body.email,req.body.firstname,req.body.lastname,req.body.username, req.body.password],
+                       [req.body.user_type_id, req.body.email,req.body.firstname,req.body.lastname,req.body.username, req.body.password],
                        function(err, result) {
            connection.release();
            if(err) {
