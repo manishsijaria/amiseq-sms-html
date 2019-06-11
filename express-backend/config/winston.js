@@ -3,11 +3,17 @@
 //This package is not directly related to Winston, but helps immensely 
 //when specifying paths to files in Node.js code. 
 var appRoot = require('app-root-path');
-
+var fs = require('fs')
 //logging library
 //var winston = require('winston');
 const { createLogger, format, transports } = require('winston');
 require('winston-daily-rotate-file');
+
+//create the directory logs if it does not exists in app-root-path
+if (!fs.existsSync(`${appRoot}/logs`)){
+  fs.mkdirSync(`${appRoot}/logs`);
+}
+
 /*
 Winston uses npm logging levels that are prioritized from "0" to 5 ("highest" to lowest):
 const levels = { 

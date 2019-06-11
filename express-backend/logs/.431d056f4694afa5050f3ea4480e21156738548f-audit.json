@@ -6,24 +6,9 @@
     "auditLog": "D:\\Learning\\Reactjstest\\reactjs-twilio-tests\\amiseq-sms-html\\express-backend\\logs\\.431d056f4694afa5050f3ea4480e21156738548f-audit.json",
     "files": [
         {
-            "date": 1559833439627,
-            "name": "D:\\Learning\\Reactjstest\\reactjs-twilio-tests\\amiseq-sms-html\\express-backend\\logs\\app-2019-06-06.log",
-            "hash": "817d0a49f6d1078aafaa9f982dc14568"
-        },
-        {
-            "date": 1559848472175,
-            "name": "D:\\Learning\\Reactjstest\\reactjs-twilio-tests\\amiseq-sms-html\\express-backend\\logs\\app-2019-06-07.log",
-            "hash": "a88796c0f14fa48ef70f80ada8613100"
-        },
-        {
-            "date": 1560180297120,
-            "name": "D:\\Learning\\Reactjstest\\reactjs-twilio-tests\\amiseq-sms-html\\express-backend\\logs\\app-2019-06-10.log",
-            "hash": "ec5527ead592323404f6064c6bd7d4cf"
-        },
-        {
-            "date": 1560248437977,
+            "date": 1560267451218,
             "name": "D:\\Learning\\Reactjstest\\reactjs-twilio-tests\\amiseq-sms-html\\express-backend\\logs\\app-2019-06-11.log",
-            "hash": "3b94be96eb42c555efa1bbefa81e0585"
+            "hash": "c79c701d0d1813f4f852d2beca4fb442"
         }
     ]
 }
