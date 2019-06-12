@@ -69,7 +69,6 @@ function getContacts(offset, count, filterText) {
                 let ParsedContacts = JSON.parse(contacts)
                 dispatch(success(ParsedContacts)) 
             }
-
         })
     }
     function failure(error) { return {type: contactConstants.GET_CONTACTS_FAILURE, error }}

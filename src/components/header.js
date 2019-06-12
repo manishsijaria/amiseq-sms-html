@@ -2,7 +2,7 @@ import React from 'react'
 //import '../css/navigation_ul_li.css'
 import '../css/navigation_div.css'
 import '../css/overall-layout.css'
-import logo from '../images/Amiseq-small-logo-42px.jpg'
+import logo from '../images/Amiseq_90x42.png'
 
 import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
