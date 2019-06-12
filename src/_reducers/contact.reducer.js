@@ -37,6 +37,8 @@ export function contactsCount(state = 0, action) {
         case contactConstants.GET_CONTACTS_COUNT_SUCCESS:
             //alert(action.count)
             return action.count 
+        case contactConstants.GET_CONTACTS_COUNT_FAILURE:
+            return 0
         case userConstants.LOGOUT:
             return 0        
         default:

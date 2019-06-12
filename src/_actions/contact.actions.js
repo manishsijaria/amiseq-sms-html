@@ -80,11 +80,15 @@ function getContactsCount(filterText) {
     return (dispatch) => {
         contactServices.getContactsCount(filterText)
         .then(count => {
-                dispatch(success(count))
+                if(count === undefined) {
+                    dispatch(failure())
+                } else {
+                    dispatch(success(count))
+                }
             }
         )
     }
-    //function failure(e) { return {type: contactConstants.GET_CONTACTS_COUNT_FAILURE, e} }
+    function failure() { return {type: contactConstants.GET_CONTACTS_COUNT_FAILURE} }
     function success(count) { return {type: contactConstants.GET_CONTACTS_COUNT_SUCCESS, count }}
 }
 
