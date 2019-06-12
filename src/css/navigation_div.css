@@ -6,8 +6,15 @@
     color: white;
   }
   
+  .navbar a  {
+    float: left;
+    position: relative;
+    top: 2px;
+    left: 2px;
+  }
+  /*  :not(a[name='logo']) */
   /* Links inside the navbar */
-  .navbar a {
+  .navbar  a:not(:first-child)  {
     float: left;
     font-size: 16px;
     color: white;

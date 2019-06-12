@@ -2,6 +2,8 @@ import React from 'react'
 //import '../css/navigation_ul_li.css'
 import '../css/navigation_div.css'
 import '../css/overall-layout.css'
+import logo from '../images/Amiseq-small-logo-42px.jpg'
+
 import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
 
@@ -35,6 +37,9 @@ class Header extends React.Component {
         } 
         return(
             <div className="navbar ">
+                <a className='logo' href="https://www.amiseq.com/">
+                    <img src={logo} alt='Amiseq Logo'></img> 
+                </a>
                 <NavLink to='/home'>Home</NavLink>
                 {this.props.loggedIn ? 
                     <NavLink to='/addcontact'>Add Contact</NavLink>

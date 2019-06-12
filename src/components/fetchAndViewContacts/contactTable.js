@@ -28,7 +28,11 @@ export default class ContactTable  extends React.PureComponent {
         if( (prevProps.filterText !== this.props.filterText) ||
             (prevProps.orderChanged !== this.props.orderChanged) ) {
             if(this.InfiniteLoaderRef) {
-                this.InfiniteLoaderRef.resetLoadMoreRowsCache(true);
+                //KB: if the contacts are 0 initially, and Search Contact is not empty.
+                //    then InfiniteLoaderRef.resetLoadMoreRowsCache throws undefined.  
+                if(this.props.rowCount > 0) {
+                    this.InfiniteLoaderRef.resetLoadMoreRowsCache(true);
+                }
             }
         }  
     }    
