@@ -32,15 +32,21 @@ export function contactsGet(state = {contacts: []}, action) {
     }
 }
 
-export function contactsCount(state = 0, action) {
+export function contactsCount(state = {contactsCount :0, isFetchingContactsCount : true}, action) {
     switch(action.type) {
+        case contactConstants.GET_CONTACTS_COUNT_REQUEST:
+            return {contactsCount : 0,  isFetchingContactsCount: true}            
+
         case contactConstants.GET_CONTACTS_COUNT_SUCCESS:
             //alert(action.count)
-            return action.count 
+            return {contactsCount : action.count,  isFetchingContactsCount: false}
+
         case contactConstants.GET_CONTACTS_COUNT_FAILURE:
-            return 0
+            return {contactsCount : 0,  isFetchingContactsCount: false}
+
         case userConstants.LOGOUT:
-            return 0        
+            return {contactsCount : 0,  isFetchingContactsCount: false}        
+
         default:
             return state
     }

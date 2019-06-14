@@ -56,9 +56,12 @@ function deleteContact(contact_id) {
 
 function getContacts(offset, count, filterText) {
     return (dispatch) => {
+        //KB: When the OrderChanged event is fired, the count doesn't change
+        //    but we need to reset the contacts.
         if(offset === FetchContactConstants.MINIMUM_START_INDEX) {
             dispatch(reset())
         }
+        
         contactServices.getContacts(offset, count, filterText)
         .then(contacts => {
             if(!contacts || contacts === undefined) {
@@ -78,6 +81,9 @@ function getContacts(offset, count, filterText) {
 
 function getContactsCount(filterText) {
     return (dispatch) => {
+        dispatch(request(true))     //Set the isFetchingContactCount=true
+        dispatch(resetContacts())   //reset all contacts
+
         contactServices.getContactsCount(filterText)
         .then(count => {
                 if(count === undefined) {
@@ -88,6 +94,8 @@ function getContactsCount(filterText) {
             }
         )
     }
+    function resetContacts() { return {type: contactConstants.RESET_CONTACTS } }
+    function request(isFetching) { return {type: contactConstants.GET_CONTACTS_COUNT_REQUEST, isFetching} }
     function failure() { return {type: contactConstants.GET_CONTACTS_COUNT_FAILURE} }
     function success(count) { return {type: contactConstants.GET_CONTACTS_COUNT_SUCCESS, count }}
 }

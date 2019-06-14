@@ -42,18 +42,27 @@ export default class FetchAndFilterContactTable  extends React.Component {
     constructor(props) {
         super(props)
         this.state = { filterText: '', orderChanged: false}
+        this.contactTableRef = React.createRef()            //KB: ref of contactTable, so that the infiniteLoader can be reset.
     }
+
     componentWillMount() {
         const { dispatch } = this.props
         dispatch(contactActions.getContactsCount(''))
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if(prevProps.count !== this.props.count 
-            || prevState.filterText !== this.state.filterText) 
-            {
-            this.fetchRowsOnCountChange(this.props.count)
-        }  
+        if(!this.props.isFetchingContactsCount) {
+            if(prevProps.contactsCount !== this.props.contactsCount 
+                || prevState.filterText !== this.state.filterText) 
+                {
+                //KB: reset the InfiniteLoader since the contactCount or filterText changed 
+                if(this.contactTableRef) {
+                    this.contactTableRef.resetLoadMoreRows()
+                }
+                //Now fetch the first chunk of contact rows.
+                this.fetchRowsOnCountChange(this.props.contactsCount)
+            }  
+        }
     }
 
     fetchRowsOnCountChange = (RowCount) => {
@@ -65,7 +74,7 @@ export default class FetchAndFilterContactTable  extends React.Component {
         }
         else {
             this.fetchMoreRows({startIndex: FetchContactConstants.MINIMUM_START_INDEX, 
-                                stopIndex: RowCount })
+                                stopIndex: RowCount -1 })
         }
     }
 
@@ -79,22 +88,28 @@ export default class FetchAndFilterContactTable  extends React.Component {
     */
     fetchMoreRows = ({startIndex, stopIndex}) => {
         const { dispatch } = this.props
-        dispatch(contactActions.getContacts(startIndex,stopIndex - startIndex + 1, this.state.filterText))
+        dispatch(contactActions.getContacts(startIndex,stopIndex - startIndex + 1 , this.state.filterText))
     }
 
     handelFilterTextChange = (filterText) => {
+        //KB: First dispatch the {contactsCount =0, isFetchingContactsCount = true}
+        //    conponentDidUpdate is fired just after dispatch, where isFetchingContactsCount is checked.
+        const { dispatch } = this.props
+        dispatch(contactActions.getContactsCount(filterText))
+        
+        //Now set the state, otherwise !isFetchingContactsCount, will not work in componentDidUpdate. 
         this.setState({
             filterText: filterText
         })
-        const { dispatch } = this.props
-        dispatch(contactActions.getContactsCount(filterText))    
     }
 
     handelOrderChange = () => {
         this.setState(prevState => ({
             orderChanged: !prevState.orderChanged
         }))
-        this.fetchRowsOnCountChange(this.props.count)
+        //Since only the order is changed, but the contactsCount remains the same.
+        //NOTE: What will happen in multiuser case, when some users have added or deleted some contacts. 
+        this.fetchRowsOnCountChange(this.props.contactsCount)
     }
 
     selected = (contact_id, fullname, contact_create_date, added_by_username) => {
@@ -108,7 +123,7 @@ export default class FetchAndFilterContactTable  extends React.Component {
     }
     render() {
         const { filterText } = this.state
-        const { contacts, count } = this.props
+        const { contacts, contactsCount } = this.props
         return(
                 <div className='content' style={{ width: this.props.leftSplitPaneWidth }}>
                     {/*
@@ -121,7 +136,7 @@ export default class FetchAndFilterContactTable  extends React.Component {
                     />
                    <ContactTable contacts={contacts} 
                                 filterText={filterText}
-                                
+                                ref={(ref) => this.contactTableRef = ref}
                                 onOrderChange={this.handelOrderChange}
                                 orderChanged={this.state.orderChanged}
 
@@ -132,7 +147,7 @@ export default class FetchAndFilterContactTable  extends React.Component {
                                 leftSplitPaneWidth={this.props.leftSplitPaneWidth}
 
                                 loadMoreRows={this.fetchMoreRows}
-                                rowCount={count}
+                                rowCount={contactsCount}
                     />
                 </div> 
         )
@@ -142,8 +157,8 @@ export default class FetchAndFilterContactTable  extends React.Component {
 function mapStateToProps(state) {
     const { user } = state.authentication
     const { contacts } = state.contactsGet
-    const  count  = state.contactsCount
-    return { user, contacts, count }
+    const  {contactsCount , isFetchingContactsCount}  = state.contactsCount
+    return { user, contacts, contactsCount , isFetchingContactsCount }
 }
 
 const connectedFetchAndFilterContactTable = connect(mapStateToProps)(FetchAndFilterContactTable)
