@@ -15,10 +15,20 @@ CREATE SCHEMA IF NOT EXISTS `amiseq_sms_html` DEFAULT CHARACTER SET utf8 ;
 USE `amiseq_sms_html` ;
 
 -- -----------------------------------------------------
+-- Table `amiseq_sms_html`.`user_type`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `amiseq_sms_html`.`user_type` (
+  `user_type_id` INT(11) NOT NULL,
+  `type_name` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`user_type_id`))
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
 -- Table `amiseq_sms_html`.`user`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `amiseq_sms_html`.`user` (
   `user_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `user_type_id` INT(11) NOT NULL COMMENT 'Each user has a user_type_id from user_type table. There can be many user in user table having the same user_type_id.',
   `firstname` VARCHAR(100) NULL DEFAULT NULL,
   `lastname` VARCHAR(100) NULL DEFAULT NULL,
   `username` VARCHAR(100) NOT NULL COMMENT 'username should be unique for all users.',
@@ -27,7 +37,13 @@ CREATE TABLE IF NOT EXISTS `amiseq_sms_html`.`user` (
   `date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`user_id`),
   UNIQUE INDEX `username_UNIQUE` (`username` ASC),
-  UNIQUE INDEX `email_UNIQUE` (`email` ASC))
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC),
+  INDEX `fk_user_user_type1_idx` (`user_type_id` ASC),
+  CONSTRAINT `fk_user_user_type1`
+    FOREIGN KEY (`user_type_id`)
+    REFERENCES `amiseq_sms_html`.`user_type` (`user_type_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
 DEFAULT CHARACTER SET = utf8;

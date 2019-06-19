@@ -9,7 +9,7 @@ values (1, 'Candidate'), (2, 'Client'), (3, 'Others');
 /* add user manish manish from application */
 select * from user;
 delete from user;
-delete from user where user_id=5;
+delete from user where user_id=6;
 update user set user_id =1 where user_id = 4;
  
 delete from contact;
