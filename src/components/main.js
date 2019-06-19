@@ -1,6 +1,6 @@
 import React from 'react'
 import { Route, Switch} from 'react-router-dom'
-import  AppPage  from './appPage'
+import  { AppPage }  from './appPage'
 import  { Login } from './login'
 import { Register }  from './register'
 import { AddContact } from './addContact'
@@ -14,7 +14,7 @@ export default class Main extends React.Component {
                 <Switch>
                     <Route exact path="/"  component={AppPage} />
                     <Route path="/login" component={Login} />
-                    <Route path="/logout" component={Login} />
+                    <Route path="/logout" component={AppPage} />
                     <Route path="/register@1234" component={Register} />
                     <Route path="/addcontact" component={AddContact}/>
                     <Route path="*" component={NotFound}/>

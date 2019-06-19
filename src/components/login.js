@@ -10,22 +10,9 @@ class Login extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            username: 'manish',
-            password: 'manish',
+            username: '',
+            password: '',
             submitted: false
-        }
-    }
-    
-    
-    componentWillMount() {
-        const URL = this.props.match.url
-        const { dispatch, loggedIn, user } = this.props
-        if(URL.indexOf('/logout') !== -1) {
-            dispatch(userActions.logout())
-        } else { //login page, when pressing back button goes to login page, set the username of loggedin user.
-            if(loggedIn) {
-                this.setState({username: user.username})
-            }
         }
     }
 
@@ -43,12 +30,10 @@ class Login extends React.Component {
         //alert(this.state.username + ' ' + this.state.password)
         const { username, password } = this.state
 
-        
         const { dispatch } = this.props
         if(username && password) {
             dispatch(userActions.login(username,password))
         }
-        
     }
     
     render() {

@@ -1,8 +1,17 @@
 
 import React from 'react'
 //import '../css/overall-layout.css'
+import { connect } from 'react-redux'
+import { userActions } from '../_actions'
 
 export default class AppPage extends React.Component {
+    componentWillMount() {
+        const URL = this.props.match.url
+        const { dispatch } = this.props
+        if(URL.indexOf('/logout') !== -1) {
+            dispatch(userActions.logout())
+        } 
+    }
     render() {
         return(
                 <div style = {{ textAlign: 'center'}}>
@@ -12,3 +21,8 @@ export default class AppPage extends React.Component {
         )
     }
 }
+
+
+const connectedAppPage = connect()(AppPage)
+
+export {connectedAppPage as AppPage}
