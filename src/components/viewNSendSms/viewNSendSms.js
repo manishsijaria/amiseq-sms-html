@@ -12,6 +12,7 @@ import { incrementMsgsCount } from '../socketAPI/incrementMsgsCount'
 
 //const TIMER_INTERVAL = 20000
 class ViewNSendSms extends React.Component {
+    
     constructor(props) {
         super(props);
         this.state = { contactSelected: ContectSelectedConstants.DEFAULT_CONTACT, 
@@ -20,6 +21,13 @@ class ViewNSendSms extends React.Component {
                     };
         this.prevContactSelected = this.props.contactSelected;
         this.offset = [];
+        
+        //KB: Event from SocketIO.Client is received twice(for a event), one in mounted state, and other in unmounted state.
+        //    hence incrementing the msgCount twice in componentDidMount method.
+        //    Therefore this._isMounted variable is added to track whether the component is Mounted or not.
+        //    Than dispatch the event to increment msgCount.
+        //https://www.robinwieruch.de/react-warning-cant-call-setstate-on-an-unmounted-component/
+        this._isMounted = false
     }    
     
     static getDerivedStateFromProps(props, state) {
@@ -36,16 +44,18 @@ class ViewNSendSms extends React.Component {
     }
 
     componentDidMount() {
+        this._isMounted = true   //Set it to true if the component is mounted.
         const { dispatch } = this.props
         
-        incrementMsgsCount( (err, data) => { 
-            //alert('data.contact_id:' + data.contact_id + ' data.by:' + data.by) 
-            dispatch(contactActions.incrementMsgsCount(data.contact_id,data.by) ) 
-        });
+            incrementMsgsCount( (err, data) => { 
+                if(this._isMounted) { //If mounted than increment MsgCount.
+                    dispatch(contactActions.incrementMsgsCount(data.contact_id,data.by) ) 
+                }
+            });    
     }
 
     componentWillUnmount() {
-        //clearInterval(this.timerID)
+        this._isMounted = false //Set it to false, if component is unmounted.
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -55,11 +65,7 @@ class ViewNSendSms extends React.Component {
 
         if(prevProps.contactSelected !== newContactSelected) {
             this.prevContactSelected = prevProps.contactSelected
-
             dispatch(contactActions.getMsgsCount(newContactSelected)) 
-            
-            //clearInterval(this.timerID)
-            //this.timerID = setInterval(() => this.setStateOnTimer(), TIMER_INTERVAL)    
         }
 
         let newMsgCount = this.props.contactMsgsCountArray[newContactSelected]
@@ -93,7 +99,6 @@ class ViewNSendSms extends React.Component {
                 this.fetchRowsOnChange(newContactSelected, newMsgCount)
             }
         } 
-        //this.fetchMoreRows({ startIndex: this._loadMoreRowsStartIndex, stopIndex: this._loadMoreRowsStopIndex})
     }
 
     ifNotExistThanAddContactIDArrayInOffsetArray = (contact_id) => {

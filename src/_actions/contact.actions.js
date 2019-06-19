@@ -4,7 +4,7 @@ import { contactServices } from "../_services";
 
 import { push } from 'connected-react-router'
 import { alertActions } from './alert.actions';
-import { FetchContactConstants } from '../_constants'
+//import { FetchContactConstants } from '../_constants'
 
 export const contactActions = {
     addContact,
@@ -56,12 +56,11 @@ function deleteContact(contact_id) {
 
 function getContacts(offset, count, filterText) {
     return (dispatch) => {
-        //KB: When the OrderChanged event is fired, the count doesn't change
-        //    but we need to reset the contacts.
+        /*
         if(offset === FetchContactConstants.MINIMUM_START_INDEX) {
             dispatch(reset())
         }
-        
+        */
         contactServices.getContacts(offset, count, filterText)
         .then(contacts => {
             if(!contacts || contacts === undefined) {
@@ -76,7 +75,7 @@ function getContacts(offset, count, filterText) {
     }
     function failure(error) { return {type: contactConstants.GET_CONTACTS_FAILURE, error }}
     function success(contacts) { return {type: contactConstants.GET_CONTACTS_SUCCESS , contacts }}
-    function reset() { return {type: contactConstants.RESET_CONTACTS }}
+    //function reset() { return {type: contactConstants.RESET_CONTACTS }}
 }
 
 function getContactsCount(filterText) {

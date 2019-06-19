@@ -43,6 +43,13 @@ export default class FetchAndFilterContactTable  extends React.Component {
         super(props)
         this.state = { filterText: '', orderChanged: false}
         this.contactTableRef = React.createRef()            //KB: ref of contactTable, so that the infiniteLoader can be reset.
+
+        //KB: Event from SocketIO.Client is received twice(for a event), one in mounted state, and other in unmounted state.
+        //    hence incrementing the msgCount twice in componentDidMount method.
+        //    Therefore this._isMounted variable is added to track whether the component is Mounted or not.
+        //    Than dispatch the event to increment msgCount.
+        //https://www.robinwieruch.de/react-warning-cant-call-setstate-on-an-unmounted-component/
+        this._isMounted = false        
     }
 
     componentWillMount() {
@@ -50,10 +57,19 @@ export default class FetchAndFilterContactTable  extends React.Component {
         dispatch(contactActions.getContactsCount(''))
     }
 
+    componentDidMount() {
+        this._isMounted = true //Set it to true if the component is mounted.
+    }
+    
+    componentWillUnmount() {
+        this._isMounted = false //Set it to false, if component is unmounted.
+    }
+
     componentDidUpdate(prevProps, prevState) {
         if(!this.props.isFetchingContactsCount) {
             if(prevProps.contactsCount !== this.props.contactsCount 
-                || prevState.filterText !== this.state.filterText) 
+                || prevState.filterText !== this.state.filterText
+                || prevState.orderChanged !== this.state.orderChanged) 
                 {
                 //KB: reset the InfiniteLoader since the contactCount or filterText changed 
                 if(this.contactTableRef) {
@@ -92,35 +108,44 @@ export default class FetchAndFilterContactTable  extends React.Component {
     }
 
     handelFilterTextChange = (filterText) => {
-        //KB: First dispatch the {contactsCount =0, isFetchingContactsCount = true}
-        //    conponentDidUpdate is fired just after dispatch, where isFetchingContactsCount is checked.
-        const { dispatch } = this.props
-        dispatch(contactActions.getContactsCount(filterText))
-        
-        //Now set the state, otherwise !isFetchingContactsCount, will not work in componentDidUpdate. 
-        this.setState({
-            filterText: filterText
-        })
+        if(this._isMounted) { //If mounted than fire and change state.
+            //KB: First dispatch the {contactsCount =0, isFetchingContactsCount = true}
+            //    conponentDidUpdate is fired just after dispatch, where isFetchingContactsCount is checked.
+            const { dispatch } = this.props
+            dispatch(contactActions.getContactsCount(filterText))
+            
+            //Now set the state, otherwise !isFetchingContactsCount, will not work in componentDidUpdate. 
+            this.setState({
+                filterText: filterText
+            })
+        }
     }
 
     handelOrderChange = () => {
-        this.setState(prevState => ({
-            orderChanged: !prevState.orderChanged
-        }))
-        //Since only the order is changed, but the contactsCount remains the same.
-        //NOTE: What will happen in multiuser case, when some users have added or deleted some contacts. 
-        this.fetchRowsOnCountChange(this.props.contactsCount)
+        if(this._isMounted) { //If mounted than fire and change state.
+            //KB: First dispatch the {contactsCount =0, isFetchingContactsCount = true}
+            //    conponentDidUpdate is fired just after dispatch, where isFetchingContactsCount is checked.
+            const { dispatch } = this.props
+            dispatch(contactActions.getContactsCount(this.state.filterText))
+
+            //Now set the state, otherwise !isFetchingContactsCount, will not work in componentDidUpdate. 
+            this.setState(prevState => ({
+                orderChanged: !prevState.orderChanged
+            }))
+        }
     }
 
     selected = (contact_id, fullname, contact_create_date, added_by_username) => {
         this.props.onContactClick(contact_id, fullname, contact_create_date, added_by_username)
     }
+
     deleteContact = (contact_id) => {
         const { dispatch } = this.props
         dispatch(contactActions.deleteContact(parseInt(contact_id,10)))
         //-1 will not be any contact_id, the viewNSendSms will be blank.
         this.props.onContactClick(ContectSelectedConstants.DEFAULT_CONTACT) 
     }
+
     render() {
         const { filterText } = this.state
         const { contacts, contactsCount } = this.props

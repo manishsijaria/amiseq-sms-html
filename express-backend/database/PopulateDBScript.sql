@@ -9,6 +9,7 @@ values (1, 'Candidate'), (2, 'Client'), (3, 'Others');
 /* add user manish manish from application */
 select * from user;
 delete from user;
+delete from user where user_id=5;
 update user set user_id =1 where user_id = 4;
  
 delete from contact;
@@ -19,9 +20,10 @@ delete from message;
 CALL `amiseq_sms_html`.`insertIntoMessage`();
 select * from message;
 /* update contact SET mobile_no = '+14108' where contact_id = 1; */
-update contact SET mobile_no = '+14108675310' where contact_id = 15;
+update contact SET mobile_no = '+14108675310' where contact_id = 2;
 /* ======================================================*/
 
+drop trigger after_message_insert;
 /*
 Offset: It is used to specify the offset of the first row to be returned.
 		if offset=100 and the first row=1 than select would return 101st record.
