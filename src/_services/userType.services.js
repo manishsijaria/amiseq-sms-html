@@ -10,7 +10,7 @@ function getUserTypes() {
         method: 'GET',
         headers: { 'Content-Type' : 'application/json'}
     }
-    return fetch('/userTypes/getUserTypes', requestOptions)
+    return fetch('/api/userTypes/getUserTypes', requestOptions)
             .then(response =>{
                 if(response.ok) {
                     return response.json()

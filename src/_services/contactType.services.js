@@ -10,7 +10,7 @@ function getContactTypes() {
         method: 'GET',
         headers: { 'Content-Type' : 'application/json'}
     }
-    return fetch('/contactTypes/getContactTypes', requestOptions)
+    return fetch('/api/contactTypes/getContactTypes', requestOptions)
             .then(response =>{
                 if(response.ok) {
                     return response.json()

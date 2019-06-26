@@ -17,7 +17,7 @@ function addContact(contact) {
         headers: { 'Content-Type' : 'application/json'},
         body: JSON.stringify(contact)
     }
-    return fetch('/contacts/addContact', requestOptions)
+    return fetch('/api/contacts/addContact', requestOptions)
             .then(response => {
                 if(response.ok) {
                     return response.json()
@@ -34,7 +34,7 @@ function deleteContact(contact_id) {
         headers: {  'Content-Type' : 'application/json' },
         body: JSON.stringify({contact_id: contact_id})
     }
-    return fetch('/contacts/delete', requestOptions)
+    return fetch('/api/contacts/delete', requestOptions)
             .then(response => {
                 if(response.ok) {
                     return response.json()
@@ -51,7 +51,7 @@ function getContacts(offset, count, filterText) {
         headers: { 'Content-Type' : 'application/json'},
         body: JSON.stringify({filterText: filterText})
     }
-    return fetch('/contacts/getContacts/' + offset + '/' + count , requestOptions)
+    return fetch('/api/contacts/getContacts/' + offset + '/' + count , requestOptions)
             .then(response => {
                 if(response.ok) {
                     return response.json()
@@ -69,7 +69,7 @@ function getContactsCount(filterText) {
         body: JSON.stringify({filterText: filterText})
     }
     
-    return fetch('/contacts/getContactsCount', requestOptions)
+    return fetch('/api/contacts/getContactsCount', requestOptions)
             .then(response => {
                 if(response.ok) {
                     return response.json()
@@ -86,7 +86,7 @@ function getMsgsCount(contact_id) {
         headers: { 'Content-Type' : 'application/json'}
     }
     
-    return fetch('/contacts/getMsgsCount/'   + contact_id , requestOptions)
+    return fetch('/api/contacts/getMsgsCount/'   + contact_id , requestOptions)
             .then(response => {
                 if(response.ok) {
                     return response.json()
@@ -102,7 +102,7 @@ function getContactMsgs(offset, count, contact_id) {
         method: 'GET',
         headers: { 'Content-Type' : 'application/json'}
     }
-    return fetch('/contacts/getContactMsgs/' + offset + '/' + count + '/' + contact_id, requestOptions)
+    return fetch('/api/contacts/getContactMsgs/' + offset + '/' + count + '/' + contact_id, requestOptions)
             .then(response => {
                 if(response.ok) {
                     return response.json()

@@ -12,7 +12,7 @@ function login(username, password) {
         headers: { 'Accept': 'application/json','Content-Type': 'application/json'},
         body: JSON.stringify({username, password})
     }
-    return fetch('/users/authenticate', requestOptions)
+    return fetch('/api/users/authenticate', requestOptions)
                 .then(response => {
                     //alert('response')
                     if(response.status === 404) {
@@ -44,7 +44,7 @@ function register(user) {
         headers: { 'Content-Type': 'application/json'},
         body: JSON.stringify(user)
     }
-    return fetch('/users/register', requestOptions)
+    return fetch('/api/users/register', requestOptions)
         .then(response => {
                 if(response.ok) {
                     //alert('response ok')
@@ -64,7 +64,7 @@ function smsSend(user_id, smsText, contactArray) {
         body: JSON.stringify({user_id: user_id, smsText: smsText , contactArray: contactArray })
     }
     //alert(JSON.stringify({smsText: smsText , clientArray: clientArray }))
-    return fetch('/users/smsSend' , requestOptions)
+    return fetch('/api/users/smsSend' , requestOptions)
             .then(response => {
                 if(response.ok) {
                     return response.json()

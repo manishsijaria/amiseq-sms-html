@@ -15,6 +15,7 @@ update user set user_id =1 where user_id = 4;
 delete from contact;
 CALL `amiseq_sms_html`.`insertIntoContact`();
 select * from contact;
+update contact set msg_date = null;
 
 delete from message;
 CALL `amiseq_sms_html`.`insertIntoMessage`();

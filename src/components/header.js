@@ -33,7 +33,7 @@ class Header extends React.Component {
     render() {
         let loggedInUser = ''
         if(this.props.loggedIn) {
-            loggedInUser = 'Welcome ' + this.props.user.username + '!'
+            loggedInUser = 'Welcome ' + this.props.user.username + ' !'
         } 
         return(
             <div className="navbar ">
