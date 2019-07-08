@@ -8,7 +8,7 @@ import { SplitPaneConstants, ContectSelectedConstants } from '../../_constants'
 
 import  SearchableTable  from '../viewNSendSms/searchableTable'
 import { Sms } from './sms'
-import { incrementMsgsCount } from '../socketAPI/incrementMsgsCount'
+import {incrementMsgsCount } from  '../socketAPI/incrementMsgsCount'
 
 //const TIMER_INTERVAL = 20000
 class ViewNSendSms extends React.Component {
@@ -47,7 +47,7 @@ class ViewNSendSms extends React.Component {
         this._isMounted = true   //Set it to true if the component is mounted.
         const { dispatch } = this.props
         
-            incrementMsgsCount( (err, data) => { 
+        incrementMsgsCount( (err, data) => { 
                 if(this._isMounted) { //If mounted than increment MsgCount.
                     dispatch(contactActions.incrementMsgsCount(data.contact_id,data.by) ) 
                 }

@@ -63,7 +63,18 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 //============= socket.io ========================
-var io = require('socket.io').listen(server)
+var io = require('socket.io').listen(server, {
+  serveClient: true,
+  // below are engine.IO options
+  pingTimeout: 60000,
+  pingInterval: 40000,
+  upgradeTimeout: 21000,
+  agent: false,
+  cookie: false,
+  rejectUnauthorized: false,
+  reconnectionDelay: 1000,
+  reconnectionDelayMax: 5000
+})
 
 //https://stackoverflow.com/questions/20144414/socket-io-connection-to-server-doesnt-work-sometimes
 //io.set('transports', ['xhr-polling']);

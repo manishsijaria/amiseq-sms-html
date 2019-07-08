@@ -5,7 +5,7 @@ import ContactRow from './contactRow'
 import {  InfiniteLoader, List } from 'react-virtualized'
 import 'react-virtualized/styles.css'
 import { FetchContactConstants } from '../../_constants'
-import { incrementMsgsCount } from '../socketAPI/incrementMsgsCount'
+import {incrementMsgsCount } from '../socketAPI/incrementMsgsCount'
 
 export default class ContactTable  extends React.PureComponent {
     constructor(props) {

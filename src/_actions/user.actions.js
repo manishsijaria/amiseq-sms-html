@@ -20,7 +20,7 @@ function login(username, password) {
             .then(
                 user => {
                     //alert('Login Success on Client:' + user)
-                    if(!user || user === 'undefined') {
+                    if(!user || user === undefined) {
                         let e = 'Username or Password incorrect, Try Again!'
                         dispatch(failure(e))
                         dispatch(alertActions.error(e))    
@@ -49,7 +49,7 @@ function register(user) {
         userService.register(user)
             .then(
                 user => { 
-                    if(!user || user === 'undefined') {
+                    if(!user || user === undefined) {
                         //alert(JSON.stringify(user))
                         let e = 'Email or  Username already registered'
                         dispatch(failure(e))

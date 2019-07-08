@@ -5,6 +5,7 @@ import '../css/generic-form.css'
 
 import { connect } from 'react-redux'
 import { userActions } from '../_actions'
+import { push } from 'connected-react-router'
 
 class Login extends React.Component {
     constructor(props) {
@@ -36,6 +37,11 @@ class Login extends React.Component {
         }
     }
     
+    handelCancel = (event) => {
+        const { dispatch } = this.props
+        event.preventDefault()
+        dispatch(push('/'))
+    }
     render() {
         const { username, password } = this.state
         const {  alert  } = this.props
@@ -56,8 +62,10 @@ class Login extends React.Component {
 
                         <label htmlFor="password"><b>Password</b></label>
                         <input type="password" name="password" value={password} onChange={this.handelChange}/>
-
-                        <input type="submit" value="Login"/>
+                        <div className='divButtons'>
+                            <button type="button" onClick={this.handelCancel}>Cancel</button>
+                            <input type="submit" value="Login"/>
+                        </div>
                     </form>
                 </div>
             </div>   
