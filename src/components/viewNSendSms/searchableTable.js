@@ -28,16 +28,17 @@ export default class SearchableTable extends React.Component {
                            onSearchTextChange={this.handelSearchTextChange}
                            rightSplitPaneWidth={this.props.rightSplitPaneWidth}
                            />
-                <MsgsTable msgs={msgs} 
-                            searchText={searchText} 
-                            contactFullname={contactFullname}
-                            heightInPx={heightOfmsgTable}
-                            rightSplitPaneWidth={this.props.rightSplitPaneWidth}
+                <div className="frame" style={{  height: heightOfmsgTable , 
+                                                width: this.props.rightSplitPaneWidth, 
+                                                }}>
+                    <MsgsTable msgs={msgs} 
+                                searchText={searchText} 
+                                contactFullname={contactFullname}
 
-                            loadMoreRows={this.props.loadMoreRows}
-                            rowCount={this.props.rowCount}
-
-                />
+                                loadMoreRows={this.props.loadMoreRows}
+                                rowCount={this.props.rowCount}
+                    />
+                </div>
             </>
         )
     }

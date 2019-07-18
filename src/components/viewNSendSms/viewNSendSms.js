@@ -81,7 +81,10 @@ class ViewNSendSms extends React.Component {
             ) {
             //TODO: for incremental fetch the offset should not be [].
             //      it should be offset of the last fetch + count  i think.
+            
             if(this.offset[newContactSelected]) {
+
+                
                 //1. Get the count from last fetch  
                 let prevCount = this.offset[newContactSelected][this.offset[newContactSelected].length - 1]
                 //2. get the total item fetched till now, in min_start_index.
@@ -95,6 +98,7 @@ class ViewNSendSms extends React.Component {
                 //   LAST PARAM OF of below code is append_in_the_end = true
                 //dispatch(contactActions.getContactMsgs(0,next_count, newContactSelected, true))
                 dispatch(contactActions.getContactMsgs(min_start_index,next_count, newContactSelected))
+                
             } else {
                 this.fetchRowsOnChange(newContactSelected, newMsgCount)
             }

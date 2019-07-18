@@ -16,30 +16,47 @@ export default class MsgsTable extends React.PureComponent {
                                 fixedWidth: true,
                                 defaultHeight: 70,
                             });
+        this._measureCallbacks = [];
+        this._mostRecentWidth = 0; 
+        this._resizeAllFlag = false;
+        this.rowHeight = 70; //50;
+        this._registerList = null;
 
         this.state = { scroll_to_row: null}
-        this.rowHeight = 70; //50;
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if(prevProps.msgs.length !== this.props.msgs.length) {
-            /*
+        if (this._resizeAllFlag) {
+            this._resizeAllFlag = false;
+            this._cache.clearAll();
             if (this.listRef) {
-                this._cache.clearAll();
-                this.listRef.recomputeRowHeights(0);
+              this.listRef.recomputeRowHeights();
             }
-            */
-           this.setState({
-                scroll_to_row:  this.props.msgs.length - 1,
-            })
         }
+        else if (prevProps.msgs.length !== this.props.msgs.length) {
+            
+            const index = prevProps.msgs.length
+            this._cache.clear(index, 0);
+            if (this.listRef) {
+                this.listRef.recomputeRowHeights(index);
+            }
+        }
+
+        /*
+        //Scroll to Row
+        this.setState({
+            scroll_to_row:  this.props.msgs.length,
+        })
+        */            
     }
 
     _onScroll = ({clientHeight,scrollHeight,scrollTop}) => {
+        
         if (this.state.scroll_to_row !== null && 
             scrollTop === this.row_height * this.scroll_to_row) {
             this.setState({scroll_to_row: null})
         }
+        
     }
 
     isRowLoaded = ({index}) => {
@@ -49,7 +66,6 @@ export default class MsgsTable extends React.PureComponent {
     rowRenderer = ({ key, index, parent, style, isScrolling, isVisible }) => {
 
         //alert('index:' + index)
-        //let widthEightyPercent =  {mywidth: { width: '90%'}}
         return (
             <CellMeasurer
                 cache={this._cache}
@@ -57,7 +73,10 @@ export default class MsgsTable extends React.PureComponent {
                 key={key}
                 rowIndex={index}
                 parent={parent}
-                > {/* CellMeasurer takes the parent component (List) where it’s going to be rendered */}            
+                width={this._mostRecentWidth}
+                >  
+                {({ measure }) =>  (          
+                <div key={index} style={style} onLoad={measure}> 
                     <MsgRow 
                         key={key} 
                         index={index}
@@ -69,14 +88,28 @@ export default class MsgsTable extends React.PureComponent {
                         searchText={this.props.searchText}
                         contactFullname={this.props.contactFullname}
                     >
-                        
                     </MsgRow>    
+                </div>
+                )}
             </CellMeasurer>
-        )        
+            )        
     }
 
+    _resizeAll = () => {
+        this._resizeAllFlag = false;
+        this._cache.clearAll();
+        if (this.listRef) {
+          this.listRef.recomputeRowHeights();
+        }
+    };
+
+    _setListRef = ref => {
+        this.listRef = ref;
+        this._registerList(ref);
+    };
+
     render() {
-        const { msgs , heightInPx, rightSplitPaneWidth  } = this.props
+        const { msgs } = this.props
         let fetchedRowCount = (msgs) ? msgs.length : 0
 
         let NoMsgsMsg = (this.props.rowCount === undefined || this.props.rowCount === 0) ? 
@@ -85,11 +118,7 @@ export default class MsgsTable extends React.PureComponent {
                                 </div> : ''
 
         return(
-            <div className="frame" style={{  height: heightInPx , 
-                                             width: rightSplitPaneWidth, 
-                                          }}>
-                
-                    <ul className="ulclass"> 
+                    <div className="infiniteLoaderDiv" > 
                         {(NoMsgsMsg) ? NoMsgsMsg : 
                             <InfiniteLoader isRowLoaded={this.isRowLoaded}
                                             loadMoreRows={this.props.loadMoreRows}
@@ -103,25 +132,29 @@ export default class MsgsTable extends React.PureComponent {
                                     <AutoSizer> 
                                         {/* The AutoSizer component will fill all of the available space of its parent*/}
                                         { ({ width, height }) => {
+                                                if(this._mostRecentWidth && this._mostRecentWidth !== width) {
+                                                    this._resizeAllFlag = true;
+                                                    setTimeout(this._resizeAll, 0);
+                                                }
+                                                this._mostRecentWidth = width;
+                                                this._registerList = registerChild;
+
                                                 return <List
-                                                    ref={(list) => { 
-                                                                this.listRef = list
-                                                                registerChild(list)
-                                                        }}
+                                                    ref={this._setListRef}
                                                     onRowsRendered={onRowsRendered}
                                                     rowRenderer={this.rowRenderer}
                                                     width={width}
                                                     height={height}
                                                     rowCount={fetchedRowCount}
-                                                    onScroll={this._onScroll}
+                                                    //onScroll={this._onScroll}
                                                     
                                                     deferredMeasurementCache={this._cache}
-                                                    rowHeight={this.rowHeight} //{this._cache.rowHeight}
-                                                    scrollToRow={this.state.scroll_to_row}
+                                                    rowHeight= {this._cache.rowHeight}    // {this.rowHeight}
+                                                    //scrollToRow={this.state.scroll_to_row}
 
                                                     searchText={this.props.searchText}
                                                     contactFullname={this.props.contactFullname}
-
+                                                    style={{ paddingBottom: '10px'}}    //space at the bottom of the list.
                                                     >
                                                     {/* when the searchText prop changes the list is rerendered, and highlighted by css */ }
                                                 </List>
@@ -131,8 +164,7 @@ export default class MsgsTable extends React.PureComponent {
                                 )}
                             </InfiniteLoader>  
                         }                      
-                    </ul> 
-            </div>
+                    </div> 
         )
     }
 }
