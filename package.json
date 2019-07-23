@@ -1,10 +1,9 @@
 {
   "name": "amiseq-sms-html",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "connected-react-router": "^6.1.0",
-    "dotenv": "^8.0.0",
     "history": "^4.7.2",
     "http-proxy-middleware": "^0.19.1",
     "lodash.debounce": "^4.0.8",
@@ -21,8 +20,8 @@
     "whatwg-fetch": "^3.0.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "dev": "react-scripts start",
+    "prod": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

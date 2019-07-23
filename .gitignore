@@ -10,6 +10,7 @@
 #The entire contents of any directory in the repository matching 
 #that name – including all of its files and subdirectories – will be ignored
 /express-backend/logs/*.*
+/express-backend/.env
 
 #--------------- testing ---------------
 /coverage
@@ -19,6 +20,12 @@
 
 #--------------- misc ---------------
 .DS_Store
+
+#----- We should not checkin these files to version control system -----
+.env.development
+.env.production
+#-----------------------------------------------------------------------
+
 .env.local
 .env.development.local
 .env.test.local

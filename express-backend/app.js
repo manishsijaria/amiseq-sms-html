@@ -2,6 +2,10 @@
 var express = require('express');
 var path = require('path');
 var morgan = require('morgan');
+
+//Read all the .env  variables first.
+require('dotenv').config();
+
 var winston = require('./config/winston');
 
 var cookieParser = require('cookie-parser');
@@ -26,6 +30,7 @@ var controller_router = require('./app/controllers/index');
 NOTE: The first place we'll actually use winston is with morgan. We will use the stream option,
 and set it to the stream interface we created as part of the winston configuration.
 */
+
 //short or combined
 app.use(morgan('short', { 'stream': winston.stream }));
 
@@ -45,7 +50,7 @@ var http = require('http');
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || CONSTANTS.SERVER_PORT);
+var port = normalizePort(process.env.SERVER_PORT || CONSTANTS.SERVER_PORT);
 app.set('port', port);
 
 /**
@@ -170,7 +175,7 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
 
-  winston.log("info", "Amiseq SMS App listening on:" + bind);
+  winston.log("info", "Amiseq SMS App listening on:" + bind + " in "+ process.env.NODE_ENV);
 
   debug('Listening on ' + bind);
 }

@@ -15,7 +15,7 @@ export default class AppPage extends React.Component {
     render() {
         return(
                 <div style = {{ textAlign: 'center'}}>
-                    <h1>Login to Amiseq SMS application</h1> 
+                    <h1>Login to {process.env.REACT_APP_NAME} (version {process.env.REACT_APP_VERSION})</h1> 
                     <p >Select the menu on top right and get started.</p> 
                 </div> 
         )

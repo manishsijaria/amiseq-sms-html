@@ -3,13 +3,16 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./start.js"
+    "dev": "cross-env NODE_ENV=development nodemon ./start.js",
+    "prod": "cross-env NODE_ENV=production nodemon ./start.js"
   },
   "dependencies": {
     "app-root-path": "^2.2.1",
     "body-parser": "~1.18.2",
     "cookie-parser": "~1.4.3",
+    "cross-env": "^5.2.0",
     "debug": "~2.6.9",
+    "dotenv": "^8.0.0",
     "express": "~4.15.5",
     "jade": "~1.11.0",
     "morgan": "~1.9.0",

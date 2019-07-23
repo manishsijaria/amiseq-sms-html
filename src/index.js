@@ -7,6 +7,15 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+//load environment variables.
+/*
+var dotenv = require('dotenv')
+var dotenvExpand = require('dotenv-expand')
+var myEnv = dotenv.config()
+dotenvExpand(myEnv)
+*/
+//alert(`${process.env.REACT_APP_VERSION}`);
+
 ReactDOM.render(
                 <Provider store={store}>
                     <App />
