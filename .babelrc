@@ -1,0 +1,16 @@
+
+{
+    //Module build failed (from ./node_modules/babel-loader/lib/index.js)
+    //Use : npm install -D babel-loader @babel/core @babel/preset-env
+    "presets": [ "@babel/env", "@babel/react"],
+
+    //Fix: for es2015 syntex, myfunc = () => {}
+    "plugins": [
+        [
+          "@babel/plugin-proposal-class-properties",
+          {
+            "loose": true
+          }
+        ]
+    ]
+}
