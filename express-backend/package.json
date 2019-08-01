@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "debug": "cross-env NODE_ENV=development PORT=3001 nodemon ./start.js", 
     "dev": "cross-env NODE_ENV=development PORT=3001 nodemon ./start.js",
-    "prod": "cross-env NODE_ENV=production nodemon ./start.js"
+    "prod": "cross-env NODE_ENV=production PORT=80 nodemon ./start.js"
   },
   "dependencies": {
     "app-root-path": "^2.2.1",

@@ -10,7 +10,6 @@ import LandingPage from './components/landingPage'
 
 import './css/overall-layout.css'
 
-
 class App extends Component {
   
   render() {

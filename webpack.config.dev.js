@@ -33,7 +33,7 @@ module.exports = (env) => {
             sms_react_app: path.join(__dirname,'/src/index.js'),
         },
         output: {
-            path: path.join(__dirname,'/dist'),
+            path: path.join(__dirname,'/dist/'),
             filename: '[name].bundle.js',   //[name] will be replaced by sms_react_app from entry object.
         },
         module: {
@@ -51,7 +51,7 @@ module.exports = (env) => {
                 },
                 //Fix: ERROR in ./src/images/circles.png 1:0
                 {
-                    test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg)(\?[a-z0-9=.]+)?$/,
+                    test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg|ico)(\?[a-z0-9=.]+)?$/,
                     loader: 'url-loader?limit=100000' 
                 }                                
             ]

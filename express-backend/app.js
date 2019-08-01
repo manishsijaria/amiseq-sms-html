@@ -42,6 +42,21 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //app.use('/', index);
 app.use(controller_router);
+
+//============= React Client request Get =============
+winston.log("info","process.env.NODE_ENV=" + process.env.NODE_ENV)
+if(process.env.NODE_ENV === 'production') {
+  //app.use(express.static(path.join(__dirname, 'client/build')));
+  app.use(express.static(path.join(__dirname)));
+  app.get('*', 
+          (req, res) => 
+            {    
+              res.sendfile(path.join(__dirname, '/index.html'));  
+            }
+          )
+}
+//====================================================
+
 //=============== www ========================
 var debug = require('debug')('express-backend:server');
 var http = require('http');

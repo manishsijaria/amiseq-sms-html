@@ -41,7 +41,7 @@ module.exports = (env) => {
             sms_react_app: path.join(__dirname,'/src/index.js'),
         },
         output: {
-            path: path.join(__dirname,'/dist'),
+            path: path.join(__dirname,'/dist/'),
             filename: '[name].bundle.js',   //[name] will be replaced by sms_react_app from entry object.
         },
         module: {
@@ -58,15 +58,26 @@ module.exports = (env) => {
                 },
                 //Fix: ERROR in ./src/images/circles.png 1:0
                 {
-                    test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg)(\?[a-z0-9=.]+)?$/,
-                    loader: 'url-loader?limit=100000' 
+                    test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg|ico)(\?[a-z0-9=.]+)?$/,
+                    //loader: "file-loader!url-loader", //'url-loader?limit=100000' ,
+                    use: [
+                        {
+                            loader: 'url-loader',
+                            options: {
+                                limit: 100000
+                            }
+                        },                       
+                    ]
                 }                                
             ]
         },
         stats: { children: false },     //FIX: for Entrypoint undefined = index.html
         plugins: [
             new HtmlWebpackPlugin({ 
-                template: path.join(__dirname,'/public/index.html')
+                template: path.join(__dirname,'/public/index.html'),
+                //Fix: in PROD for %PUBLIC_URL%/fevicon.ico , %PUBLIC_URL%/manifest.json in index.html file.
+                fevicon: path.join(__dirname,'/public/fevicon.ico'),
+                manifest: path.join(__dirname,'/public/manifest.json'),
             }),
             new webpack.DefinePlugin(envKeys),
 
