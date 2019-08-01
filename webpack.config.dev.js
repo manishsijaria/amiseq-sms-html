@@ -52,7 +52,15 @@ module.exports = (env) => {
                 //Fix: ERROR in ./src/images/circles.png 1:0
                 {
                     test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg|ico)(\?[a-z0-9=.]+)?$/,
-                    loader: 'url-loader?limit=100000' 
+                    //loader: 'url-loader?limit=100000' 
+                    use: [
+                        {
+                            loader: 'url-loader',
+                            options: {
+                                limit: 100000
+                            }
+                        },                       
+                    ]                    
                 }                                
             ]
         },
