@@ -45,11 +45,12 @@ app.use(controller_router);
 
 //============= React Client request Get =============
 winston.log("info","process.env.NODE_ENV=" + process.env.NODE_ENV)
+// Only in production, serve the static, react.js files.
 if(process.env.NODE_ENV === 'production') {
-  //app.use(express.static(path.join(__dirname, 'client/build')));
+  // Serve the static files from the React app
   app.use(express.static(path.join(__dirname,'/client-dist')));
-  app.get('*', 
-          (req, res) => 
+  // Handles any requests that don't match the ones above
+  app.get('*', (req, res) => 
             {    
               res.sendfile(path.join(__dirname, '/client-dist/index.html'));  
             }
