@@ -41,7 +41,7 @@ module.exports = (env) => {
             sms_react_app: path.join(__dirname,'/src/index.js'),
         },
         output: {
-            path: path.join(__dirname,'/dist/'),
+            path: path.join(__dirname,'/client-dist/'),
             filename: '[name].bundle.js',   //[name] will be replaced by sms_react_app from entry object.
         },
         module: {
@@ -82,7 +82,7 @@ module.exports = (env) => {
             new webpack.DefinePlugin(envKeys),
 
             //--------- Production Specific -----------
-            //It cleans the output.path (/dist) directory before new files are bundled. 
+            //It cleans the output.path (/client-dist) directory before new files are bundled. 
             new CleanWebpackPlugin(),
             new UglifyJsPlugin(),                           //minify everything
             new webpack.optimize.AggressiveMergingPlugin(), //Merge chunks
