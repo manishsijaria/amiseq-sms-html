@@ -1,5 +1,6 @@
 {
   "name": "amiseq-sms-html",
+  "homepage": ".",
   "version": "1.0.0",
   "private": true,
   "dependencies": {

@@ -41,6 +41,7 @@ module.exports = (env) => {
             sms_react_app: path.join(__dirname,'/src/index.js'),
         },
         output: {
+            //publicPath: '/amiseq-sms',
             path: path.join(__dirname,'/client-dist/'),
             filename: '[name].bundle.js',   //[name] will be replaced by sms_react_app from entry object.
         },

@@ -16,7 +16,15 @@ var CONSTANTS = require('./config/constants')
 //var index = require('./routes/index');
 //var users = require('./routes/users');
 var app = express();
-
+/*
+app.use(function(req, res, next) {
+        res.header("Access-Control-Allow-Origin", "ws://192.168.1.99/amiseq-sms/sendAndReceive");
+        res.header("Access-Control-Allow-Headers", "X-Requested-With");
+        res.header("Access-Control-Allow-Headers", 'Origin, Content-Type, Authorization, Content-Length, X-Requested-With');
+        res.header("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS");
+        next();
+    });
+*/
 var controller_router = require('./app/controllers/index');
 
 // view engine setup
@@ -85,6 +93,8 @@ server.on('error', onError);
 server.on('listening', onListening);
 //============= socket.io ========================
 var io = require('socket.io').listen(server, {
+  //path: '/amiseq-sms/sendAndReceive',
+  //origins: ['ws://192.168.1.99/amiseq-sms/sendAndReceive'],	
   serveClient: true,
   // below are engine.IO options
   pingTimeout: 60000,
