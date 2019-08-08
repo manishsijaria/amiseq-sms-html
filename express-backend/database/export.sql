@@ -1,4 +1,5 @@
--- MySQL Workbench Forward Engineering
+-- MySQL Workbench Forward Engineering 
+-- compatible to MySQL 5.5.41
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
@@ -34,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `amiseq_sms_html`.`user` (
   `username` VARCHAR(100) NOT NULL COMMENT 'username should be unique for all users.',
   `password` VARCHAR(100) NOT NULL,
   `email` VARCHAR(100) NULL DEFAULT NULL COMMENT 'email should be unique.',
-  `date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'NOTE Fix - Windows Server Mysql Version 5.5.41 gives error if it is datetime datatype, BUT IN REST OF TABLES WORKS FINE !!!',
   PRIMARY KEY (`user_id`),
   UNIQUE INDEX `username_UNIQUE` (`username` ASC),
   UNIQUE INDEX `email_UNIQUE` (`email` ASC),
@@ -71,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `amiseq_sms_html`.`contact` (
   `mobile_no` VARCHAR(20) NULL DEFAULT NULL COMMENT 'mobile no should be unique for contacts.',
   `contact_type_id` INT(11) NOT NULL COMMENT 'Foreign key of contact_type, there can be more than one contact having the same contact_type_id.',
   `user_id` INT(11) NOT NULL COMMENT 'The user id of the user(recruiter) who created this contact.',
-  `date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'The date on which the contact is created.',
+  `date_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'The date on which the contact is created.',
   `msg_count` INT(11) NULL DEFAULT 0 COMMENT 'This filed is updated by the trigger on message table(after row insert). Default value is 0.',
   `msg_date` DATETIME NULL DEFAULT NULL COMMENT 'This filed is updated by the trigger on message table(after row insert). Default\nNULL value of field.',
   PRIMARY KEY (`contact_id`),
@@ -96,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `amiseq_sms_html`.`message` (
   `message_id` INT(11) NOT NULL AUTO_INCREMENT,
   `msg_from` VARCHAR(20) NOT NULL,
   `msg_to` VARCHAR(20) NOT NULL,
-  `msg_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `msg_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `sms_text` VARCHAR(1024) NOT NULL,
   `contact_id` INT(11) NOT NULL COMMENT 'one contact can have many messages. therefore (1..n) relationship between contact and message table.',
   `user_id` INT(11) NULL DEFAULT NULL,
