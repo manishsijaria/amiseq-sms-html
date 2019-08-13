@@ -26,8 +26,9 @@ class App extends Component {
                 <Route exact path="/landingpage"  component={LandingPage} />
                 <Route component={Main}></Route>
               </Switch>
-              
-              <div className='footer'>Copyright @2018-2020 Amiseq Inc. </div>
+              <div className='footer'>
+                  Copyright @2018-2020 Amiseq Inc. (version {process.env.REACT_APP_VERSION})
+              </div>
           </div>
         </div>
       </ConnectedRouter>

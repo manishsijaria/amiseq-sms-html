@@ -40,7 +40,7 @@ class Login extends React.Component {
     handelCancel = (event) => {
         const { dispatch } = this.props
         event.preventDefault()
-        dispatch(push('/'))
+        dispatch(push('/apppage'))
     }
     render() {
         const { username, password } = this.state

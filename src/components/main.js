@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Switch} from 'react-router-dom'
+import { Route, Switch, Redirect } from 'react-router-dom'
 import  { AppPage }  from './appPage'
 import  { Login } from './login'
 import { Register }  from './register'
@@ -12,11 +12,12 @@ export default class Main extends React.Component {
         return(
             <div className='center-grid'> 
                 <Switch>
-                    <Route exact path="/"  component={AppPage} />
+                    <Route exact path="/"  render= {() => <Redirect  to={{  pathname: "/login"   }} /> } />
                     <Route path="/login" component={Login} />
                     <Route path="/logout" component={AppPage} />
                     <Route path="/register@1234" component={Register} />
                     <Route path="/addcontact" component={AddContact}/>
+                    <Route path="/apppage" component={AppPage} />
                     <Route path="*" component={NotFound}/>
                 </Switch>
             </div>
