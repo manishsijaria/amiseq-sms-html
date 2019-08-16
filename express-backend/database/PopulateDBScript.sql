@@ -1,23 +1,33 @@
 
 /*================== Populate DB Script ==================*/
 insert into user_type (user_type_id, type_name) 
-values (1, 'Super Admin'), (2, 'Admin'), (3, 'Recruiter');
+values (1, 'Super Admin'), (2, 'Admin'), (3, 'Recruiter'), (4, 'Sales');
 
 insert into contact_type (contact_type_id, type_name) 
 values (1, 'Candidate'), (2, 'Client'), (3, 'Others');
+
+/*================== User - Amiseq Recruiters =============*/
+insert into user (user_type_id, firstname, lastname, email, username, password )
+values 	(3,"Rachit","Sarda","rachit@amiseq.com", "rachit","amiseq01"),
+		(3,"Charanjeet","Singh","jeet@amiseq.com","jeet","amiseq02"),
+        (3, "Kumar","Saurabh","kumar@amiseq.com","kumar","amiseq03"),
+        (3, "Garv","Gangawala","garv@amiseq.com","garv","amiseq04");	
+	 		
+/*==========================================================*/
+
 
 /* add user manish manish from application */
 select * from user;
 delete from user;
 delete from user where user_id=6;
-update user set user_id =1 where user_id = 4;
- 
+update user set user_id =1 where user_id = 24;
+
 delete from contact;
 CALL `amiseq_sms_html`.`insertIntoContact`();
 select * from contact;
 update contact set msg_date = null;
 
-delete from message;
+delete from message where message_id <= 22;
 CALL `amiseq_sms_html`.`insertIntoMessage`();
 select * from message;
 /* update contact SET mobile_no = '+14108' where contact_id = 1; */

@@ -175,7 +175,7 @@ AFTER INSERT ON `amiseq_sms_html`.`message`
 FOR EACH ROW
 BEGIN
     DECLARE id_exists Boolean;
-    DECLARE AMISEQ_SMS_NO varchar(20) default '+15005550006';
+    DECLARE AMISEQ_SMS_NO varchar(20) default '+14087553393';
 
     #Check the contact table
     SELECT 1 INTO id_exists

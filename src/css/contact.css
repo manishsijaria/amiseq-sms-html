@@ -21,10 +21,11 @@
 }
 
 .contact_row { 
+  position: relative;
   height: 42px;
-  padding-left: 5px;
+  padding-left: 5px; 
   border-bottom: 2px solid #b2b9b9;
-  margin: 1px 0; 
+  margin: 5px 0 25px; 
   cursor: pointer;
 }
 
@@ -41,7 +42,7 @@
 
 .contact_row_msg {
   /* space on top and right of oval */
-  margin-top: 1px;
+  /* margin-top: 1px; */
   margin-right: 5%;
   color: rgb(9,210,97);
 }
@@ -54,7 +55,7 @@
   text-align: center; 
   color: white;
   /* space on top and right of oval */
-  margin-top: 1px;
+  /* margin-top: 1px; */
   margin-right: 5%;
 }
 

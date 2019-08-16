@@ -14,7 +14,7 @@ class AddContact extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            contact: { firstname: '',  lastname: '', fullname:'', 
+            contact: { firstname: '-',  lastname: '-', fullname:'', 
                         mobile_no: '',  contact_type_id: CONTACT_TYPES.CANDIDATE, user_id: '' },
             submitted: false   
          }  

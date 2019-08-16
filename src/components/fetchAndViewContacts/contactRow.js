@@ -84,7 +84,7 @@ export default class ContactRow  extends React.Component {
                  
                  onKeyDown={this.handelKeyPress}
                  tabIndex={0} style={this.props.style} >
-                <div>
+                <div style={{ paddingTop: '3px'}} >
                     <div style={{float: 'left', whiteSpace: 'nowrap' }}>
                         <b>{contact.fullname}</b>
                     </div>
