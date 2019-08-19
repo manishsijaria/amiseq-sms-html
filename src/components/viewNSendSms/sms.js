@@ -41,7 +41,7 @@ class Sms extends React.Component {
         heightOfSmsComp = heightOfSmsComp - 25
         let marginLeftOfSubmit = 10;
         rightSplitPaneWidth = rightSplitPaneWidth - (2 * marginLeftOfSubmit)
-        let widthOfSubmit = 150;
+        let widthOfSubmit = 100;
         
         return(
             <form name="form" style={{display: 'flex', 
@@ -62,13 +62,29 @@ class Sms extends React.Component {
                     spellCheck={true}
                     disabled = {(ContectSelectedConstants.DEFAULT_CONTACT === contactSelected) ? 'disabled' : ''}
                 />
+                
+                
+                 {/*
                 <input type="submit" value="Send SMS" 
                         style={{ marginLeft: `${marginLeftOfSubmit}px`, 
                                  width: `${widthOfSubmit - marginLeftOfSubmit}px`, 
                                  height: `48px`}}
                         disabled = {(ContectSelectedConstants.DEFAULT_CONTACT === contactSelected) ? true : false}
-                >
+                > 
                 </input>
+                */}
+                <button onClick={this.handleSubmit}
+                        style={{ marginLeft: `${marginLeftOfSubmit}px`, 
+                                 width: `${widthOfSubmit - marginLeftOfSubmit}px`, 
+                                 height: `48px`,
+                                 color: `blue`}}
+                        disabled = {(ContectSelectedConstants.DEFAULT_CONTACT === contactSelected) ? true : false}
+                >
+                      <i className="fa fa-paper-plane-o fa-2x" aria-hidden="true"></i> 
+                     {/* <i className="fas fa-angle-double-right fa-3x"></i> */}
+                     
+                </button> 
+                
             </form>
         )
     }

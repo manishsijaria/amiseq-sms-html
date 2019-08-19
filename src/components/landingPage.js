@@ -7,7 +7,8 @@ import '../css/react-split-pane.css'
 import { SplitPaneConstants } from '../_constants'
 import { ViewNSendSms } from '../components/viewNSendSms/viewNSendSms'
 import { ContectSelectedConstants } from '../_constants'
-//import { connect } from 'react-redux'
+import { connect } from 'react-redux'
+import { push } from 'connected-react-router'
 
 class LandingPage extends React.Component {
     constructor(props) {
@@ -25,8 +26,10 @@ class LandingPage extends React.Component {
     }
     
     componentWillMount() {
-        //const { dispatch } = this.props
-
+        const { dispatch } = this.props
+        if(!this.props.loggedIn) {
+            dispatch(push('/login'))
+        }
         this.updateDimensions();
     }
 
@@ -101,4 +104,11 @@ class LandingPage extends React.Component {
     }
 }
 
-export default LandingPage;
+function mapStateToProps(state) {
+    const { user, loggedIn } = state.authentication
+    return { user, loggedIn }
+}
+
+const connectedLandingPage = connect(mapStateToProps)(LandingPage)
+
+export {connectedLandingPage as LandingPage}

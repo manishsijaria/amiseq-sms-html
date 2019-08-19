@@ -6,7 +6,7 @@ import { ConnectedRouter } from 'connected-react-router';
 
 import { Header } from './components/header'
 import Main from './components/main'
-import LandingPage from './components/landingPage'
+import { LandingPage } from './components/landingPage'
 
 import './css/overall-layout.css'
 
@@ -27,7 +27,7 @@ class App extends Component {
                 <Route component={Main}></Route>
               </Switch>
               <div className='footer'>
-                  Copyright @2018-2020 Amiseq Inc. (version {process.env.REACT_APP_VERSION})
+                  Copyright © 2017 &nbsp; Amiseq Inc.® &nbsp;&nbsp; | &nbsp;&nbsp; V {process.env.REACT_APP_VERSION}
               </div>
           </div>
         </div>

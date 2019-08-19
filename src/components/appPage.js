@@ -15,7 +15,7 @@ export default class AppPage extends React.Component {
     render() {
         return(
                 <div style = {{ textAlign: 'center'}}>
-                    <h1>Login to {process.env.REACT_APP_NAME} </h1> 
+                    <h1> {process.env.REACT_APP_NAME} </h1> 
                     <p >Select the menu on top right and get started.</p> 
                 </div> 
         )

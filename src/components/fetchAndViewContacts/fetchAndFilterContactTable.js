@@ -3,7 +3,7 @@ import React from 'react'
 
 //import { SelectContactType } from './selectContactType'
 //import SelectUser from './selectUser'
-import SearchContact from './searchContact'
+import { SearchContact } from './searchContact'
 import ContactTable from './contactTable'
 import {connect} from 'react-redux'
 import { contactActions } from '../../_actions'

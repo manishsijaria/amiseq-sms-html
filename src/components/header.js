@@ -37,13 +37,17 @@ class Header extends React.Component {
         } 
         return(
             <div className="navbar ">
-                <a className='logo' href="https://www.amiseq.com/">
+                {/* target and rel attribute to open the site in new window, 
+                    Links with target="_blank" on them are vulnerable, therefore added  rel attrib. to fix it.
+                 */}
+                <a className='logo' href="https://www.amiseq.com/" target="_blank" rel="noopener noreferrer">
                     <img src={logo} alt='Amiseq Logo'></img> 
                 </a>
-                {/* <NavLink to='/home'>Home</NavLink> */}
+                {/*  
                 {this.props.loggedIn ? 
                     <NavLink to='/addcontact'>Add Contact</NavLink>
                     : ''}
+                */}
                 <div className="dropdown" onBlur={this._onBlur}>
                     <span style={{display: 'inline-block', width: '150px'}}>{loggedInUser}</span>
                     

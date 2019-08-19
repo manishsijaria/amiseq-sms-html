@@ -1,8 +1,10 @@
 
 import React from 'react'
 import debounce from 'lodash.debounce';
+import { push } from 'connected-react-router'
+import { connect } from 'react-redux'
 
-export default class SearchContact  extends React.Component {
+class SearchContact  extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -10,6 +12,12 @@ export default class SearchContact  extends React.Component {
         }
         // Delay action 2 seconds
         this.onChangeDebounced = debounce(this.onChangeDebounced, 1000)
+    }
+
+    handelAdd = (event) => {
+        const { dispatch } = this.props
+        event.preventDefault()
+        dispatch(push('/addcontact'))
     }
 
     handelChange = (event) => {
@@ -29,6 +37,8 @@ export default class SearchContact  extends React.Component {
 
     render() {
         let leftSplitPaneWidth = this.props.leftSplitPaneWidth
+        let addButtonWidth = 50
+        let rightSpace = 40
         return(
                 <div className='searchContact' style={{ width: `${leftSplitPaneWidth}px`}}>
                     <form name="form" className='searchContactForm'>
@@ -36,10 +46,23 @@ export default class SearchContact  extends React.Component {
                             value = {this.state.name} 
                             onChange={this.handelChange} 
                             placeholder="Search contact..."
-                            style={{ width: `${leftSplitPaneWidth - 40}px`}}
+                            style={{ width: `${leftSplitPaneWidth - rightSpace - addButtonWidth}px`}}
                         />
-                    </form>
+                        <button
+                            onClick={this.handelAdd} 
+                            style={{ position: 'relative', 
+                                     top: '5px', left: '7px', 
+                                     color: 'blue' }}
+                        >
+                            <i className="fas fa-plus fa-2x"></i>
+                        </button>
+                    </form>                    
                 </div> 
         )
     }
 }
+
+
+const connectedSearchContact = connect()(SearchContact)
+
+export {connectedSearchContact as SearchContact}

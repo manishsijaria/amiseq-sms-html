@@ -74,5 +74,7 @@ https://stackoverflow.com/questions/13792755/show-border-grid-lines-only-between
   grid-column: span 12;                   
   /* Align the text in the footer at the center */
   text-align: center;
+  font-size: 2vh;
+  font-weight: bold;
 }
 
