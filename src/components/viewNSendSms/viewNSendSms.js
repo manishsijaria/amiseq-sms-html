@@ -194,9 +194,11 @@ class ViewNSendSms extends React.Component {
                             onDragFinished={this._onDragFinished}>
                     <div>
                         <SearchableTable msgs={msgs}
+                                    contactSelected={contactSelected} 
                                     contactFullname={contactFullname}
                                     contactCreateDate={contactCreateDate}
                                     addedByUsername={addedByUsername}
+                                    
                                     
                                     heightInPx={this.state.horizontal_top_split_pane_height }
                                     rightSplitPaneWidth={this.props.rightSplitPaneWidth}

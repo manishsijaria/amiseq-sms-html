@@ -7,12 +7,14 @@ import  { ServerConstants, ContectSelectedConstants } from '../../_constants'
 class Sms extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { smsText: ''  }
+        this.state = { smsText: '', smsCount: 0  }
     }
     handelChange = (event) => {
         const { name, value } = event.target
+        let smsText = value.slice(0, ServerConstants.OUR_TWILIO_MSG_LENGTH)
         this.setState({
-            [name] : value
+            [name] : smsText ,
+            smsCount: Math.ceil(smsText.length / ServerConstants.TWILIO_MSG_LENGTH)
         })
     }
 
@@ -39,52 +41,54 @@ class Sms extends React.Component {
         const { smsText } = this.state
         let { rightSplitPaneWidth, heightOfSmsComp, contactSelected } = this.props
         heightOfSmsComp = heightOfSmsComp - 25
-        let marginLeftOfSubmit = 10;
-        rightSplitPaneWidth = rightSplitPaneWidth - (2 * marginLeftOfSubmit)
+        let margin = 10;
+        rightSplitPaneWidth = rightSplitPaneWidth - (2 * margin)
         let widthOfSubmit = 100;
         
         return(
             <form name="form" style={{display: 'flex', 
                                       flexDirection: 'row', 
                                       width: `${rightSplitPaneWidth}px`,
-                                      marginLeft: '8px'
+                                      marginLeft: `${margin}px`
                                       }} 
                               onSubmit={this.handleSubmit} 
             >
+                {/* NOTE: maxLength property do not work in textarea, or browser */}
                 <textarea  name="smsText" 
                     value = {smsText}
                     onChange={this.handelChange} 
                     placeholder="Please enter the message to send..."
-                    style={{ width: `${rightSplitPaneWidth }px`, 
+                    style={{ width: `${rightSplitPaneWidth - widthOfSubmit - margin}px`, 
                              height: `${heightOfSmsComp}px`,
                              }}
-                    maxLength={ServerConstants.TWILIO_MSG_LENGTH}
                     spellCheck={true}
                     disabled = {(ContectSelectedConstants.DEFAULT_CONTACT === contactSelected) ? 'disabled' : ''}
                 />
-                
-                
-                 {/*
-                <input type="submit" value="Send SMS" 
-                        style={{ marginLeft: `${marginLeftOfSubmit}px`, 
-                                 width: `${widthOfSubmit - marginLeftOfSubmit}px`, 
-                                 height: `48px`}}
-                        disabled = {(ContectSelectedConstants.DEFAULT_CONTACT === contactSelected) ? true : false}
-                > 
-                </input>
-                */}
-                <button onClick={this.handleSubmit}
-                        style={{ marginLeft: `${marginLeftOfSubmit}px`, 
-                                 width: `${widthOfSubmit - marginLeftOfSubmit}px`, 
-                                 height: `48px`,
-                                 color: `blue`}}
-                        disabled = {(ContectSelectedConstants.DEFAULT_CONTACT === contactSelected) ? true : false}
-                >
-                      <i className="fa fa-paper-plane-o fa-2x" aria-hidden="true"></i> 
-                     {/* <i className="fas fa-angle-double-right fa-3x"></i> */}
-                     
-                </button> 
-                
+                <div style={{display: 'flex', 
+                                      flexDirection: 'column', 
+                                      width: `${widthOfSubmit}px`,
+                                      marginLeft: `${margin}px`
+                                      }}>
+                    <label style={{ width: `${widthOfSubmit}px`, 
+                                    fontSize: `10px`,
+                                    textAlign: 'center',
+                                    height: `10px`,
+                                    marginBottom: `3px`}}>
+                                    {this.state.smsCount} SMS
+                    </label>
+                    
+                    <button onClick={this.handleSubmit}
+                            style={{ 
+                                    width: `${widthOfSubmit }px`, 
+                                    height: `35px`,
+                                    color: `blue`}}
+                            disabled = {(ContectSelectedConstants.DEFAULT_CONTACT === contactSelected) ? true : false}
+                    >
+                        <i className="fa fa-paper-plane-o fa-2x" aria-hidden="true"></i> 
+                        {/* <i className="fas fa-angle-double-right fa-3x"></i> */}
+                        
+                    </button> 
+                </div>
             </form>
         )
     }

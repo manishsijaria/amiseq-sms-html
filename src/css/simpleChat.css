@@ -8,7 +8,7 @@
 
 /* msj : message from contact */
 .msj{
-    float:left;background:greenyellow;margin-left: 7% ;
+    float:left;background:rgb(210,255,198);margin-left: 7% ;
 }
 
 /* msj-rta : message from Amiseq */
@@ -26,7 +26,7 @@
     position:relative;
     border-style: solid;
     border-width: 0 13px 13px 0;
-    border-color: transparent greenyellow transparent transparent;            
+    border-color: transparent rgb(210,255,198) transparent transparent;            
 }
 
 /* Add ">" after message from Amiseq */

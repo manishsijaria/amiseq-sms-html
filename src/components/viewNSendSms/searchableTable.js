@@ -15,7 +15,7 @@ export default class SearchableTable extends React.Component {
     }
    
     render() {
-        const { msgs, contactFullname,contactCreateDate,addedByUsername } = this.props
+        const { msgs,contactSelected, contactFullname,contactCreateDate,addedByUsername } = this.props
         const { searchText } = this.state
         let heightOfmsgTable = this.props.heightInPx - 60
         return(
@@ -32,6 +32,7 @@ export default class SearchableTable extends React.Component {
                                                 width: this.props.rightSplitPaneWidth, 
                                                 }}>
                     <MsgsTable msgs={msgs} 
+                                contactSelected={contactSelected}
                                 searchText={searchText} 
                                 contactFullname={contactFullname}
 

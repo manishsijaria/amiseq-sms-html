@@ -3,7 +3,7 @@ import React from 'react'
 
 import MsgRow from './msgRow'
 import {  InfiniteLoader, List, AutoSizer, CellMeasurer, CellMeasurerCache } from 'react-virtualized'
-import { FetchMsgsConstants } from '../../_constants'
+import { FetchMsgsConstants, ContectSelectedConstants } from '../../_constants'
 
 export default class MsgsTable extends React.PureComponent {
     constructor(props) {
@@ -26,7 +26,11 @@ export default class MsgsTable extends React.PureComponent {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (this._resizeAllFlag) {
+        //NOTE: When the contactSelected changes than the row height is not recalculated, therefore added the || condition.
+        //  if the contactSelected = -1 that means the this.listRef is not initialized, and gives runtime error recomputeRowHeights() is not defined.
+        //  therefore a prior check prevProps.contactSelected !== ContectSelectedConstants.DEFAULT_CONTACT. 
+        if (this._resizeAllFlag || (prevProps.contactSelected !== ContectSelectedConstants.DEFAULT_CONTACT &&
+                                    prevProps.contactSelected !== this.props.contactSelected) ) {
             this._resizeAllFlag = false;
             this._cache.clearAll();
             if (this.listRef) {
@@ -34,7 +38,6 @@ export default class MsgsTable extends React.PureComponent {
             }
         }
         else if (prevProps.msgs.length !== this.props.msgs.length) {
-            
             const index = prevProps.msgs.length
             this._cache.clear(index, 0);
             if (this.listRef) {
