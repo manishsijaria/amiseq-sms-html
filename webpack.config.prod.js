@@ -1,14 +1,17 @@
 
 const path = require('path')        // to get the current path
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 const dotenv = require('dotenv')    // to read and parse the .env files
 const fs = require('fs');           // to check if the file exists
 
+const loaders = require('./webpack.loaders')
+const plugins = require('./webpack.plugins')
+
 //----------------- Production Specific ---------------
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-var CompressionPlugin = require('compression-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 
 module.exports = (env) => {
     // Get the root path (assuming your webpack config is in the root of your project!)
@@ -47,44 +50,31 @@ module.exports = (env) => {
         },
         module: {
             rules: [
-                {
-                    test: /\.js$/,
-                    exclude: /node_modules/,
-                    loader: 'babel-loader',
-                },
+                loaders.BabelLoader,
                 //Fix: ERROR in ./src/index.css 1:5 Module parse failed: Unexpected token (1:5)
-                {
-                    test:/\.css$/,
-                    use:['style-loader','css-loader']
-                },
+                loaders.CSSLoader(env.NODE_ENV),
                 //Fix: ERROR in ./src/images/circles.png 1:0
-                {
-                    test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg|ico)(\?[a-z0-9=.]+)?$/,
-                    //loader: "file-loader!url-loader", //'url-loader?limit=100000' ,
-                    use: [
-                        {
-                            loader: 'url-loader',
-                            options: {
-                                limit: 100000
-                            }
-                        },                       
-                    ]
-                }                                
+                loaders.URLLoader,                           
             ]
         },
         stats: { children: false },     //FIX: for Entrypoint undefined = index.html
         plugins: [
-            new HtmlWebpackPlugin({ 
-                template: path.join(__dirname,'/public/index.html'),
-                //Fix: in PROD for %PUBLIC_URL%/fevicon.ico , %PUBLIC_URL%/manifest.json in index.html file.
-                fevicon: path.join(__dirname,'/public/fevicon.ico'),
-                manifest: path.join(__dirname,'/public/manifest.json'),
-            }),
+            plugins.HtmlWebpackPlugin(env.NODE_ENV),
             new webpack.DefinePlugin(envKeys),
-
+            
             //--------- Production Specific -----------
-            //It cleans the output.path (/client-dist) directory before new files are bundled. 
-            new CleanWebpackPlugin(),
+            //It cleans the output.path (/client-dist) directory before new files are bundled.
+            //dry - Simulate the removal of files, verbose - print to console (set to true when dry is true)
+            new CleanWebpackPlugin({  dry: true, verbose: true}),
+
+            new MiniCssExtractPlugin({
+                // Options similar to the same options in webpackOptions.output
+                // all options are optional
+                filename: '[name].css',
+                chunkFilename: '[id].css',
+                ignoreOrder: false, // Enable to remove warnings about conflicting order
+            }),
+
             new UglifyJsPlugin(),                           //minify everything
             new webpack.optimize.AggressiveMergingPlugin(), //Merge chunks
             new CompressionPlugin({   

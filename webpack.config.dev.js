@@ -1,9 +1,11 @@
 
 const path = require('path')        // to get the current path
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 const dotenv = require('dotenv')    // to read and parse the .env files
 const fs = require('fs');           // to check if the file exists
+
+const loaders = require('./webpack.loaders')
+const plugins = require('./webpack.plugins')
 
 module.exports = (env) => {
     // Get the root path (assuming your webpack config is in the root of your project!)
@@ -38,30 +40,11 @@ module.exports = (env) => {
         },
         module: {
             rules: [
-                {
-                    test: /\.js$/,
-                    exclude: /node_modules/,
-                    loader: 'babel-loader',
-
-                },
+                loaders.BabelLoader,
                 //Fix: ERROR in ./src/index.css 1:5 Module parse failed: Unexpected token (1:5)
-                {
-                    test:/\.css$/,
-                    use:['style-loader','css-loader']
-                },
+                loaders.CSSLoader(env.NODE_ENV),
                 //Fix: ERROR in ./src/images/circles.png 1:0
-                {
-                    test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg|ico)(\?[a-z0-9=.]+)?$/,
-                    //loader: 'url-loader?limit=100000' 
-                    use: [
-                        {
-                            loader: 'url-loader',
-                            options: {
-                                limit: 100000
-                            }
-                        },                       
-                    ]                    
-                }                                
+                loaders.URLLoader,                           
             ]
         },
         stats: { children: false },     //FIX: for Entrypoint undefined = index.html
@@ -83,25 +66,10 @@ module.exports = (env) => {
         },
         //----------------------------------------------
         plugins: [
-            new HtmlWebpackPlugin({ 
-                template: path.join(__dirname,'/public/index.html')
-            }),
+            plugins.HtmlWebpackPlugin(env.NODE_ENV),
             //DefinePlugin internally and maps the environment values to code through it. 
-            new webpack.DefinePlugin(envKeys
-                /*
-                {
-                    'process.env':{
-                        'NODE_ENV': JSON.stringify('development'),
-                        'REACT_APP_VERSION': JSON.stringify('1.0.0'),
-                        'REACT_APP_NAME': JSON.stringify('Amiseq SMS application'),
-
-                        'REACT_APP_SERVER_IP': JSON.stringify('http://[::1]'),
-                        'REACT_APP_SERVER_PORT': JSON.stringify('3001'),
-                        'REACT_APP_TWILIO_NO': JSON.stringify('+15005550006'),
-                    }
-                }
-                */                
-            ),
+            new webpack.DefinePlugin(envKeys),
+            
             //----------- Development Specific ------------
             //NOTE: webpack-dev-server will replace the module without having us to reload the page 
             //and without losing the application state. the browser could refresh by itself whenever we make and save any change to our code.
