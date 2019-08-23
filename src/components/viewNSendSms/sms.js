@@ -40,7 +40,7 @@ class Sms extends React.Component {
     render() {
         const { smsText } = this.state
         let { rightSplitPaneWidth, heightOfSmsComp, contactSelected } = this.props
-        heightOfSmsComp = heightOfSmsComp - 25
+        heightOfSmsComp = heightOfSmsComp - 28 //Note: otherwise horiz/vertical scrollbar appear on big screen.
         let margin = 10;
         rightSplitPaneWidth = rightSplitPaneWidth - (2 * margin)
         let widthOfSubmit = 100;

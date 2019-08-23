@@ -82,7 +82,7 @@ export default class ContactTable  extends React.PureComponent {
         const rowWidth = this.props.leftSplitPaneWidth //225;
         let splitPaneSize = this.props.leftSplitPaneWidth
         let NoContactMsg = (this.props.rowCount === 0) ? 
-                                <div><span>No Contacts 
+                                <div style={{marginLeft: '5px', marginTop: '5px'}}><span>No Contacts 
                                             {(this.props.filterText) ? ' matching ' + this.props.filterText : ' yet!' } 
                                      </span>
                                 </div> : ''
