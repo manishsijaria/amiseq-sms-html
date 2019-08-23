@@ -12,7 +12,7 @@
   /* 12 column in 1 row, 1fr (1 part of available space) here the whole row space */
   grid-template-columns: repeat(12,1fr);  
   /* 1st row auto, 3rd row auto, 2nd row (1 part of available space) */
-  grid-template-rows: auto 1fr auto;      
+  grid-template-rows: auto 1fr 22px;      
   /* grid-row-start=1, grid-row-end=3. i.e. 3 rows in grid */
   grid-row : 1 / 3;  
   /*
@@ -74,7 +74,7 @@ https://stackoverflow.com/questions/13792755/show-border-grid-lines-only-between
   grid-column: span 12;                   
   /* Align the text in the footer at the center */
   text-align: center;
-  font-size: 2vh;
+  font-size: 12px;
   font-weight: bold;
 }
 
