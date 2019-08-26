@@ -23,7 +23,7 @@ class App extends Component {
               </div> 
               
               <Switch>
-                <Route exact path="/landingpage"  component={LandingPage} />
+                <Route exact path="/landingpage/:param?"  component={LandingPage} />
                 <Route component={Main}></Route>
               </Switch>
               <div className='footer'>

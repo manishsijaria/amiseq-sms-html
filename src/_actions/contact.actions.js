@@ -28,7 +28,7 @@ function addContact(contact) {
             } else {
                 let ParseContact = JSON.parse(contact)
                 dispatch(success(ParseContact))
-                dispatch(push('/landingpage'))
+                dispatch(push('/landingpage/' + ParseContact.mobile_no))
             }
         })
     }

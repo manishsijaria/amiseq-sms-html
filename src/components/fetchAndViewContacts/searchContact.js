@@ -9,10 +9,13 @@ class SearchContact  extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            searchText: ''
+            searchText: (this.props.mobile_no) ? this.props.mobile_no : ''
         }
         // Delay action 2 seconds
         this.onChangeDebounced = debounce(this.onChangeDebounced, 1000)
+        if(this.state.searchText) {
+            this.onChangeDebounced()
+        }
     }
 
     handelAdd = (event) => {

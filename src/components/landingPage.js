@@ -71,6 +71,7 @@ class LandingPage extends React.Component {
         this.setState({ left_split_pane_width: size - SplitPaneConstants.RESIZER_OFFSET})
     }
     render() {
+        
         return(
                 <>
                     <div className='middleContents' ref={'middleContentsRef'}>
@@ -81,6 +82,7 @@ class LandingPage extends React.Component {
                                     onDragFinished={this._onDragFinished}>
                             <div>
                                 <FetchAndFilterContactTable 
+                                        mobile_no = {this.props.match.params.param}
                                         onContactClick={this.handelClick} 
                                         contactSelected={this.state.contactSelected}
                                         heightInPx={this.state.heightInPx}

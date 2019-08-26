@@ -155,7 +155,8 @@ export default class FetchAndFilterContactTable  extends React.Component {
                    <SelectContactType/>
                    <SelectUser/>
                    */}
-                   <SearchContact   filterText={filterText} 
+                   <SearchContact   mobile_no = {this.props.mobile_no}
+                                    filterText={filterText} 
                                     onSearchContactFilterChange={this.handelFilterTextChange}
                                     leftSplitPaneWidth={this.props.leftSplitPaneWidth}
                     />
