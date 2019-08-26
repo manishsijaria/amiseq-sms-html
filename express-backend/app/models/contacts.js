@@ -67,7 +67,7 @@ module.exports.getContacts = (offset, count, filterText, callback) => {
         whereClause = whereClause +  ` AND ` + whereCondition2   
     } 
 
-    var  orderByClause = ` ORDER BY msg_date desc, msg_count desc, contact.date_created desc, fullname asc LIMIT ` + offset + `,` + count
+    var  orderByClause = ` ORDER BY contact.date_created desc, msg_date desc, msg_count desc,  fullname asc LIMIT ` + offset + `,` + count
     var queryContacts = selectClause + whereClause + orderByClause
 
     getConnection((err,connection)=> {
