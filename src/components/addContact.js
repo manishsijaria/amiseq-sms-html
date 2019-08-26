@@ -92,12 +92,13 @@ class AddContact extends React.Component {
             this.setState({   contact: { ...this.state.contact, mobile_no : mob_no}}, 
                             ()=> { console.log('hello')})
             
+           //this.setState((state, props) => ({   contact: {  mobile_no : mob_no}})) 
+            
         } else {
             let e = "Mobile no must be 10 digit no. prefixed by +"
             dispatch(alertActions.error(e))
             return 
         }        
-
         
         /*
         NOTE: this.state.contact.user_id is not setting here, don't know why.
