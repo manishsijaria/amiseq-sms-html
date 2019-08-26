@@ -30,6 +30,7 @@ export default class MsgsTable extends React.PureComponent {
         //  if the contactSelected = -1 that means the this.listRef is not initialized, and gives runtime error recomputeRowHeights() is not defined.
         //  therefore a prior check prevProps.contactSelected !== ContectSelectedConstants.DEFAULT_CONTACT. 
         if (this._resizeAllFlag || (prevProps.contactSelected !== ContectSelectedConstants.DEFAULT_CONTACT &&
+                                    (this.props.contactSelected !== ContectSelectedConstants.DEFAULT_CONTACT) &&
                                     prevProps.contactSelected !== this.props.contactSelected) ) {
             this._resizeAllFlag = false;
             this._cache.clearAll();

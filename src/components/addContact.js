@@ -3,6 +3,8 @@ import '../css/generic-form.css'
 import {connect} from 'react-redux'
 import { contactTypeActions, contactActions } from '../_actions'
 import { push } from 'connected-react-router'
+import { genericFunctions } from '../_genericFunctions'
+import { alertActions } from '../_actions';
 
 const CONTACT_TYPES = {
     CANDIDATE : 1,
@@ -19,12 +21,51 @@ class AddContact extends React.Component {
             submitted: false   
          }  
     }
+   
+    static getDerivedStateFromProps(props, state) {
+        //alert('getDerivedStateFromProps')
+        if (props.user.user_id !== state.contact.user_id ) {
+            //alert(props.user.user_id)
+            return {
+                contact: {...state.contact, user_id: props.user.user_id },
+                submitted: state.submitted
+            };
+        }
+        // Return null if the state hasn't changed
+        return null;
+    }    
 
-    componentWillMount() {
-        const { dispatch } = this.props
+    componentDidMount() {
+        const { dispatch , match} = this.props
+        //alert('componentDidMount')
+        //Clear the previous error msg.
+        dispatch(alertActions.clear())
         dispatch(contactTypeActions.getContactTypes())
-    }
 
+        let param = match.params.param
+        //alert(match.params.param)
+        if(! (param === undefined || param === '') ) {
+            if(genericFunctions.isANumber(param)) {
+                this.setState({ contact: {...this.state.contact, 
+                                            mobile_no : genericFunctions.formatPhoneNumber(param)}})
+            } else { //firstname lastname
+                let indexOfSearchText = param.toLowerCase().indexOf(' ')
+                let firstName, lastName
+                if(indexOfSearchText !== -1) {
+                    firstName = param.substring(0,indexOfSearchText -1)
+                    lastName = param.substring(indexOfSearchText + 1, param.length)
+                    this.setState({ contact: {...this.state.contact, 
+                                                firstname: firstName,
+                                                lastname: lastName,
+                                                fullname: firstName + ' ' + lastName}}) 
+                } else { //firstname
+                    firstName = param.substring(0,param.length)
+                    this.setState({ contact: {...this.state.contact, 
+                                                firstname: firstName}}) 
+                }
+            }
+        }        
+    }
     handelChange = (event) => {
         const { user } = this.props
         const { contact } = this.state
@@ -40,10 +81,24 @@ class AddContact extends React.Component {
                 this.setState({  contact: { ...contact, [name] : value,  user_id: user.user_id } }) 
         }
     }
+
     handelSubmit = (event) => {
         event.preventDefault()
-        const { dispatch } = this.props
 
+        const { dispatch } = this.props
+        if(genericFunctions.isPhoneNumber(this.state.contact.mobile_no)) {
+            let mob_no = genericFunctions.formatPhoneNumber(this.state.contact.mobile_no)
+            //alert(mob_no)
+            this.setState({   contact: { ...this.state.contact, mobile_no : mob_no}}, 
+                            ()=> { console.log('hello')})
+            
+        } else {
+            let e = "Mobile no must be 10 digit no. prefixed by +"
+            dispatch(alertActions.error(e))
+            return 
+        }        
+
+        
         /*
         NOTE: this.state.contact.user_id is not setting here, don't know why.
         therefore shifted to handelChange
@@ -51,13 +106,17 @@ class AddContact extends React.Component {
         alert('user_id: ' + user.user_id)
         this.setState({submitted: true , contact: {...this.state.contact, user_id: this.props.user.user_id}})
         */
+       
         this.setState({ submitted: true })
         
-        const { firstname, lastname, mobile_no, contact_type_id } = this.state.contact
-
-        if(firstname && lastname && mobile_no && contact_type_id) {
-            dispatch(contactActions.addContact(this.state.contact))
-        }
+        //NOTE: setTimeout bcos the setState do not immediatily updates the state ;)
+        setTimeout(()=>{
+            const { firstname, lastname, mobile_no, contact_type_id } = this.state.contact
+            //alert(mobile_no)
+            if(firstname && lastname && mobile_no && contact_type_id) {
+                dispatch(contactActions.addContact(this.state.contact))
+            }
+        },300)
     }
     
     handelCancel = (event) => {
@@ -75,9 +134,10 @@ class AddContact extends React.Component {
             tagOptions = `<option key={0} value={0}>{' '}</option>`
         } else { 
             tagOptions =  contactTypes.map(contactType => 
+                                            (contactType.contact_type_id === CONTACT_TYPES.CANDIDATE) ?
                                             <option key={contactType.contact_type_id} value={contactType.contact_type_id}>
                                                     {contactType.type_name}
-                                            </option>)
+                                            </option> : '')
         }
         return(
             <div>
@@ -98,7 +158,7 @@ class AddContact extends React.Component {
                         <input type="text" name="lastname" value={lastname} onChange={this.handelChange} placeholder="Contact's last name" required/>
 
                         <label htmlFor="mobile_no"><b>Mobile No.</b></label>
-                        <input type="text" name="mobile_no" value={mobile_no} onChange={this.handelChange} placeholder="+1xxxxxxxxxx" required/>
+                        <input type="text" name="mobile_no" value={mobile_no}  onChange={this.handelChange} placeholder="+1xxxxxxxxxx" required/>
 
                         <label htmlFor="contact_type_id"><b>Type</b></label>
                         <select name="contact_type_id" value={contact_type_id} onChange={this.handelChange} >
@@ -114,7 +174,6 @@ class AddContact extends React.Component {
             </div>
         )
     }
-
 }
 
 function mapStateToProps(state) {

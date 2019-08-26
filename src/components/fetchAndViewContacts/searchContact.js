@@ -3,12 +3,13 @@ import React from 'react'
 import debounce from 'lodash.debounce';
 import { push } from 'connected-react-router'
 import { connect } from 'react-redux'
+import { genericFunctions } from '../../_genericFunctions'
 
 class SearchContact  extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            name: ''
+            searchText: ''
         }
         // Delay action 2 seconds
         this.onChangeDebounced = debounce(this.onChangeDebounced, 1000)
@@ -17,13 +18,13 @@ class SearchContact  extends React.Component {
     handelAdd = (event) => {
         const { dispatch } = this.props
         event.preventDefault()
-        dispatch(push('/addcontact'))
+        dispatch(push('/addcontact/' + this.state.searchText))
     }
 
     handelChange = (event) => {
         const {  value } = event.target
         // Immediately update the state
-        this.setState({ name : value})
+        this.setState({ searchText : value})
         //ABSOLUTE CODE : this.props.onSearchContactFilterChange(value)
         // Execute the debounced onChange method
         this.onChangeDebounced(event)        
@@ -32,7 +33,11 @@ class SearchContact  extends React.Component {
     onChangeDebounced = (e) => {
         // Delayed logic goes here
          //alert(this.state.value)
-         this.props.onSearchContactFilterChange(this.state.name)
+         let searchText = this.state.searchText
+         if(genericFunctions.isANumber(searchText)) {
+            searchText = genericFunctions.replaceSpecialCharsInPhoneNo(searchText)
+         }
+         this.props.onSearchContactFilterChange(searchText)
     }
 
     render() {
@@ -42,8 +47,8 @@ class SearchContact  extends React.Component {
         return(
                 <div className='searchContact' style={{ width: `${leftSplitPaneWidth}px`}}>
                     <form name="form" className='searchContactForm'>
-                        <input type="text" name="name" 
-                            value = {this.state.name} 
+                        <input type="text" name="searchText" 
+                            value = {this.state.searchText} 
                             onChange={this.handelChange} 
                             placeholder="Search contact..."
                             style={{ width: `${leftSplitPaneWidth - rightSpace - addButtonWidth}px`}}

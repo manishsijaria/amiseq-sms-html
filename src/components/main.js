@@ -16,7 +16,7 @@ export default class Main extends React.Component {
                     <Route path="/login" component={Login} />
                     <Route path="/logout" component={AppPage} />
                     <Route path="/register@1234" component={Register} />
-                    <Route path="/addcontact" component={AddContact}/>
+                    <Route path="/addcontact/:param?" component={AddContact}/>
                     <Route path="/apppage" component={AppPage} />
                     <Route path="*" component={NotFound}/>
                 </Switch>
