@@ -1,47 +1,6 @@
 var getConnection = require('../../config/dbconnection')
 var winston = require('../../config/winston');
 
-module.exports.addContact = (req, callback) => {
-    //prepare insert query
-    var insert_query = `INSERT INTO contact(firstname, lastname, mobile_no, contact_type_id, user_id) 
-                        VALUES(?,?,?,?,?)`
-    getConnection((err,connection)=> {
-        const {firstname, lastname, mobile_no, contact_type_id, user_id} = req.body
-        connection.query(insert_query,
-            [firstname, lastname, mobile_no, contact_type_id, user_id],
-            function(err,result) {
-                connection.release()
-                if(err) {
-                    callback(null,err)
-                    winston.log('error','error in inserting contact' + err);                                
-                } else {
-                    //NOTE: The response must be a JSON string, so that it is caught on the react-client properly.
-                    //      Otherwise Err: net::ERR_EMPTY_RESPONSE TypeError: Failed to fetch  occures.
-                    var success_msg = 'Insert Successful id=' + result.insertId;
-                    winston.log('info','insert successful : ' + success_msg);
-                    callback({ contact_id: result.insertId, firstname, lastname, mobile_no, contact_type_id, user_id },null)
-                }
-            })
-    })     
-}
-
-module.exports.deleteContact = (contact_id , callback) => {
-    var deleteContact = `DELETE FROM contact WHERE contact_id =` + contact_id
-    getConnection((err,connection)=> {
-        connection.query(deleteContact, [], (err, result) => {
-            connection.release()
-            if(err) {
-                callback(null,err)
-                winston.log('error','Error in deleting Contact')
-            } else {
-                winston.log('info','result.length=' + JSON.stringify(result.length))
-                winston.log('info','result=' + JSON.stringify(result))
-                callback(result,null)
-            }
-
-        })
-    })    
-}
 
 module.exports.getContactsFilter = (filterText) => {
     let condition = ''
@@ -53,7 +12,8 @@ module.exports.getContactsFilter = (filterText) => {
 }
 
 module.exports.getContacts = (offset, count, filterText, callback) => {
-    var selectClause = `SELECT contact_id, CONCAT(contact.firstname,' ', contact.lastname) as fullname,
+    var selectClause = `SELECT contact_id, contact.firstname as firstname, contact.lastname as lastname,
+                                CONCAT(contact.firstname,' ', contact.lastname) as fullname,
                                 contact.mobile_no, contact_type_id, contact.user_id, msg_count, msg_date, NOW() as todays_date, 
                                 contact.date_created, DATE_FORMAT(contact.date_created, "%m/%d/%Y")  as contact_create_date,
                                 CONCAT(user.firstname, ' ', user.lastname) as added_by_username
@@ -89,6 +49,62 @@ module.exports.getContacts = (offset, count, filterText, callback) => {
         })
     })    
 }
+
+module.exports.addContact = (req, callback) => {
+    var  that = this //NOTE: this is not accessible in callback functions.
+    //prepare insert query
+    var insert_query = `INSERT INTO contact(firstname, lastname, mobile_no, contact_type_id, user_id) 
+                        VALUES(?,?,?,?,?)`
+    const {firstname, lastname, mobile_no, contact_type_id, user_id} = req.body
+    getConnection((err,connection)=> {
+        
+        connection.query(insert_query,
+            [firstname, lastname, mobile_no, contact_type_id, user_id],
+            function(err,result) {
+                connection.release()
+                if(err) {
+                    callback(null,err)
+                    winston.log('error','error in inserting contact' + err);                                
+                } else {
+                    //NOTE: The response must be a JSON string, so that it is caught on the react-client properly.
+                    //      Otherwise Err: net::ERR_EMPTY_RESPONSE TypeError: Failed to fetch  occures.
+                    var success_msg = 'Insert Successful id=' + result.insertId;
+                    winston.log('info','insert successful : ' + success_msg);
+                    that.getContacts(0,1,mobile_no, (resultInner,error) => {
+                        if(error) { 
+                            return  callback(null,error) 
+                        }
+                        else { 
+                            winston.log('info','========resultInner[0]=====' + resultInner[0]);
+                            return callback(resultInner[0],null) 
+                        }        
+                    })         
+                }
+            })
+    })     
+}
+
+module.exports.deleteContact = (contact_id , callback) => {
+    var deleteContact = `DELETE FROM contact WHERE contact_id =` + contact_id
+    getConnection((err,connection)=> {
+        connection.query(deleteContact, [], (err, result) => {
+            connection.release()
+            if(err) {
+                callback(null,err)
+                winston.log('error','Error in deleting Contact')
+            } else {
+                winston.log('info','result.length=' + JSON.stringify(result.length))
+                winston.log('info','result=' + JSON.stringify(result))
+                callback(result,null)
+            }
+
+        })
+    })    
+}
+
+
+
+
 
 module.exports.getContactsCount = (filterText, callback) => {
     var selectClause = `SELECT count(*) as count 

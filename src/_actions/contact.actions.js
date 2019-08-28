@@ -28,7 +28,11 @@ function addContact(contact) {
             } else {
                 let ParseContact = JSON.parse(contact)
                 dispatch(success(ParseContact))
-                dispatch(push('/landingpage/' + ParseContact.mobile_no))
+                
+                dispatch(push('/landingpage/'   + ParseContact.contact_id 
+                                                + "/" + ParseContact.fullname  
+                                                + "/" + encodeURIComponent(ParseContact.contact_create_date)
+                                                + "/" + ParseContact.added_by_username )) //+ ParseContact.mobile_no))
             }
         })
     }

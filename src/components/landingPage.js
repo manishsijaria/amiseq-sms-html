@@ -13,10 +13,11 @@ import { push } from 'connected-react-router'
 class LandingPage extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { contactSelected: ContectSelectedConstants.DEFAULT_CONTACT,
-                        contactFullname:'', 
-                        contactCreateDate: '',
-                        addedByUsername:'',
+        //contact_id?/:fullname?/:contact_create_date?/:added_by_username
+        this.state = { contactSelected: (this.props.match.params.contact_id) ? parseInt(this.props.match.params.contact_id, 10) : ContectSelectedConstants.DEFAULT_CONTACT,
+                        contactFullname:(this.props.match.params.fullname) ? this.props.match.params.fullname : '',
+                        contactCreateDate:(this.props.match.params.contact_create_date) ? decodeURIComponent(this.props.match.params.contact_create_date) : '',
+                        addedByUsername:(this.props.match.params.added_by_username) ? this.props.match.params.added_by_username : '',
 
                         heightInPercent: 0, 
                         heightInPx: 0,
@@ -81,8 +82,8 @@ class LandingPage extends React.Component {
                                     style={{ height: this.state.heightInPercent }}
                                     onDragFinished={this._onDragFinished}>
                             <div>
+                                {/* mobile_no = {this.props.match.params.param} */}
                                 <FetchAndFilterContactTable 
-                                        mobile_no = {this.props.match.params.param}
                                         onContactClick={this.handelClick} 
                                         contactSelected={this.state.contactSelected}
                                         heightInPx={this.state.heightInPx}

@@ -52,7 +52,7 @@ class AddContact extends React.Component {
                 let indexOfSearchText = param.toLowerCase().indexOf(' ')
                 let firstName, lastName
                 if(indexOfSearchText !== -1) {
-                    firstName = param.substring(0,indexOfSearchText -1)
+                    firstName = param.substring(0,indexOfSearchText)
                     lastName = param.substring(indexOfSearchText + 1, param.length)
                     this.setState({ contact: {...this.state.contact, 
                                                 firstname: firstName,

@@ -151,11 +151,7 @@ export default class FetchAndFilterContactTable  extends React.Component {
         const { contacts, contactsCount } = this.props
         return(
                 <div className='content' style={{ width: this.props.leftSplitPaneWidth }}>
-                    {/*
-                   <SelectContactType/>
-                   <SelectUser/>
-                   */}
-                   <SearchContact   mobile_no = {this.props.mobile_no}
+                   <SearchContact   
                                     filterText={filterText} 
                                     onSearchContactFilterChange={this.handelFilterTextChange}
                                     leftSplitPaneWidth={this.props.leftSplitPaneWidth}
