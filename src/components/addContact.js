@@ -112,8 +112,8 @@ class AddContact extends React.Component {
         
         //NOTE: setTimeout bcos the setState do not immediatily updates the state ;)
         setTimeout(()=>{
-            const { firstname, lastname, mobile_no, contact_type_id } = this.state.contact
-            //alert(mobile_no)
+            const { firstname, lastname, mobile_no, contact_type_id, user_id } = this.state.contact
+            //alert(user_id)
             if(firstname && lastname && mobile_no && contact_type_id) {
                 dispatch(contactActions.addContact(this.state.contact))
             }

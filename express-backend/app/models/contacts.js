@@ -12,20 +12,19 @@ module.exports.getContactsFilter = (filterText) => {
 }
 
 module.exports.getContacts = (offset, count, filterText, callback) => {
-    var selectClause = `SELECT contact_id, contact.firstname as firstname, contact.lastname as lastname,
+   var selectClause = `SELECT contact_id, contact.firstname as firstname, contact.lastname as lastname,
                                 CONCAT(contact.firstname,' ', contact.lastname) as fullname,
                                 contact.mobile_no, contact_type_id, contact.user_id, msg_count, msg_date, NOW() as todays_date, 
                                 contact.date_created, DATE_FORMAT(contact.date_created, "%m/%d/%Y")  as contact_create_date,
                                 CONCAT(user.firstname, ' ', user.lastname) as added_by_username
-                        FROM  contact, user`
-    var whereCondition1 = ` contact.user_id = user.user_id`
-    //var whereCondition2 = (filterText) ? ` CONCAT(contact.firstname,' ', contact.lastname) like '%` + filterText + `%'` : ``
-    var whereCondition2 = this.getContactsFilter(filterText)
-    
-    var whereClause = ` WHERE ` + whereCondition1
-    if(whereCondition2) {
-        whereClause = whereClause +  ` AND ` + whereCondition2   
-    } 
+                        FROM  contact 
+                        left outer join user on contact.user_id=user.user_id `
+
+    var whereCondition1 = this.getContactsFilter(filterText)
+    var whereClause = ''
+    if(whereCondition1) {
+        whereClause = ` WHERE ` + whereCondition1
+    }
 
     var  orderByClause = ` ORDER BY msg_date desc, msg_count desc, contact.date_created desc, fullname asc LIMIT ` + offset + `,` + count
     var queryContacts = selectClause + whereClause + orderByClause
@@ -70,6 +69,7 @@ module.exports.addContact = (req, callback) => {
                     //      Otherwise Err: net::ERR_EMPTY_RESPONSE TypeError: Failed to fetch  occures.
                     var success_msg = 'Insert Successful id=' + result.insertId;
                     winston.log('info','insert successful : ' + success_msg);
+                    winston.log('info','user_id  : ' + user_id);
                     that.getContacts(0,1,mobile_no, (resultInner,error) => {
                         if(error) { 
                             return  callback(null,error) 
